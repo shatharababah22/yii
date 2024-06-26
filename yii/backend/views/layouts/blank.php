@@ -23,6 +23,7 @@ AppAsset::register($this);
 
 <main role="main">
     <div class="container">
+    
         <?= $content ?>
     </div>
 </main>

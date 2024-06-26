@@ -60,4 +60,10 @@ class PlansCoverage extends \yii\db\ActiveRecord
     {
         return $this->hasOne(PlansItems::class, ['id' => 'item_id']);
     }
+
+
+    
 }
+
+
+

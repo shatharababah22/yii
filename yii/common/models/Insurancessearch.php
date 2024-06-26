@@ -45,8 +45,17 @@ class Insurancessearch extends Insurances
 
         // add conditions that should always apply here
 
+        $totalCount = $query->count();
+
+     
+
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pageSize' => 1,
+            ],
+             
+            'totalCount' => $totalCount
         ]);
 
         $this->load($params);

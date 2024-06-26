@@ -1,0 +1,57 @@
+<?php
+
+use yii\db\Migration;
+
+/**
+ * Handles the creation of table `{{%plans_items}}`.
+ */
+class m240624_093108_create_plans_items_table extends Migration
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function safeUp()
+    {
+        $this->createTable('{{%plans_items}}', [
+            'id' => $this->primaryKey(),
+            'plan_id' => $this->integer()->notNull(),
+            'title' => $this->string()->notNull(), 
+        ]);
+
+        $this->createIndex(
+            'idx-plans_items-plan_id',
+            '{{%plans_items}}',
+            'plan_id'
+        );
+
+        $this->addForeignKey(
+            'fk-plans_items-plan_id',
+            '{{%plans_items}}',
+            'plan_id',
+            '{{%plans}}',
+            'id',
+            'CASCADE'
+        );
+    }
+    /**
+     * {@inheritdoc}
+     */
+    public function safeDown()
+    {
+
+        
+        $this->dropForeignKey(
+            'fk-plans_items-plan_id',
+            '{{%plans_items}}'
+        );
+
+       
+        $this->dropIndex(
+            'idx-plans_items-plan_id',
+            '{{%plans_items}}'
+        );
+
+        $this->dropTable('{{%plans_items}}');
+    }
+}
+

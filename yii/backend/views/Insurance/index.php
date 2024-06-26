@@ -3,8 +3,8 @@
 use common\models\Insurances;
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\grid\ActionColumn;
-use yii\grid\GridView;
+use yii\widgets\LinkPager;
+use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
 /** @var common\models\Insurancessearch $searchModel */
@@ -14,241 +14,57 @@ $this->title = 'Insurances';
 $this->params['breadcrumbs'][] = $this->title;
 
 
-// // Register the custom CSS file
-// $this->registerCssFile("@web/css/custom.css", ['depends' => [\yii\web\YiiAsset::class]]);
+
 ?>
-<div class="insurances-index">
-
-    <h1><?= Html::encode($this->title) ?></h1>
 
 
-
-
-
-
-<main id="content" role="main" class="main">
-    <!-- Content -->
-    <div class="content container-fluid">
-      <!-- Page Header -->
-      <div class="page-header">
-        <div class="row align-items-center mb-3">
-          <div class="col-sm mb-2 mb-sm-0">
-            <h1 class="page-header-title">Products <span class="badge bg-soft-dark text-dark ms-2">72,031</span></h1>
-
-            <div class="mt-2">
-              <a class="text-body me-3" href="javascript:;" data-bs-toggle="modal" data-bs-target="#exportProductsModal">
-                <i class="bi-download me-1"></i> Export
-              </a>
-              <a class="text-body" href="javascript:;" data-bs-toggle="modal" data-bs-target="#importProductsModal">
-                <i class="bi-upload me-1"></i> Import
-              </a>
-            </div>
-          </div>
-          <!-- End Col -->
-
-          <div class="col-sm-auto">
-            <!-- <a class="btn btn-primary" href="./ecommerce-add-product.html">Add product</a> -->
-            <?= Html::a('Create Insurances', ['create'], ['class' => 'btn btn-primary']) ?>
-          </div>
-          <!-- End Col -->
-        </div>
-        <!-- End Row -->
-
-        <!-- Nav Scroller -->
-        <div class="js-nav-scroller hs-nav-scroller-horizontal">
-          <span class="hs-nav-scroller-arrow-prev" style="display: none;">
-            <a class="hs-nav-scroller-arrow-link" href="javascript:;">
-              <i class="bi-chevron-left"></i>
-            </a>
-          </span>
-
-          <span class="hs-nav-scroller-arrow-next" style="display: none;">
-            <a class="hs-nav-scroller-arrow-link" href="javascript:;">
-              <i class="bi-chevron-right"></i>
-            </a>
-          </span>
-
-          <!-- Nav -->
-          <ul class="nav nav-tabs page-header-tabs" id="pageHeaderTab" role="tablist">
-            <li class="nav-item">
-              <a class="nav-link active" href="#">All products</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Archived</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Publish</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Unpublish</a>
-            </li>
-          </ul>
-          <!-- End Nav -->
-        </div>
-        <!-- End Nav Scroller -->
+<!-- Page Header -->
+<div class="page-header">
+  <div class="row align-items-center mb-3">
+    <div class="col-sm mb-2 mb-sm-0">
+      <h1 class="page-header-title"><?= Html::encode($this->title) ?> <span class="badge bg-soft-dark text-dark ms-2"><?= Yii::$app->formatter->asInteger($dataProvider->totalCount) ?></span></h1>
+      <div class="mt-2">
+        <a class="text-body me-3" href="javascript:;" data-bs-toggle="modal" data-bs-target="#exportProductsModal">
+          <i class="bi-download me-1"></i> Export
+        </a>
+        <a class="text-body" href="javascript:;" data-bs-toggle="modal" data-bs-target="#importProductsModal">
+          <i class="bi-upload me-1"></i> Import
+        </a>
       </div>
-      <!-- End Page Header -->
+    </div>
 
-      <div class="row justify-content-end mb-3">
-        <div class="col-lg">
-          <!-- Datatable Info -->
-          <div id="datatableCounterInfo" style="display: none;">
-            <div class="d-sm-flex justify-content-lg-end align-items-sm-center">
-              <span class="d-block d-sm-inline-block fs-5 me-3 mb-2 mb-sm-0">
-                <span id="datatableCounter">0</span>
-                Selected
-              </span>
-              <a class="btn btn-outline-danger btn-sm mb-2 mb-sm-0 me-2" href="javascript:;">
-                <i class="bi-trash"></i> Delete
-              </a>
-              <a class="btn btn-white btn-sm mb-2 mb-sm-0 me-2" href="javascript:;">
-                <i class="bi-archive"></i> Archive
-              </a>
-              <a class="btn btn-white btn-sm mb-2 mb-sm-0 me-2" href="javascript:;">
-                <i class="bi-upload"></i> Publish
-              </a>
-              <a class="btn btn-white btn-sm mb-2 mb-sm-0" href="javascript:;">
-                <i class="bi-x-lg"></i> Unpublish
-              </a>
-            </div>
-          </div>
-          <!-- End Datatable Info -->
-        </div>
-      </div>
-      <!-- End Row -->
+    <div class="col-sm-auto">
+      <?= Html::a('Create insurance', ['create'], ['class' => 'btn btn-primary']) ?>
+    </div>
+  </div>
+</div>
 
-      <!-- Card -->
-      <div class="card">
-        <!-- Header -->
-        <div class="card-header card-header-content-md-between">
-          <div class="mb-2 mb-md-0">
-            <form>
-              <!-- Search -->
-              <div class="input-group input-group-merge input-group-flush">
-                <div class="input-group-prepend input-group-text">
-                  <i class="bi-search"></i>
-                </div>
-                <input id="datatableSearch" type="search" class="form-control" placeholder="Search users" aria-label="Search users">
-              </div>
-              <!-- End Search -->
-            </form>
-          </div>
 
-          <div class="d-grid d-sm-flex gap-2">
-            <button class="btn btn-white" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasEcommerceProductFilter" aria-controls="offcanvasEcommerceProductFilter">
-              <i class="bi-filter me-1"></i> Filters
-            </button>
+<div class="row justify-content-end mb-3">
 
-            <!-- Dropdown -->
-            <div class="dropdown">
-              <button type="button" class="btn btn-white w-100" id="showHideDropdown" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
-                <i class="bi-table me-1"></i> Columns <span class="badge bg-soft-dark text-dark rounded-circle ms-1">6</span>
-              </button>
+</div>
 
-              <div class="dropdown-menu dropdown-menu-end dropdown-card" aria-labelledby="showHideDropdown" style="width: 15rem;">
-                <div class="card card-sm">
-                  <div class="card-body">
-                    <div class="d-grid gap-3">
-                      <!-- Form Switch -->
-                      <label class="row form-check form-switch" for="toggleColumn_product">
-                        <span class="col-8 col-sm-9 ms-0">
-                          <span class="me-2">Product</span>
-                        </span>
-                        <span class="col-4 col-sm-3 text-end">
-                          <input type="checkbox" class="form-check-input" id="toggleColumn_product" checked>
-                        </span>
-                      </label>
-                      <!-- End Form Switch -->
 
-                      <!-- Form Switch -->
-                      <label class="row form-check form-switch" for="toggleColumn_type">
-                        <span class="col-8 col-sm-9 ms-0">
-                          <span class="me-2">Type</span>
-                        </span>
-                        <span class="col-4 col-sm-3 text-end">
-                          <input type="checkbox" class="form-check-input" id="toggleColumn_type" checked>
-                        </span>
-                      </label>
-                      <!-- End Form Switch -->
+<!-- Card -->
+<div class="card">
 
-                      <!-- Form Switch -->
-                      <label class="row form-check form-switch" for="toggleColumn_vendor">
-                        <span class="col-8 col-sm-9 ms-0">
-                          <span class="me-2">Vendor</span>
-                        </span>
-                        <span class="col-4 col-sm-3 text-end">
-                          <input type="checkbox" class="form-check-input" id="toggleColumn_vendor">
-                        </span>
-                      </label>
-                      <!-- End Form Switch -->
 
-                      <!-- Form Switch -->
-                      <label class="row form-check form-switch" for="toggleColumn_stocks">
-                        <span class="col-8 col-sm-9 ms-0">
-                          <span class="me-2">Stocks</span>
-                        </span>
-                        <span class="col-4 col-sm-3 text-end">
-                          <input type="checkbox" class="form-check-input" id="toggleColumn_stocks" checked>
-                        </span>
-                      </label>
-                      <!-- End Form Switch -->
-                      
-                      <!-- Form Switch -->
-                      <label class="row form-check form-switch" for="toggleColumn_sku">
-                        <span class="col-8 col-sm-9 ms-0">
-                          <span class="me-2">SKU</span>
-                        </span>
-                        <span class="col-4 col-sm-3 text-end">
-                          <input type="checkbox" class="form-check-input" id="toggleColumn_sku" checked>
-                        </span>
-                      </label>
-                      <!-- End Form Switch -->
+  <!-- Header -->
+  <div class="card-header card-header-content-md-between">
+    <div class="mb-2 mb-md-0">
+    </div>
+    <div class="d-grid d-sm-flex gap-2">
+      <button class="btn btn-white" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasEcommerceProductFilter" aria-controls="offcanvasEcommerceProductFilter">
+        <i class="bi-filter me-1"></i> Filters
+      </button>
+    </div>
+  </div>
+  <!-- End Header -->
 
-                      <!-- Form Switch -->
-                      <label class="row form-check form-switch" for="toggleColumn_price">
-                        <span class="col-8 col-sm-9 ms-0">
-                          <span class="me-2">Price</span>
-                        </span>
-                        <span class="col-4 col-sm-3 text-end">
-                          <input type="checkbox" class="form-check-input" id="toggleColumn_price" checked>
-                        </span>
-                      </label>
-                      <!-- End Form Switch -->
 
-                      <!-- Form Switch -->
-                      <label class="row form-check form-switch" for="toggleColumn_quantity">
-                        <span class="col-8 col-sm-9 ms-0">
-                          <span class="me-2">Quantity</span>
-                        </span>
-                        <span class="col-4 col-sm-3 text-end">
-                          <input type="checkbox" class="form-check-input" id="toggleColumn_quantity">
-                        </span>
-                      </label>
-                      <!-- End Form Switch -->
-
-                      <!-- Form Switch -->
-                      <label class="row form-check form-switch" for="toggleColumn_variants">
-                        <span class="col-8 col-sm-9 ms-0">
-                          <span class="me-2">Variants</span>
-                        </span>
-                        <span class="col-4 col-sm-3 text-end">
-                          <input type="checkbox" class="form-check-input" id="toggleColumn_variants" checked>
-                        </span>
-                      </label>
-                      <!-- End Form Switch -->
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- End Dropdown -->
-          </div>
-        </div>
-        <!-- End Header -->
-
-        <!-- Table -->
-        <div class="table-responsive datatable-custom">
-        <table id="datatable" class="table table-borderless table-thead-bordered table-nowrap table-align-middle card-table" data-hs-datatables-options='{
+  <!-- Table -->
+  <div class="table-responsive datatable-custom">
+    <table id="datatable" class="table table-borderless table-thead-bordered table-nowrap table-align-middle card-table" data-hs-datatables-options='{
                    "columnDefs": [{
                       "targets": [0, 4, 9],
                       "width": "5%",
@@ -265,166 +81,150 @@ $this->params['breadcrumbs'][] = $this->title;
                    "isShowPaging": false,
                    "pagination": "datatablePagination"
                  }'>
-            <thead class="thead-light">
-              <tr>
-                <th scope="col" class="table-column-pe-0">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="datatableCheckAll">
-                    <label class="form-check-label">
-                    </label>
-                  </div>
-                </th>
-                <th class="table-column-ps-0">Product</th>
-                <th>Overview</th>
-                <th>Description</th>
-                <th>Photo</th>
-                <th>Price</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-
-            <tbody>
-                <?php foreach ($insurances as $insurance): ?>
-                    <tr>
-                        <td class="table-column-pe-0">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="productsCheck<?= $insurance->id ?>">
-                                <label class="form-check-label" for="productsCheck<?= $insurance->id ?>">
-                                </label>
-                            </div>
-                        </td>
-                        <td class="table-column-ps-0">
-                            <a class="d-flex align-items-center" href="<?= Url::to(['view', 'id' => $insurance->id]) ?>">
-                                <div class="flex-shrink-0">
-                                    <img class="avatar avatar-lg" src="<?= $insurance->photo ?>" alt="Image Description">
-                                </div>
-                                <div class="flex-grow-1 ms-3">
-                                    <h5 class="text-inherit mb-0"><?= Html::encode($insurance->name) ?></h5>
-                                </div>
-                            </a>
-                        </td>
-                        <td><?= Html::encode($insurance->overview) ?></td>
-                        <td><?= Html::encode($insurance->description) ?></td>
-                        <td><?= Html::encode($insurance->photo) ?></td>
-                        <td><?= Html::encode($insurance->price) ?></td>
-                        <td>
-                            <div class="btn-group" role="group">
-                                <a class="btn btn-white btn-sm" href="<?= Url::to(['update', 'id' => $insurance->id]) ?>">
-                                    <i class="bi-pencil-fill me-1"></i> Edit
-                                </a>
-
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-white btn-icon btn-sm dropdown-toggle dropdown-toggle-empty" id="productsEditDropdown<?= $insurance->id ?>" data-bs-toggle="dropdown" aria-expanded="false"></button>
-                                    <div class="dropdown-menu dropdown-end-end mt-1" aria-labelledby="productsEditDropdown<?= $insurance->id ?>">
-                                        <a class="dropdown-item" href="<?= Url::to(['delete', 'id' => $insurance->id]) ?>" data-method="post" data-confirm="Are you sure you want to delete this item?">
-                                            <i class="bi-trash dropdown-item-icon"></i> Delete
-                                        </a>
-                                        <a class="dropdown-item" href="#">
-                                            <i class="bi-archive dropdown-item-icon"></i> Archive
-                                        </a>
-                                        <a class="dropdown-item" href="#">
-                                            <i class="bi-upload dropdown-item-icon"></i> Publish
-                                        </a>
-                                        <a class="dropdown-item" href="#">
-                                            <i class="bi-x-lg dropdown-item-icon"></i> Unpublish
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    </div>
-        <!-- End Table -->
-
-        <!-- Footer -->
-        <div class="card-footer">
-          <div class="row justify-content-center justify-content-sm-between align-items-sm-center">
-            <div class="col-sm mb-2 mb-sm-0">
-              <div class="d-flex justify-content-center justify-content-sm-start align-items-center">
-                <span class="me-2">Showing:</span>
-
-                <!-- Select -->
-                <div class="tom-select-custom">
-                  <select id="datatableEntries" class="js-select form-select form-select-borderless w-auto" autocomplete="off" data-hs-tom-select-options='{
-                            "searchInDropdown": false,
-                            "hideSearch": true
-                          }'>
-                    <option value="12">12</option>
-                    <option value="14" selected>14</option>
-                    <option value="16">16</option>
-                    <option value="18">18</option>
-                  </select>
+      <thead class="thead-light">
+        <tr>
+          <th scope="col" class="table-column-pe-0">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="datatableCheckAll">
+              <label class="form-check-label">
+              </label>
+            </div>
+          </th>
+          <th class="table-column-ps-0">Product</th>
+          <th>Overview</th>
+          <th>Description</th>
+          <th>Price</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php foreach ($dataProvider->models as $model) : ?>
+          <tr>
+            <td class="table-column-pe-0">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="productsCheck<?= $model->id ?>">
+                <label class="form-check-label" for="productsCheck<?= $model->id ?>"></label>
+              </div>
+            </td>
+            <td class="table-column-ps-0">
+              <a class="d-flex align-items-center" href="<?= Url::to(['view', 'id' => $model->id]) ?>">
+                <div class="flex-shrink-0">
+                  <img class="avatar avatar-lg" src="<?= Yii::$app->request->baseUrl ?>/images/<?= $model->photo ?>" alt="Image Description">
                 </div>
-                <!-- End Select -->
+                <div class="flex-grow-1 ms-3">
+                  <h5 class="text-inherit mb-0"><?= Html::encode($model->name) ?></h5>
+                </div>
+              </a>
+            </td>
+            <td><?= Html::encode($model->overview) ?></td>
+            <td id="description-<?= $model->id ?>">
+              <?php
+              $fullDescription = Html::encode($model->description);
+              if (strlen($fullDescription) > 100) {
+                $shortDescription = Html::encode(substr($fullDescription, 0, 80)) . '... ';
+                echo '<span class="short-description">' . $shortDescription . '</span>';
+                echo '<span class="full-description" style="display: none;">' . $fullDescription . '</span>';
+                echo Html::a('Read more', '#', [
+                  'class' => 'read-more',
+                  'data-id' => $model->id,
+                  'style' => 'display: inline;'
+                ]);
+                echo Html::a('Read less', '#', [
+                  'class' => 'read-less',
+                  'data-id' => $model->id,
+                  'style' => 'display: none;'
+                ]);
+              } else {
+                echo '<span class="short-description">' . $fullDescription . '</span>';
+              }
+              ?>
+            </td>
+            <td><?= Html::encode($model->price) ?></td>
+            <td>
+              <a class="btn btn-white btn-sm" href="<?= Url::to(['update', 'id' => $model->id]) ?>">
+                <i class="bi-pencil-fill " style="font-size: 15px;"></i>
+              </a>
+              <a class="btn btn-white btn-sm" href="<?= Url::to(['delete', 'id' => $model->id]) ?>" data-method="post" data-confirm="Are you sure you want to delete this item?">
+                <i class="bi bi-trash " style="font-size: 15px; color:red"></i>
+              </a>
+              <a class="btn btn-white btn-sm" href="<?= Url::to(['view', 'id' => $model->id]) ?>">
+                <i class="bi bi-eye-fill" style="font-size: 15px; color: #377DFF;"></i>
+              </a>
+            </td>
+          </tr>
+        <?php endforeach; ?>
+      </tbody>
+    </table>
 
-                <span class="text-secondary me-2">of</span>
 
-                <!-- Pagination Quantity -->
-                <span id="datatableWithPaginationInfoTotalQty"></span>
-              </div>
+
+  </div>
+
+  <?php if ($dataProvider->pagination->pageCount > 1) : ?>
+    <div class="card-footer">
+      <div class="row justify-content-center justify-content-sm-between align-items-sm-center">
+        <div class="col-sm mb-2 mb-sm-0">
+          <div class="d-flex justify-content-center justify-content-sm-start align-items-center ">
+            <span class="me-2">Showing:</span>
+
+
+            <div class="tom-select-custom">
+              <span class="text-secondary me-2"> <?= count($dataProvider->getModels()) ?></span>
             </div>
-            <!-- End Col -->
 
-            <div class="col-sm-auto">
-              <div class="d-flex justify-content-center justify-content-sm-end">
-                <!-- Pagination -->
-                <nav id="datatablePagination" aria-label="Activity pagination"></nav>
-              </div>
-            </div>
-            <!-- End Col -->
+
+            <span class="text-secondary me-2">of</span>
+
+            <span id="datatableWithPaginationInfoTotalQty"><?= Yii::$app->formatter->asInteger($dataProvider->totalCount) ?></span>
           </div>
-          <!-- End Row -->
         </div>
-        <!-- End Footer -->
-      </div>
-      <!-- End Card -->
-    </div>
-    <!-- End Content -->
 
-    <!-- Footer -->
 
-    <div class="footer">
-      <div class="row justify-content-between align-items-center">
-        <div class="col">
-          <p class="fs-6 mb-0">&copy; Front. <span class="d-none d-sm-inline-block">2022 Htmlstream.</span></p>
-        </div>
-        <!-- End Col -->
-
-        <div class="col-auto">
-          <div class="d-flex justify-content-end">
-            <!-- List Separator -->
-            <ul class="list-inline list-separator">
-              <li class="list-inline-item">
-                <a class="list-separator-link" href="#">FAQ</a>
-              </li>
-
-              <li class="list-inline-item">
-                <a class="list-separator-link" href="#">License</a>
-              </li>
-
-              <li class="list-inline-item">
-                <!-- Keyboard Shortcuts Toggle -->
-                <button class="btn btn-ghost-secondary btn btn-icon btn-ghost-secondary rounded-circle" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasKeyboardShortcuts" aria-controls="offcanvasKeyboardShortcuts">
-                  <i class="bi-command"></i>
-                </button>
-                <!-- End Keyboard Shortcuts Toggle -->
-              </li>
-            </ul>
-            <!-- End List Separator -->
+        <div class="col-sm-auto">
+          <div class="d-flex justify-content-center justify-content-sm-end">
+            <?= LinkPager::widget([
+              'pagination' => $dataProvider->pagination,
+              'options' => [
+                'class' => 'pagination',
+              ],
+              'linkContainerOptions' => ['class' => 'page-item'], // Individual page container class
+              'linkOptions' => ['class' => 'page-link'], // Link class
+              'prevPageCssClass' => 'page-item', // Class for the previous page button
+              'nextPageCssClass' => 'page-item', // Class for the next page button
+              'prevPageLabel' => '&laquo;', // Custom label for the previous page button
+              'nextPageLabel' => '&raquo;', // Custom label for the next page button
+            ]) ?> <nav id="datatablePagination" aria-label="Activity pagination"></nav>
           </div>
         </div>
         <!-- End Col -->
       </div>
       <!-- End Row -->
     </div>
+  <?php endif; ?>
+  <!-- End Footer -->
 
-    <!-- End Footer -->
-  </main>
-
-
-
-  
 </div>
+<!-- End Row -->
+</div>
+<!-- End Footer -->
+</div>
+<!-- End Card -->
+
+
+
+
+<!--Filter Modal -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasEcommerceProductFilter" aria-labelledby="offcanvasEcommerceProductFilterLabel">
+  <div class="offcanvas-header">
+    <h4 id="offcanvasEcommerceProductFilterLabel" class="mb-0">Filters</h4>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <span class="text-cap small">filter by:</span>
+    <div class="mb-2">
+      <?php echo $this->render('_search', ['model' => $searchModel]); ?>
+    </div>
+  </div>
+
+
+

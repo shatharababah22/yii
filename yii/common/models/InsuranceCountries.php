@@ -49,7 +49,7 @@ class InsuranceCountries extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'insurance_id' => Yii::t('app', 'Insurance ID'),
+            'insurance_id' => Yii::t('app', 'Insurance name'),
             'country_code' => Yii::t('app', 'Country Code'),
             'company_name' => Yii::t('app', 'Company Name'),
             'company_logo' => Yii::t('app', 'Company Logo'),

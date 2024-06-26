@@ -1,5 +1,4 @@
 <?php
-
 namespace common\models;
 
 use Yii;
@@ -14,7 +13,9 @@ use Yii;
  * @property string $zone
  * @property string|null $currency
  * @property int $active
+ * @property Airports[] $airports
  */
+
 class Countries extends \yii\db\ActiveRecord
 {
     /**
@@ -54,5 +55,15 @@ class Countries extends \yii\db\ActiveRecord
             'currency' => Yii::t('app', 'Currency'),
             'active' => Yii::t('app', 'Active'),
         ];
+    }
+
+    /**
+     * Gets query for [[Airports]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAirports()
+    {
+        return $this->hasMany(Airports::class, ['country_id' => 'id']);
     }
 }

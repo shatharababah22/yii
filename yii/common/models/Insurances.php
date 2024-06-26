@@ -34,8 +34,11 @@ class Insurances extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'photo', 'price'], 'required'],
-            [['overview', 'description', 'photo', 'benefits_link'], 'string'],
+            [['name','photo','price'], 'required'],
+            [['photo'], 'file',  'extensions' => 'png, jpg, jpeg'],
+
+            [['overview', 'description','name'], 'string'],
+            ['benefits_link', 'url'],
             [['price'], 'number'],
             [['name'], 'string', 'max' => 255],
         ];

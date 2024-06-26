@@ -8,7 +8,7 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
-
+use yii\helpers\Url;
 /**
  * Site controller
  */
@@ -90,6 +90,9 @@ class SiteController extends Controller
         ]);
     }
 
+
+ 
+
     /**
      * Logout action.
      *
@@ -98,7 +101,7 @@ class SiteController extends Controller
     public function actionLogout()
     {
         Yii::$app->user->logout();
-
-        return $this->goHome();
+    
+        return $this->redirect(Url::to(['site/login'], true));
     }
 }

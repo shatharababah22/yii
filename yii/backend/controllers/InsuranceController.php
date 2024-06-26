@@ -5,8 +5,12 @@ namespace backend\controllers;
 use common\models\Insurances;
 use common\models\Insurancessearch;
 use yii\web\Controller;
+use Yii;
+use yii\filters\AccessControl;
+use yii\web\UploadedFile;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+
 
 /**
  * InsuranceController implements the CRUD actions for Insurances model.
@@ -21,8 +25,17 @@ class InsuranceController extends Controller
         return array_merge(
             parent::behaviors(),
             [
+                'access' => [
+                    'class' => AccessControl::class,
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'roles' => ['@'], // Allow only authenticated users
+                        ],
+                    ],
+                ],
                 'verbs' => [
-                    'class' => VerbFilter::className(),
+                    'class' => VerbFilter::class,
                     'actions' => [
                         'delete' => ['POST'],
                     ],
@@ -37,14 +50,17 @@ class InsuranceController extends Controller
      * @return string
      */
     public function actionIndex()
-    {
-        $insurances = Insurances::find()->all();
-    
-        return $this->render('index', [
-            'insurances' => $insurances,
-        ]);
-    }
-    
+{
+    $searchModel = new InsurancesSearch();
+    $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+    return $this->render('index', [
+        'searchModel' => $searchModel,
+        'dataProvider' => $dataProvider,
+      
+    ]);
+}
+
+
 
     /**
      * Displays a single Insurances model.
@@ -64,13 +80,27 @@ class InsuranceController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
+
     public function actionCreate()
     {
         $model = new Insurances();
 
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+        if (Yii::$app->request->isPost) {
+            if ($model->load(Yii::$app->request->post())) {
+                $uploadedFile = UploadedFile::getInstance($model, 'photo');
+                if ($uploadedFile) {
+                    $file = $uploadedFile;
+                    $fileName = rand() . '-' . strtotime(date('Y-m-d H:i:s')) . '.' . $file->extension;
+                    $path = 'images/' . $fileName;
+                    if ($uploadedFile->saveAs($path)) {
+                        $model->photo = $fileName;
+                    } else {
+                        Yii::$app->session->setFlash('error', 'Failed to save the uploaded file.');
+                    }
+                }
+                if ($model->save()) {
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
             }
         } else {
             $model->loadDefaultValues();
@@ -81,25 +111,53 @@ class InsuranceController extends Controller
         ]);
     }
 
+    
     /**
      * Updates an existing Insurances model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionUpdate($id)
+     */ public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $oldPhoto = $model->photo; // Store the old photo path
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if (Yii::$app->request->isPost) {
+            if ($model->load(Yii::$app->request->post())) {
+                $uploadedFile = UploadedFile::getInstance($model, 'photo');
+
+                if ($uploadedFile) {
+                    $file = $uploadedFile;
+                    $fileName = rand() . '-' . strtotime(date('Y-m-d H:i:s')) . '.' . $file->extension;
+                    $path = 'images/' . $fileName;
+                    if ($uploadedFile->saveAs($path)) {
+
+                        if ($oldPhoto && file_exists('images/' . $oldPhoto)) {
+                            unlink('images/' . $oldPhoto);
+                        }
+                        $model->photo = $fileName;
+                    } else {
+                        Yii::$app->session->setFlash('error', 'Failed to save the uploaded file.');
+                    }
+                } else {
+
+                    $model->photo = $oldPhoto;
+                }
+
+                if ($model->save()) {
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
+            }
         }
 
         return $this->render('update', [
             'model' => $model,
         ]);
     }
+
+
+
 
     /**
      * Deletes an existing Insurances model.

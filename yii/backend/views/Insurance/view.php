@@ -11,7 +11,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Insurances', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
-<div class="insurances-view">
+
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -27,16 +27,34 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
 
     <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'name',
-            'overview:ntext',
-            'description:ntext',
-            'photo:ntext',
-            'price',
-            'benefits_link:ntext',
+    'model' => $model,
+    'attributes' => [
+        'id',
+        'name',
+        'overview:ntext',
+        'description:ntext',
+        [
+            'attribute' => 'photo',
+            'format' => 'html', 
+            'value' => function ($model) {
+                $imageUrl = $model->photo ? Yii::getAlias('@web') . '/images/' . $model->photo : "https://i.pinimg.com/564x/85/75/6f/85756f80922443841cb0072e1b1a7408.jpg";
+                return Html::img($imageUrl, [
+                    'style' => 'max-width:120px; border-radius:60%;',
+                ]);
+            },
         ],
-    ]) ?>
+        'price',
+        'benefits_link:ntext',
+    ],
+]) ?>
 
-</div>
+
+
+
+
+
+
+
+
+
+

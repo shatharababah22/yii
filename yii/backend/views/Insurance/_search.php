@@ -15,24 +15,43 @@ use yii\widgets\ActiveForm;
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'id') ?>
+    <?= $form->field($model, 'id', ['options' => ['class' => 'mt-2']])  ?>
 
-    <?= $form->field($model, 'name') ?>
+    <?= $form->field($model, 'name', ['options' => ['class' => 'mt-2']])  ?>
 
-    <?= $form->field($model, 'overview') ?>
+    <?= $form->field($model, 'overview', ['options' => ['class' => 'mt-2']])  ?>
 
-    <?= $form->field($model, 'description') ?>
+    <?= $form->field($model, 'description', ['options' => ['class' => 'mt-2']])  ?>
+<!-- 
+    <?= $form->field($model, 'photo', ['options' => ['class' => 'mt-2']])  ?> -->
 
-    <?= $form->field($model, 'photo') ?>
+    <?php  echo $form->field($model, 'price', ['options' => ['class' => 'mt-2']])  ?>
 
-    <?php // echo $form->field($model, 'price') ?>
+    <?php  echo $form->field($model, 'benefits_link', ['options' => ['class' => 'mt-2']])  ?>
 
-    <?php // echo $form->field($model, 'benefits_link') ?>
 
-    <div class="form-group">
-        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Reset', ['class' => 'btn btn-outline-secondary']) ?>
+    
+    
+    <div class="offcanvas-footer ">
+      <div class="row ">
+        <div class="col">
+          <div class="d-grid">
+          <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
+          </div>
+        </div>
+   
+        <div class="col">
+          <div class="d-grid">
+        <?=Html::a('Reset', ['index'], ['class' => 'btn btn-white'])?>
+        </div>
+        </div>
+    
+      </div>
+      
     </div>
+   
+
+
 
     <?php ActiveForm::end(); ?>
 

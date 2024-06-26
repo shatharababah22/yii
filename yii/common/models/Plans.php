@@ -79,4 +79,10 @@ class Plans extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Pricing::class, ['plan_id' => 'id']);
     }
+
+
+    public function getPlansItems()
+    {
+        return $this->hasMany(PlansItems::class, ['plan_id' => 'id']);
+    }
 }

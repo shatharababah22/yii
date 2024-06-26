@@ -1,0 +1,33 @@
+<?php
+
+use yii\db\Migration;
+
+/**
+ * Handles the creation of table `{{%insurances}}`.
+ */
+class m240620_173336_create_insurances_table extends Migration
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function safeUp()
+    {
+        $this->createTable('{{%insurances}}', [
+     'id' => $this->primaryKey(),
+            'name' => $this->string()->notNull(),
+            'overview' => $this->text()->notNull(),
+            'description' => $this->text()->defaultValue(null),
+            'photo' => $this->string()->defaultValue(null),
+       'price' => $this->integer()->notNull(), 
+            'benefits_link' => $this->string()->defaultValue(null),
+        ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function safeDown()
+    {
+        $this->dropTable('{{%insurances}}');
+    }
+}
