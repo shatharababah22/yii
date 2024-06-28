@@ -13,9 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 
-<main id="content" role="main" class="main">
-    <!-- Content -->
-    <div class="content container-fluid">
+
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
@@ -33,7 +31,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'insurance_id',
+            [
+                'attribute' => 'insurance_id',
+                'value' => $model->insurance->name,
+            ],
             'name',
             'description:ntext',
             'overview:ntext',
@@ -43,6 +44,4 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]) ?>
 
-    </div>
-</main>
-
+ 

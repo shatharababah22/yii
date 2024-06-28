@@ -62,7 +62,7 @@ class Policy extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'customer_id' => Yii::t('app', 'Customer ID'),
+            'customer_id' => Yii::t('app', 'Customer Email'),
             'from_airport' => Yii::t('app', 'From Airport'),
             'DepartCountryCode' => Yii::t('app', 'Depart Country Code'),
             'departure_date' => Yii::t('app', 'Departure Date'),

@@ -29,16 +29,22 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
 
     <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'code',
-            'country',
-            'callCode',
-            'zone',
-            'currency',
-            'active',
+    'model' => $model,
+    'attributes' => [
+        'id',
+        'code',
+        'country',
+        'callCode',
+        'zone',
+        'currency',
+        [
+            'attribute' => 'active',
+            'value' => function ($model) {
+                return $model->active == 1 ? 'Active' : 'Inactive';
+            },
         ],
-    ]) ?>
+    ],
+]) ?>
+
 
 

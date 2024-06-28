@@ -4,16 +4,14 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /** @var yii\web\View $this */
-/** @var common\models\Pricing $model */
+/** @var common\models\Policy $model */
 
-$this->title = $model->plan->plan_code;
-$this->params['breadcrumbs'][] = ['label' => 'Pricings', 'url' => ['index']];
+$this->title = $model->id;
+$this->params['breadcrumbs'][] = ['label' => 'Policies', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
-
-
-
+<div class="policy-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -32,23 +30,26 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            [
-                'attribute' => 'plan_id',
-                'value' => $model->plan->plan_code,
-            ],
-          
-            'duration',
-            'passenger',
+            'customer_id',
+            'from_airport',
+            'DepartCountryCode',
+            'departure_date',
+            'going_to',
+            'ArrivalCountryCode',
+            'return_date',
+            'ProposalState',
+            'ItineraryID',
+            'PNR',
+            'PolicyNo',
+            'PolicyPurchasedDateTime',
+            'PolicyURLLink:ntext',
+            'status',
+            'status_description:ntext',
+            'created_at',
+            'updated_at',
+            'source',
             'price',
         ],
     ]) ?>
 
 </div>
-            <!-- End Card Body -->
-        </div>
-    </div>
-    <!-- End Card -->
-</div>
-<!-- End Col -->
-</div>
-<!-- End Row -->

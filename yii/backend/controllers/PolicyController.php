@@ -2,19 +2,16 @@
 
 namespace backend\controllers;
 
-use common\models\PlansItems;
-use common\models\PlansItemsSearch;
+use common\models\Policy;
+use common\models\PolicySearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use yii;
-
-
 /**
- * BenefitController implements the CRUD actions for PlansItems model.
+ * PolicyController implements the CRUD actions for Policy model.
  */
-class BenefitController extends Controller
+class PolicyController extends Controller
 {
     /**
      * @inheritDoc
@@ -29,7 +26,7 @@ class BenefitController extends Controller
                     'rules' => [
                         [
                             'allow' => true,
-                            'roles' => ['@'], // Allow only authenticated users
+                            'roles' => ['@'], 
                         ],
                     ],
                 ],
@@ -44,23 +41,23 @@ class BenefitController extends Controller
     }
 
     /**
-     * Lists all PlansItems models.
+     * Lists all Policy models.
      *
      * @return string
      */
     public function actionIndex()
     {
-        $searchModel = new PlansItemsSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchModel = new PolicySearch();
+        $dataProvider = $searchModel->search($this->request->queryParams);
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-          
         ]);
     }
 
     /**
-     * Displays a single PlansItems model.
+     * Displays a single Policy model.
      * @param int $id ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
@@ -73,13 +70,13 @@ class BenefitController extends Controller
     }
 
     /**
-     * Creates a new PlansItems model.
+     * Creates a new Policy model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
-        $model = new PlansItems();
+        $model = new Policy();
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
@@ -95,7 +92,7 @@ class BenefitController extends Controller
     }
 
     /**
-     * Updates an existing PlansItems model.
+     * Updates an existing Policy model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
      * @return string|\yii\web\Response
@@ -115,7 +112,7 @@ class BenefitController extends Controller
     }
 
     /**
-     * Deletes an existing PlansItems model.
+     * Deletes an existing Policy model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
      * @return \yii\web\Response
@@ -129,15 +126,15 @@ class BenefitController extends Controller
     }
 
     /**
-     * Finds the PlansItems model based on its primary key value.
+     * Finds the Policy model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
-     * @return PlansItems the loaded model
+     * @return Policy the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = PlansItems::findOne(['id' => $id])) !== null) {
+        if (($model = Policy::findOne(['id' => $id])) !== null) {
             return $model;
         }
 

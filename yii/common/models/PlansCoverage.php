@@ -45,8 +45,8 @@ class PlansCoverage extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'item_id' => Yii::t('app', 'Item ID'),
-            'YorN' => Yii::t('app', 'Yor N'),
+            'item_id' => Yii::t('app', 'Title'),
+            'YorN' => Yii::t('app', 'Status'),
             'description' => Yii::t('app', 'Description'),
         ];
     }

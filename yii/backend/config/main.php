@@ -46,7 +46,7 @@ return [
             'rules' => [
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'insurances'],
                 // ['class' => 'yii\rest\UrlRule', 'controller' => 'plans'],
-                ['class' => 'yii\rest\UrlRule', 'controller' => 'airport'],
+                ['class' => 'yii\rest\UrlRule', 'controller' => 'airports'],
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'draft'],
                 
             ],

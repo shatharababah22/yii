@@ -46,7 +46,7 @@ class Pricing extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'plan_id' => Yii::t('app', 'Plan ID'),
+            'plan_id' => Yii::t('app', 'Plan Code'),
             'duration' => Yii::t('app', 'Duration'),
             'passenger' => Yii::t('app', 'Passenger'),
             'price' => Yii::t('app', 'Price'),

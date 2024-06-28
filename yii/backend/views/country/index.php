@@ -119,6 +119,7 @@ $this->params['breadcrumbs'][] = $this->title;
       </thead>
 
       <tbody>
+      <?php if ($dataProvider->models) : ?>
         <?php foreach ($dataProvider->models as $country) : ?>
           <tr>
             <td class="table-column-pe-0">
@@ -158,7 +159,13 @@ $this->params['breadcrumbs'][] = $this->title;
             </td>
           </tr>
         <?php endforeach; ?>
-
+        <?php else: ?>
+            <tr class="odd"><td valign="top" colspan="8" class="dataTables_empty"><div class="text-center p-4">
+              
+            <img class="mb-3" src="<?= Url::to('@web/svg/illustrations/oc-error.svg') ?>" alt="Image Description" style="width: 10rem;" data-hs-theme-appearance="default">
+            <p class="mb-0">No data to show</p>
+            </div></td></tr>
+    <?php endif; ?>
       </tbody>
     </table>
   </div>
@@ -185,23 +192,21 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
         <div class="col-sm-auto">
-          <div class="d-flex justify-content-center justify-content-sm-end">
-          <?= LinkPager::widget([
-    'pagination' => $dataProvider->pagination,
-    'options' => [
-        'class' => 'pagination custom-pagination', // Custom class for the pagination container
-    ],
-    'linkContainerOptions' => ['class' => 'page-item custom-page-item'], // Individual page container class
-    'linkOptions' => ['class' => 'page-link custom-page-link'], // Link class
-    'prevPageCssClass' => 'page-item custom-page-item-prev', // Class for the previous page button
-    'nextPageCssClass' => 'page-item custom-page-item-next', // Class for the next page button
-    'prevPageLabel' => '&laquo;', // Custom label for the previous page button
-    'nextPageLabel' => '&raquo;', // Custom label for the next page button
-]) ?>
-
- <nav id="datatablePagination" aria-label="Activity pagination"></nav>
+            <div class="d-flex justify-content-center justify-content-sm-end">
+              <?= LinkPager::widget([
+                'pagination' => $dataProvider->pagination,
+                'options' => [
+                  'class' => 'pagination', 
+                ],
+                'linkContainerOptions' => ['class' => 'page-item'], // Individual page container class
+                'linkOptions' => ['class' => 'page-link'], // Link class
+                'prevPageCssClass' => 'page-item', // Class for the previous page button
+                'nextPageCssClass' => 'page-item', // Class for the next page button
+                'prevPageLabel' => '&laquo;', // Custom label for the previous page button
+                'nextPageLabel' => '&raquo;', // Custom label for the next page button
+              ]) ?> <nav id="datatablePagination" aria-label="Activity pagination"></nav>
+            </div>
           </div>
-        </div>
         <!-- End Col -->
       </div>
       <!-- End Row -->

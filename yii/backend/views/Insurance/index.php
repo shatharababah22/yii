@@ -90,7 +90,7 @@ $this->params['breadcrumbs'][] = $this->title;
               </label>
             </div>
           </th>
-          <th class="table-column-ps-0">Product</th>
+          <th class="table-column-ps-0">Name</th>
           <th>Overview</th>
           <th>Description</th>
           <th>Price</th>
@@ -98,6 +98,8 @@ $this->params['breadcrumbs'][] = $this->title;
         </tr>
       </thead>
       <tbody>
+              <?php if ($dataProvider->models) : ?>
+
         <?php foreach ($dataProvider->models as $model) : ?>
           <tr>
             <td class="table-column-pe-0">
@@ -152,7 +154,14 @@ $this->params['breadcrumbs'][] = $this->title;
               </a>
             </td>
           </tr>
-        <?php endforeach; ?>
+             <?php endforeach; ?>
+             <?php else: ?>
+            <tr class="odd"><td valign="top" colspan="8" class="dataTables_empty"><div class="text-center p-4">
+              
+            <img class="mb-3" src="<?= Url::to('@web/svg/illustrations/oc-error.svg') ?>" alt="Image Description" style="width: 10rem;" data-hs-theme-appearance="default">
+            <p class="mb-0">No data to show</p>
+            </div></td></tr>
+    <?php endif; ?>
       </tbody>
     </table>
 

@@ -75,21 +75,21 @@ $this->title = 'Login';
 ]); ?>
 
 <div class="text-center">
-    <div class="mb-5">
-        <h1 class="display-5">Sign in</h1>
+    <div class="mb-7">
+        <h1 class="display-5 ">Sign in</h1>
         <!-- <p>Don't have an account yet? <a class="link" href="./authentication-signup-cover.html">Sign up here</a></p> -->
     </div>
 
-    <div class="d-grid mb-4">
+    <!-- <div class="d-grid mb-4">
         <a class="btn btn-white btn-lg" href="#">
             <span class="d-flex justify-content-center align-items-center">
                 <img class="avatar avatar-xss me-2" src="<?= Url::to('@web/svg/brands/google-icon.svg') ?>" alt="Image Description">
                 Sign in with Google
             </span>
         </a>
-    </div>
+    </div> -->
 
-    <span class="divider-center text-muted mb-4">OR</span>
+    <!-- <span class="divider-center text-muted mb-4">OR</span> -->
 </div>
 
 <!-- Form -->

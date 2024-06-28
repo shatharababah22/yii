@@ -54,13 +54,13 @@ class PolicyDraft extends \yii\db\ActiveRecord
     {
         return [
             [['mobile', 'email'], 'required', 'on' => 'update'],
-            [['insurance_id', 'plan_id', 'departure_date', 'return_date'], 'required'],
-            [['insurance_id', 'plan_id', 'departure_date', 'return_date', 'created_at', 'updated_at', 'source', 'adult', 'children', 'infant'], 'integer'],
+            [[ 'plan_id', 'departure_date', 'return_date'], 'required'],
+            [[ 'plan_id', 'departure_date', 'return_date', 'created_at', 'updated_at', 'source', 'adult', 'children', 'infant'], 'integer'],
             [['price'], 'number'],
             [['email', 'mobile'], 'string', 'max' => 255],
             [['from_airport', 'going_to'], 'string', 'max' => 100],
             [['DepartCountryCode', 'ArrivalCountryCode'], 'string', 'max' => 11],
-            [['insurance_id'], 'exist', 'skipOnError' => true, 'targetClass' => Insurances::class, 'targetAttribute' => ['insurance_id' => 'id']],
+            ['exist', 'skipOnError' => true, 'targetClass' => Insurances::class, 'targetAttribute' => ['insurance_id' => 'id']],
             [['plan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Plans::class, 'targetAttribute' => ['plan_id' => 'id']],
         ];
     }
@@ -72,7 +72,7 @@ class PolicyDraft extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'insurance_id' => Yii::t('app', 'Insurance ID'),
+       
             'plan_id' => Yii::t('app', 'Plan ID'),
             'email' => Yii::t('app', 'Email'),
             'mobile' => Yii::t('app', 'Mobile'),
@@ -97,10 +97,6 @@ class PolicyDraft extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getInsurance()
-    {
-        return $this->hasOne(Insurances::class, ['id' => 'insurance_id']);
-    }
 
     /**
      * Gets query for [[Plan]].

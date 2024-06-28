@@ -6,8 +6,8 @@ use yii\helpers\Url;
 /** @var yii\web\View $this */
 /** @var common\models\InsuranceCountries $model */
 
-$this->title = 'Create Insurance Countries';
-$this->params['breadcrumbs'][] = ['label' => 'Insurance Countries', 'url' => ['index']];
+$this->title = 'Create Companies';
+$this->params['breadcrumbs'][] = ['label' => 'Companies', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 

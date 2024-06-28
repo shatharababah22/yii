@@ -15,19 +15,42 @@ use yii\widgets\ActiveForm;
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'id') ?>
+    <!-- <?= $form->field($model, 'id',['options' => ['class' => 'mt-2']])  ?> -->
 
-    <?= $form->field($model, 'item_id') ?>
-
-    <?= $form->field($model, 'YorN') ?>
-
-    <?= $form->field($model, 'description') ?>
-
-    <div class="form-group">
-        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Reset', ['class' => 'btn btn-outline-secondary']) ?>
-    </div>
-
+    <?= $form->field($model, 'item_id', ['options' => ['class' => 'mt-2']])->dropDownList(
+        \yii\helpers\ArrayHelper::map(
+            \common\models\Countries::find()->all(),
+            'id',
+            'title'
+        ),
+        ['class' => 'form-select']
+    ) ?>
+    <?= $form->field($model, 'description',['options' => ['class' => 'mt-2']])  ?>
+    <?= $form->field($model, 'YorN' ,['options' => ['class' => 'mt-2']])->dropDownList(
+                [
+                  'Yes' => 'yes',
+                    'No' => 'No',
+                   
+                ],
+                ['class' => 'form-select']
+            ) ?>
+    <div class="offcanvas-footer ">
+      <div class="row ">
+        <div class="col">
+          <div class="d-grid">
+          <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
+          </div>
+        </div>
+   
+        <div class="col">
+          <div class="d-grid">
+        <?=Html::a('Reset', ['index'], ['class' => 'btn btn-white'])?>
+        </div>
+        </div>
+    
+      </div>
+      
+</div>
     <?php ActiveForm::end(); ?>
 
 </div>

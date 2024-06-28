@@ -324,7 +324,7 @@ AppAsset::register($this);
             <div class="nav-item">
               <a class="nav-link " href="<?= Url::to(['/site/index']) ?>" role="button" data-bs-toggle="collapse" data-bs-target="#navbarVerticalMenuDashboards" aria-expanded="true" aria-controls="navbarVerticalMenuDashboards">
                 <i class="bi-house-door nav-icon"></i>
-                <span class="nav-link-title">Dashboards</span>
+                <span class="nav-link-title">Dashboard</span>
               </a>
 
 
@@ -397,17 +397,9 @@ AppAsset::register($this);
 
               </div>
               <!-- End Collapse -->
-
-         
-
-
-        
-
                 
             </div>
             <!-- End Collapse -->
-
-
 
 
               <!-- Collapse -->
@@ -425,22 +417,6 @@ AppAsset::register($this);
                 </div>
               </div>
               <!-- End Collapse -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
               <!-- Collapse -->
               <div class="nav-item">
@@ -498,6 +474,15 @@ AppAsset::register($this);
               </div>
               <!-- End Collapse -->
 
+              <!-- Collapse -->
+              <div class="nav-item">
+                <a class="nav-link " href="<?= Url::to(['/policy/index']) ?>">
+                <i class="bi bi-card-checklist nav-icon"></i>
+                  <span class="nav-link-title">Policies</span>
+                </a>
+              </div>
+              <!-- End Collapse -->
+
 
               <div class="nav-item">
 
@@ -517,7 +502,7 @@ AppAsset::register($this);
 
 
 
-            </div>
+        
             <!-- End Content -->
 
           </div>

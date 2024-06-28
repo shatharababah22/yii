@@ -15,22 +15,41 @@ use yii\widgets\ActiveForm;
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'id') ?>
+    <!-- <?= $form->field($model, 'id',['options' => ['class' => 'mt-2']])  ?> -->
 
-    <?= $form->field($model, 'code') ?>
+    <?= $form->field($model, 'code',['options' => ['class' => 'mt-2']])  ?>
 
-    <?= $form->field($model, 'name') ?>
+    <?= $form->field($model, 'name',['options' => ['class' => 'mt-2']])  ?>
 
-    <?= $form->field($model, 'cityCode') ?>
+    <?= $form->field($model, 'cityCode',['options' => ['class' => 'mt-2']])  ?>
 
-    <?= $form->field($model, 'cityName') ?>
+    <?= $form->field($model, 'cityName',['options' => ['class' => 'mt-2']])  ?>
 
-    <?php // echo $form->field($model, 'country_id') ?>
-
-    <div class="form-group">
-        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Reset', ['class' => 'btn btn-outline-secondary']) ?>
-    </div>
+    <?= $form->field($model, 'country_id', ['options' => ['class' => 'mt-2']])->dropDownList(
+        \yii\helpers\ArrayHelper::map(
+            \common\models\Countries::find()->all(),
+            'id',
+            'country'
+        ),
+        ['class' => 'form-select','prompt' => 'Select passenger']
+    ) ?>
+   <div class="offcanvas-footer ">
+      <div class="row ">
+        <div class="col">
+          <div class="d-grid">
+          <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
+          </div>
+        </div>
+   
+        <div class="col">
+          <div class="d-grid">
+        <?=Html::a('Reset', ['index'], ['class' => 'btn btn-white'])?>
+        </div>
+        </div>
+    
+      </div>
+      
+</div>
 
     <?php ActiveForm::end(); ?>
 

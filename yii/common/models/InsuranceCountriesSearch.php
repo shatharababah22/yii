@@ -14,11 +14,13 @@ class InsuranceCountriesSearch extends InsuranceCountries
     /**
      * {@inheritdoc}
      */
+
+     public $insurance_name;
     public function rules()
     {
         return [
-            [['id', 'insurance_id'], 'integer'],
-            [['country_code', 'company_name', 'company_logo', 'source_country', 'source_country_code'], 'safe'],
+            [['id',], 'integer'],
+            [['country_code','insurance_name', 'company_name', 'company_logo', 'source_country', 'source_country_code'], 'safe'],
         ];
     }
 
@@ -43,11 +45,15 @@ class InsuranceCountriesSearch extends InsuranceCountries
         $query = InsuranceCountries::find();
 
         // add conditions that should always apply here
-
+        $query->joinWith(['insurance']);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
-
+        $dataProvider->sort->attributes['insurance_name'] = [
+            'asc' => ['insurances.name' => SORT_ASC],
+            'desc' => ['insurances.name' => SORT_DESC],
+        ];
+    
         $this->load($params);
 
         if (!$this->validate()) {
@@ -56,10 +62,9 @@ class InsuranceCountriesSearch extends InsuranceCountries
             return $dataProvider;
         }
 
-        // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'insurance_id' => $this->insurance_id,
+            'insurances.name' => $this->insurance_name,
         ]);
 
         $query->andFilterWhere(['like', 'country_code', $this->country_code])

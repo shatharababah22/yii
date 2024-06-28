@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use yii\bootstrap5\ActiveForm;
 use yii\helpers\Url;
 
 /** @var yii\web\View $this */
@@ -16,72 +16,47 @@ use yii\helpers\Url;
 
 
 
-
-<!-- Page Header -->
-<div class="page-header">
-    <div class="row align-items-center">
-        <div class="col-sm mb-2 mb-sm-0">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb breadcrumb-no-gutter">
-                    <li class="breadcrumb-item"><a class="breadcrumb-link" href="<?= Url::to(['index']) ?>">Pricing</a></li>
-                    <li class="breadcrumb-item active" aria-current="page"><?= Html::encode($this->title) ?></li>
-                </ol>
-            </nav>
-
-
-
-
-        </div>
-        <!-- End Col -->
-    </div>
-    <!-- End Row -->
-</div>
-<!-- End Page Header -->
-
-<div class="row">
-    <div class="col-lg-11 mb-3 mb-lg-0">
-        <!-- Card -->
-        <div class="card mb-3 mb-lg-5">
-            <!-- Header -->
-            <div class="card-header">
-                <h4 class="card-header-title">Pricing information</h4>
-            </div>
-            <!-- End Header -->
-            <div class="card-body">
                 <?php $form = ActiveForm::begin(); ?>
 
-                <div class="row">
-                    <div class="col-sm-6">
-                        <!-- Form -->
-                        <div class="mb-4">
 
-                            <label for="price" class="form-label">Plan code</label>
 
-                            <div>
 
-                                <?= $form->field($model, 'plan_id')->dropDownList(
-                                    \yii\helpers\ArrayHelper::map(
-                                        \common\models\Plans::find()->all(),
-                                        'id',
-                                        'plan_code'
-                                    ),
+                
+<div class="row mb-2">
+<?= $form->field($model, 'plan_id', ['options' => ['class' => 'col-sm-6']])->dropDownList(
+    \yii\helpers\ArrayHelper::map(
+        \common\models\Plans::find()->all(),
+        'id',
+        'plan_code'
+    ),
+    ['class' => 'form-select']
+) ?>
+
+<?= $form->field($model, 'passenger', ['options' => ['class' => 'col-sm-6']])->dropDownList(
                                     [
-                                        'class' => 'js-select form-select',
-                                        'autocomplete' => 'off',
-                                        'data-hs-tom-select-options' => '{"placeholder": "Select countries..."}',
-                                        'style' => 'height:55px'
+                                        ''=>'Please select',
+                                        'adult' => 'Adult',
+                                        'child' => 'Child',
+                                        'Infant' => 'INF',
+                                    ],
+                                    [
+                                    
+                                        'class' => 'form-select',
+                               
+                                     
                                     ]
-                                )->label(false) ?>
-                            </div>
+                                ) ?>
+
+
+</div>
+
+<div class="row mb-2">
+
+                          
 
 
 
-                        </div>
-                        <!-- End Form -->
-                    </div>
-
-
-                    <div class="col-sm-6">
+<div class="col-sm-6">
                         <!-- Form -->
                         <div class="mb-4">
                             <label for="price" class="form-label">Price</label>
@@ -91,9 +66,9 @@ use yii\helpers\Url;
                             <div class="quantity-counter ">
                                 <div class="js-quantity-counter row align-items-center">
                                     <div class="col">
-                                        <span class="d-block small">Select quantity</span>
+                                        <!-- <span class="d-block small">Select quantity</span> -->
 
-                                        <?= $form->field($model, 'price')->textInput(['class' => 'js-result form-control form-control-quantity-counter', 'value' => '1'])->label(false) ?>
+                                        <?= $form->field($model, 'price',['options'=>['class'=>'mt-1']])->textInput(['class' => 'js-result form-control form-control-quantity-counter', 'value' => '1'])->label(false) ?>
 
                                     </div>
                                     <!-- End Col -->
@@ -118,51 +93,13 @@ use yii\helpers\Url;
                         </div>
                         <!-- End Form -->
                     </div>
-                </div>
+             
 
 
 
-                <div class="row">
-                    <div class="col-sm-6">
-                        <!-- Form -->
-                        <div class="mb-4">
-                            <label for="status" class="form-label">Passenger</label>
-
-
-                            <div class="tom-select-custom">
-                                <?= $form->field($model, 'passenger')->dropDownList(
+                            <?= $form->field($model, 'duration', ['options' => ['class' => 'col-sm-6']])->dropDownList(
                                     [
-                                        'adult' => 'Adult',
-                                        'child' => 'Child',
-                                        'Infant' => 'INF',
-                                    ],
-                                    [
-                                        'prompt' => 'Select a value...',
-                                        'class' => 'js-select form-select',
-                                        'autocomplete' => 'off',
-                                        'style' => 'height:53px',
-                                        'data-hs-tom-select-options' => json_encode([
-                                            'placeholder' => 'Select a value...',
-                                            'hideSearch' => true,
-
-                                        ]),
-                                    ]
-                                )->label(false) ?>
-                            </div>
-
-                        </div>
-                    </div>
-
-
-                    <div class="col-sm-6">
-                        <!-- Form -->
-                        <div class="mb-4">
-                            <label for="status" class="form-label">Duration</label>
-
-
-                            <div class="tom-select-custom">
-                                <?= $form->field($model, 'duration')->dropDownList(
-                                    [
+                                        ''=>'Please select duration',
                                         '7' => '7 days',
                                         '10' => '10 days',
                                         '15' => '15 days',
@@ -176,23 +113,17 @@ use yii\helpers\Url;
                                         '1095' => '3 years',
                                     ],
                                     [
-                                        'prompt' => 'Select a value...',
-                                        'class' => 'js-select form-select',
-                                        'autocomplete' => 'off',
-                                        'style' => 'height:53px',
-                                        'data-hs-tom-select-options' => json_encode([
-                                            'placeholder' => 'Select a value...',
-                                            'hideSearch' => true,
-
-                                        ]),
+                                     
+                                        'class' => 'form-select',
+                        
                                     ]
-                                )->label(false) ?>
-                            </div>
-                            <!-- End Form -->
-                        </div>
-                    </div>
+                                ) ?>
 
-                </div>
+                                    </div>
+
+               
+
+
 
 
 
@@ -212,18 +143,9 @@ use yii\helpers\Url;
                 <!-- Plan Code -->
 
 
-                <!-- Submit Button -->
-                <div class="form-group">
-                    <?= Html::submitButton('Save', ['class' => 'btn btn-primary', 'style' => 'width: 150px;']) ?>
-                </div>
+            <div class="form-group d-flex justify-content-end ">
+        <?= Html::submitButton('Save', ['class' => 'btn btn-primary save-button']) ?>
+   
+    </div>
 
                 <?php ActiveForm::end(); ?>
-            </div>
-            <!-- End Card Body -->
-        </div>
-    </div>
-    <!-- End Card -->
-</div>
-<!-- End Col -->
-</div>
-<!-- End Row -->

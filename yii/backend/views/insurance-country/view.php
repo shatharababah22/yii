@@ -7,7 +7,7 @@ use yii\widgets\DetailView;
 /** @var common\models\InsuranceCountries $model */
 
 $this->title = $model->company_name;
-$this->params['breadcrumbs'][] = ['label' => 'Insurance Countries', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Companies', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
@@ -30,7 +30,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'insurance_id',
+        
+            [
+                'attribute' => 'insurance_id',
+                'value' => $model->insurance->name
+            ],
             'country_code',
             'company_name',
             'company_logo',

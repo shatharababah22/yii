@@ -14,11 +14,14 @@ class PlansSearch extends Plans
     /**
      * {@inheritdoc}
      */
+
+     public $insurance_name;
+
     public function rules()
     {
         return [
-            [['id', 'insurance_id', 'max_age', 'min_age'], 'integer'],
-            [['name', 'description', 'overview', 'plan_code'], 'safe'],
+            [['id', 'max_age', 'min_age'], 'integer'],
+            [['name', 'description', 'overview', 'plan_code','insurance_name'], 'safe'],
         ];
     }
 
@@ -41,44 +44,46 @@ class PlansSearch extends Plans
     public function search($params)
     {
         $query = Plans::find();
-
-        // add conditions that should always apply here
-
-      
+    
+        $query->joinWith(['insurance']);
+    
         $totalCount = $query->count();
-
-     
-
+    
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
                 'pageSize' => 1,
             ],
-             
             'totalCount' => $totalCount
         ]);
-
+    
         $this->load($params);
-
+    
+        $dataProvider->sort->attributes['insurance_name'] = [
+            'asc' => ['insurances.name' => SORT_ASC],
+            'desc' => ['insurances.name' => SORT_DESC],
+        ];
+    
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
             // $query->where('0=1');
             return $dataProvider;
         }
-
-        // grid filtering conditions
+    
+        
         $query->andFilterWhere([
-            'id' => $this->id,
-            'insurance_id' => $this->insurance_id,
-            'max_age' => $this->max_age,
-            'min_age' => $this->min_age,
+            'plans.id' => $this->id,
+            'insurances.name' => $this->insurance_name,
+            'plans.max_age' => $this->max_age,
+            'plans.min_age' => $this->min_age,
         ]);
-
-        $query->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'description', $this->description])
-            ->andFilterWhere(['like', 'overview', $this->overview])
-            ->andFilterWhere(['like', 'plan_code', $this->plan_code]);
-
+    
+        $query->andFilterWhere(['like', 'plans.name', $this->name])
+            ->andFilterWhere(['like', 'plans.description', $this->description])
+            ->andFilterWhere(['like', 'plans.overview', $this->overview])
+            ->andFilterWhere(['like', 'plans.plan_code', $this->plan_code]);
+    
         return $dataProvider;
     }
+    
 }

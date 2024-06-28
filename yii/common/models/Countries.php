@@ -34,7 +34,6 @@ class Countries extends \yii\db\ActiveRecord
         return [
             [['code', 'country'], 'required'],
             [['callCode'], 'number'],
-            [['active'], 'integer'],
             [['code', 'currency'], 'string', 'max' => 5],
             [['country'], 'string', 'max' => 255],
             [['zone'], 'string', 'max' => 30],

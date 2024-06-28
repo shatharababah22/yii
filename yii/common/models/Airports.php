@@ -50,7 +50,7 @@ class Airports extends \yii\db\ActiveRecord
             'name' => Yii::t('app', 'Name'),
             'cityCode' => Yii::t('app', 'City Code'),
             'cityName' => Yii::t('app', 'City Name'),
-            'country_id' => Yii::t('app', 'Country ID'),
+            'country_id' => Yii::t('app', 'Country Name'),
         ];
     }
 

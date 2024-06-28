@@ -13,7 +13,7 @@ use yii\bootstrap5\ActiveForm;
 /** @var common\models\InsuranceCountriesSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Insurance Countries';
+$this->title = 'Companies';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="insurance-countries-index">
@@ -95,30 +95,44 @@ $this->params['breadcrumbs'][] = $this->title;
                         <label class="form-check-label"></label>
                     </div>
                 </th>
-                <th>ID</th>
-                <th>Insurance ID</th>
-                <th>Country Code</th>
+    
                 <th>Company Name</th>
-                <th>Company Logo</th>
+                <th>Insurance Name</th>
+                <th>Country Code</th>
+                <th>Source country </th>
+                <th>Source country code</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
+                <?php if ($dataProvider->models) : ?>
+
             <?php foreach ($dataProvider->models as $model) : ?>
                 <tr>
-                    <td class="table-column-pe-0">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="productsCheck<?= $model->id ?>">
-                            <label class="form-check-label" for="productsCheck<?= $model->id ?>"></label>
-                        </div>
-                    </td>
-                    <td><?= Html::encode($model->id) ?></td>
-                    <td><?= Html::encode($model->insurance_id) ?></td>
+
+
+
+                <td class="table-column-pe-0">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="productsCheck<?= $model->id ?>">
+                <label class="form-check-label" for="productsCheck<?= $model->id ?>"></label>
+              </div>
+            </td>
+            <td class="table-column-ps-0">
+              <a class="d-flex align-items-center" href="<?= Url::to(['view', 'id' => $model->id]) ?>">
+                <div class="flex-shrink-0">
+                  <img class="avatar avatar-lg" src="<?= Yii::$app->request->baseUrl ?>/images/<?= $model->company_logo ?>" alt="Image Description">
+                </div>
+                <div class="flex-grow-1 ms-3">
+                  <h5 class="text-inherit mb-0"><?= Html::encode($model->company_name) ?></h5>
+                </div>
+              </a>
+            </td>
+                 
+                    <td><?= Html::encode($model->insurance->name) ?></td>
                     <td><?= Html::encode($model->country_code) ?></td>
-                    <td><?= Html::encode($model->company_name) ?></td>
-                    <td>
-                        <img class="avatar avatar-lg" src="<?= Yii::$app->request->baseUrl ?>/images/<?= Html::encode($model->company_logo) ?>" alt="Company Logo">
-                    </td>
+                    <td><?= Html::encode($model->source_country) ?></td>
+                    <td><?= Html::encode($model->source_country_code) ?></td>
                     <td>
                         <a class="btn btn-white btn-sm" href="<?= Url::to(['update', 'id' => $model->id]) ?>">
                             <i class="bi-pencil-fill" style="font-size: 15px;"></i>
@@ -131,7 +145,14 @@ $this->params['breadcrumbs'][] = $this->title;
                         </a>
                     </td>
                 </tr>
-            <?php endforeach; ?>
+                  <?php endforeach; ?>
+                  <?php else: ?>
+            <tr class="odd"><td valign="top" colspan="8" class="dataTables_empty"><div class="text-center p-4">
+              
+            <img class="mb-3" src="<?= Url::to('@web/svg/illustrations/oc-error.svg') ?>" alt="Image Description" style="width: 10rem;" data-hs-theme-appearance="default">
+            <p class="mb-0">No data to show</p>
+            </div></td></tr>
+    <?php endif; ?>
         </tbody>
     </table>
 </div>

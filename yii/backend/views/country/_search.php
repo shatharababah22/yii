@@ -15,7 +15,7 @@ use yii\widgets\ActiveForm;
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'id',['options' => ['class' => 'mt-2']])  ?>
+    <!-- <?= $form->field($model, 'id',['options' => ['class' => 'mt-2']])  ?> -->
 
     <?= $form->field($model, 'code',['options' => ['class' => 'mt-2']])  ?>
 
@@ -26,8 +26,14 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'zone',['options' => ['class' => 'mt-2']])  ?>
 
     <?php echo $form->field($model, 'currency') ?>
-
-    <?php  echo $form->field($model, 'active') ?>
+    <?= $form->field($model, 'active' ,['options' => ['class' => 'mt-2']])->dropDownList(
+                [
+                  '1' => 'Active',
+                    '0' => 'Inactive',
+                   
+                ],
+                ['class' => 'form-select']
+            ) ?>
  
     <div class="offcanvas-footer ">
       <div class="row ">

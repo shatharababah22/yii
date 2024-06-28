@@ -17,9 +17,10 @@ class CountriesSearch extends Countries
     public function rules()
     {
         return [
-            [['id', 'active'], 'integer'],
+            [['id'], 'integer'],
             [['code', 'country', 'zone', 'currency'], 'safe'],
             [['callCode'], 'number'],
+            [['active'], 'boolean'], 
         ];
     }
 
@@ -52,7 +53,7 @@ class CountriesSearch extends Countries
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
-                'pageSize' => 1,
+                'pageSize' => 10,
             ],
              
             'totalCount' => $totalCount

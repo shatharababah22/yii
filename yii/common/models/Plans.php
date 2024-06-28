@@ -50,7 +50,7 @@ class Plans extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'insurance_id' => Yii::t('app', 'Insurance ID'),
+            'insurance_id' => Yii::t('app', 'Insurance Name'),
             'name' => Yii::t('app', 'Name'),
             'description' => Yii::t('app', 'Description'),
             'overview' => Yii::t('app', 'Overview'),
