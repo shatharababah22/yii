@@ -13,13 +13,14 @@ class m240620_173336_create_insurances_table extends Migration
     public function safeUp()
     {
         $this->createTable('{{%insurances}}', [
-     'id' => $this->primaryKey(),
+            'id' => $this->primaryKey(),
             'name' => $this->string()->notNull(),
             'overview' => $this->text()->notNull(),
             'description' => $this->text()->defaultValue(null),
             'photo' => $this->string()->defaultValue(null),
-       'price' => $this->integer()->notNull(), 
+            'price' => $this->integer()->notNull(),
             'benefits_link' => $this->string()->defaultValue(null),
+            'slug' => $this->string()->unique()->notNull(),
         ]);
     }
 

@@ -6,204 +6,121 @@
 use common\models\Countries;
 use yii\bootstrap5\ActiveForm;
 use yii\helpers\Html;
+use yii\helpers\Url;
+
 
 $this->title = 'About';
 ?>
 <!--hero start-->
-<section class="jarallax py-9 hero-agency" data-jarallax data-speed="0.4">
-    <img class="jarallax-img" src="/images/jo1.jpg" alt="agency" />
-    <div class="position-absolute start-0 end-0">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-5 col-12" data-cue="zoomIn">
-                    <div class="text-center text-lg-start">
-                        <div class="mb-4 text-white-stable">
-                            <small class="text-uppercase ls-lg">Immediate Travel Coverage</small>
-                            <h1 class="mb-3 mt-3 display-4 text-white text-shadow-1">
-                                Get Instant Travel Insurance in Jordan
-                            </h1>
-                            <p class="lead mb-0 text-white">
-                                Planning a trip to or from Jordan? Get your travel insurance instantly for worry-free travel experiences.
-                            </p>
-                        </div>
+<section class="bg-primary-dark pt-9 right-slant-shape" data-cue="fadeIn">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-5 col-12">
+                <div class="text-center text-lg-start mb-7 mb-lg-0" data-cues="slideInDown">
+                    <div class="mb-4">
+                        <h1 class="mb-5 display-5 text-white-stable">
+                            Claim your <?= htmlspecialchars($insurance->name, ENT_QUOTES, 'UTF-8') ?> insurance
+                            <span class="text-pattern-line text-warning"> within minutes</span>
+                        </h1>
+                        <p class="mb-0 text-white-50">
+                            Worldwide & Schengen – Accepted by all Embassies. All our insurance covers COVID-19 100%.
+                        </p>
                     </div>
+                    <div data-cues="slideInDown">
+                        <a href="#" class="btn btn-primary me-2">Get Covered Now</a>
+                        <a href="#" class="btn btn-outline-warning">Explore Programs</a>
+                    </div>
+
                 </div>
-                <div class="offset-lg-1 col-lg-5 col-12">
-                    <div class="position-relative z-1 pt-lg-9" data-cue="slideInRight">
-                        <div class="position-relative">
-                            <div class="card shadow-sm">
-                                <div class="card-body">
-                                    <?php $form = ActiveForm::begin(['action'=>'/insurance/travel', 'method'=>'get', 'options'=>['class'=>'row needs-validation g-3']]) ?>
-                                    <div class="col-lg-12">
-                                        <div class="mb-3">
-                                            <h3 class="mb-0 text-center">Get Covered</h3>
-                                            <?= $form->field($model, 'type')->hiddenInput(['value'=>1])->label(false) ?>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 col-12">
-                                        <label for="ScheduleFirstnameInput" class="form-label">
-                                            From
-                                            <span class="text-danger">*</span>
-                                        </label>
-                                        <?php $model->from_country = "JO"; ?>
-                                        <?= $form->field($model, 'from_country')->dropDownList(\yii\helpers\ArrayHelper::map(
-                                            Countries::find()->cache(27000)->all(), 'code', 'country'
-                                        ), ['prompt' => 'Departure'])->label(false) ?>
-                                    </div>
-                                    <div class="col-md-6 col-12">
-                                        <label for="scheduleLastnameInput" class="form-label">
-                                            To
-                                            <span class="text-danger">*</span>
-                                        </label>
-                                        <?= $form->field($model, 'to_country')->dropDownList(\yii\helpers\ArrayHelper::map(
-                                            Countries::find()->cache(27000)->all(), 'code', 'country'
-                                        ), ['prompt' => 'Arrival'])->label(false) ?>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="scheduleEmailInput" class="form-label">
-                                            Departure Date
-                                            <span class="text-danger">*</span>
-                                        </label>
-                                        <?= $form->field($model, 'date')->textInput(['type'=>'date'])->label(false) ?>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="scheduleEmailInput" class="form-label">
-                                            Days (Duration)
-                                            <span class="text-danger">*</span>
-                                        </label>
-                                        <?= $form->field($model, 'duration')->dropDownList([
-                                            3=>'3 Days',
-                                            4=>'4 Days',
-                                            5=>'5 Days',
-                                            6=>'6 Days',
-                                            7=>'7 Days',
-                                            8=>'8 Days',
-                                            9=>'9 Days',
-                                            10=>'10 Days',
-                                            11=>'11 Days',
-                                            12=>'12 Days',
-                                            13=>'13 Days',
-                                            14=>'14 Days',
-                                            15=>'15 Days',
-                                            17=>'17 Days',
-                                            18=>'18 Days',
-                                            19=>'19 Days',
-                                            20=>'20 Days',
-                                            21=>'21 Days',
-                                            22=>'22 Days',
-                                            23=>'23 Days',
-                                            24=>'24 Days',
-                                            25=>'25 Days',
-                                            26=>'26 Days',
-                                            27=>'27 Days',
-                                            28=>'28 Days',
-                                            29=>'29 Days',
-                                            30=>'30 Days',
-                                            60=>'60 Days',
-                                            90=>'90 Days',
-                                            180=>'180 Days',
-                                            365=>'1 Year',
-                                            730=>'2 Years',
-                                            1095=>'3 Years',
-                                        ], ['class'=>'form-control'])->label(false) ?>
+            </div>
+            <div class="offset-lg-1 col-lg-5 col-12">
+                <div class="position-relative z-1 pt-lg-9" data-cue="slideInRight">
+                    <div class="position-relative">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+<?php $form = ActiveForm::begin(['action' => '/insurance/travel', 'method' => 'get', 'options' => ['class' => 'row needs-validation g-3']]) ?>
+    <div class="col-lg-12">
+        <div class="mb-3">
+            <h3 class="mb-0 text-center">Get Covered</h3>
+            <?= $form->field($model, 'type')->hiddenInput(['value' => 1])->label(false) ?>
+        </div>
+    </div>
+    <div class="col-md-6 col-12">
+        <label for="ScheduleFirstnameInput" class="form-label">
+            From
+            <span class="text-danger">*</span>
+        </label>
+        <?= $form->field($model, 'from_country')->dropDownList(\yii\helpers\ArrayHelper::map(
+            Countries::find()->cache(27000)->all(),
+            'code',
+            'country'
+        ), ['prompt' => 'Departure'])->label(false) ?>
+    </div>
+    <div class="col-md-6 col-12">
+        <label for="scheduleLastnameInput" class="form-label">
+            To
+            <span class="text-danger">*</span>
+        </label>
+        <?= $form->field($model, 'to_country')->dropDownList(\yii\helpers\ArrayHelper::map(
+            Countries::find()->cache(27000)->all(),
+            'code',
+            'country'
+        ), ['prompt' => 'Arrival'])->label(false) ?>
+    </div>
+    <div class="col-md-6">
+        <label for="scheduleEmailInput" class="form-label">
+            Departure Date
+            <span class="text-danger">*</span>
+        </label>
+        <?= $form->field($model, 'date')->textInput(['type' => 'date'])->label(false) ?>
+    </div>
+    <div class="col-md-6">
+        <label for="scheduleEmailInput" class="form-label">
+            Days (Duration)
+            <span class="text-danger">*</span>
+        </label>
+        <?= $form->field($model, 'duration')->dropDownList([
+            '7' => '7 days',
+            '10' => '10 days',
+            '15' => '15 days',
+            '21' => '21 days',
+            '30' => '1 month',
+            '60' => '2 months',
+            '90' => '3 months',
+            '180' => '6 months',
+            '365' => '1 year',
+            '730' => '2 years',
+            '1095' => '3 years',
+        ], ['prompt' => 'Duration', 'class' => 'form-control'])->label(false) ?>
+    </div>
+    <div id="adult" class="col">
+        <label for="scheduleEmailInput" class="form-label">
+            Adult
+            <span class="text-danger">*</span>
+        </label>
+        <?= $form->field($model, 'adult')->dropDownList(range(0, 50), ['class' => 'form-control'])->label(false) ?>
+    </div>
+    <div id="child" class="col">
+        <label for="scheduleEmailInput" class="form-label">
+            Child
+        </label>
+        <?= $form->field($model, 'children')->dropDownList(range(0, 10), ['class' => 'form-control'])->label(false) ?>
+    </div>
+    <div id="infant" class="col">
+        <label for="scheduleEmailInput" class="form-label">
+            Infant
+        </label>
+        <?= $form->field($model, 'infants')->dropDownList(range(0, 2), ['class' => 'form-control'])->label(false) ?>
+    </div>
+    <div class="col-12">
+        <p id="adult1-note" class="text-muted small mb-0">Adult age must be between 19-75 years old</p>
+        <p id="infant-note" class="text-muted small">Infant age must be between 30 days-2 years old</p>
+    </div>
+    <div class="d-grid">
+        <?= Html::submitButton('Next', ['class' => 'btn btn-warning', 'name' => 'login-button']) ?>
+    </div>
+<?php ActiveForm::end() ?>
 
-                                    </div>
-                                    <div id="adult" class="col">
-                                        <label for="scheduleEmailInput" class="form-label">
-                                            Adult
-                                            <span class="text-danger">*</span>
-                                        </label>
-                                        <?= $form->field($model, 'adult')->dropDownList([
-                                            0=>'0',
-                                            1=>'1',
-                                            2=>'2',
-                                            3=>'3',
-                                            4=>'4',
-                                            5=>'5',
-                                            6=>'6',
-                                            7=>'7',
-                                            8=>'8',
-                                            9=>'9',
-                                            10=>'10',
-                                            11=>'11',
-                                            12=>'12',
-                                            13=>'13',
-                                            14=>'14',
-                                            15=>'15',
-                                            17=>'17',
-                                            18=>'18',
-                                            19=>'19',
-                                            20=>'20',
-                                            21=>'21',
-                                            22=>'22',
-                                            23=>'23',
-                                            24=>'24',
-                                            25=>'25',
-                                            26=>'26',
-                                            27=>'27',
-                                            28=>'28',
-                                            29=>'29',
-                                            30=>'30',
-                                            31=>'31',
-                                            32=>'32',
-                                            33=>'33',
-                                            34=>'34',
-                                            35=>'35',
-                                            36=>'36',
-                                            37=>'37',
-                                            38=>'38',
-                                            39=>'39',
-                                            40=>'40',
-                                            41=>'41',
-                                            42=>'42',
-                                            43=>'43',
-                                            44=>'44',
-                                            45=>'45',
-                                            46=>'46',
-                                            47=>'47',
-                                            48=>'48',
-                                            49=>'49',
-                                            50=>'50',
-                                        ], ['class'=>'form-control'])->label(false) ?>
-                                    </div>
-                                    <div id="child" class="col">
-                                        <label for="scheduleEmailInput" class="form-label">
-                                            Child
-                                        </label>
-                                        <?= $form->field($model, 'children')->dropDownList([
-                                            0=>'0',
-                                            1=>'1',
-                                            2=>'2',
-                                            3=>'3',
-                                            4=>'4',
-                                            5=>'5',
-                                            6=>'6',
-                                            7=>'7',
-                                            8=>'8',
-                                            9=>'9',
-                                            10=>'10',
-                                        ], ['class'=>'form-control'])->label(false) ?>
-                                    </div>
-                                    <div id="infant" class="col">
-                                        <label for="scheduleEmailInput" class="form-label">
-                                            Infant
-                                        </label>
-                                        <?= $form->field($model, 'infants')->dropDownList([
-                                            0=>'0',
-                                            1=>'1',
-                                            2=>'2',
-                                        ], ['class'=>'form-control'])->label(false) ?>
-                                    </div>
-                                    <div class="col-12">
-                                        <p id="adult1-note" class="text-muted small mb-0">Adult age must be between 19-75 years old</p>
-                                        <p id="infant-note" class="text-muted small">Infant age must be between 30 days-2 years old</p>
-
-                                    </div>
-                                    <div class="d-grid">
-                                        <?= Html::submitButton('Next', ['class' => 'btn btn-warning', 'name' => 'login-button']) ?>
-
-                                    </div>
-                                    <?php ActiveForm::end() ?>
                                 </div>
                             </div>
                         </div>
@@ -214,66 +131,97 @@ $this->title = 'About';
     </div>
 </section>
 <!--hero end-->
+
+
+<!--Featured in start-->
+<div class="my-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 offset-lg-1 col-12" data-cue="fadeIn">
+                <ul class="list-inline text-center">
+                <?php foreach (\common\models\Countries::find()->all() as $Countries) : ?>
+
+                    <li class="list-inline-item d-inline-flex align-items-center me-3 mb-2 mb-lg-0">
+                        <img src="/assets/flags/jo.png" class="rounded-circle" width="24" height="24" alt="Jordan" />
+                        <h6 class="my-2 ms-2"><?= $Countries->country ?></h6>
+                    </li>
+                
+                    <?php endforeach; ?>
+                   
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Featured in end-->
+
+
+
+<div class="my-3">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 offset-lg-1 col-12" data-cue="fadeIn" data-show="true" style="animation-name: fadeIn; animation-duration: 600ms; animation-timing-function: ease; animation-delay: 0ms; animation-direction: normal; animation-fill-mode: both;">
+                <div class="text-center mb-4 mb-lg-7">
+                    <small class="text-uppercase fw-semibold ls-md">Certified insurance companies</small>
+                </div>
+
+               
+                <div class="swiper logoSwiper swiper-initialized swiper-horizontal swiper-backface-hidden" data-cue="slideInDown" data-show="true" style="animation-name: slideInDown; animation-duration: 600ms; animation-timing-function: ease; animation-delay: 0ms; animation-direction: normal; animation-fill-mode: both;">
+                <?php foreach (\common\models\InsuranceCountries::find()->all() as $Countries) : ?>
+
+                    <div class="swiper-wrapper pb-7" id="swiper-wrapper-3ec847c46421dd89" aria-live="off">
+                        <div class="swiper-slide swiper-slide-active" role="group" aria-label="1 / 5" data-swiper-slide-index="0" style="width: 172.2px; margin-right: 50px;">
+                            <div data-cue="slideInDown" data-show="true" style="animation-name: slideInDown; animation-duration: 600ms; animation-timing-function: ease; animation-delay: 200ms; animation-direction: normal; animation-fill-mode: both;">
+                                <figure class="text-center">
+                                    <img src="<?= Yii::$app->request->baseUrl ?>/dashboard/images/<?= $Countries->company_logo ?>" alt="logo" width="110">
+                                </figure>
+                            </div>
+                        </div>
+                    
+                        <?php endforeach; ?>
+
+                   
+                       
+                    </div>
+                    <div class="swiper-pagination swiper-pagination-bullets swiper-pagination-horizontal swiper-pagination-bullets-dynamic swiper-pagination-lock" style="width: 90px;"><span class="swiper-pagination-bullet swiper-pagination-bullet-active swiper-pagination-bullet-active-main" aria-current="true" style="left: 36px;"></span><span class="swiper-pagination-bullet swiper-pagination-bullet-active-next" style="left: 36px;"></span><span class="swiper-pagination-bullet swiper-pagination-bullet-active-next-next" style="left: 36px;"></span><span class="swiper-pagination-bullet" style="left: 36px;"></span><span class="swiper-pagination-bullet" style="left: 36px;"></span></div>
+                    <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <section class="my-xl-9 my-5">
     <div class="container" data-cue="fadeIn">
         <div class="row">
-            <?php foreach (\common\models\Insurances::find()->all() as $insurance): ?>
-            <div class="col-md-4 mt-5">
-                <!--Image overlay-->
-                <a href="#" class="card text-bg-light shadow"  data-cue="fadeUp">
-                    <img src="<?= $insurance->photo ?>" class="card-img" alt="img">
-                    <div class="card-img-overlay text-white d-inline-flex justify-content-start align-items-end overlay-dark">
-                        <div class="text-capitalize">
-                            <h2 class="card-title"><?= $insurance->name ?></h2>
-                            <div class="mb-4 justify-content-center">
-                                <div class="price-text">
-                                    <span class="small">starts from </span>
-                                    <div class="price price-show h1 text-warning">
-                                        <span>$</span>
-                                        <span><?= $insurance->price ?></span>
+            <?php foreach (\common\models\Insurances::find()->all() as $insurance) : ?>
+                <div class="col-md-4 mt-5">
+                   
+                    <a href="<?= Url::to(['insurance/country', 'slug' => $insurance->slug]) ?>" class="card text-bg-light shadow" data-cue="fadeUp">
+                        <img src="<?= Yii::$app->request->baseUrl ?>/dashboard/images/<?= $insurance->photo ?>" class="card-img" alt="img">
+                        <div class="card-img-overlay text-white d-inline-flex justify-content-start align-items-end overlay-dark">
+                            <div class="text-capitalize">
+                                <h2 class="card-title"><?= $insurance->name ?></h2>
+                                <div class="mb-4 justify-content-center">
+                                    <div class="price-text">
+                                        <span class="small">starts from </span>
+                                        <div class="price price-show h1 text-warning">
+                                            <span>$</span>
+                                            <span><?= $insurance->price ?></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                    </div>
-                </a>
-            </div>
+                        </div>
+                    </a>
+                </div>
             <?php endforeach; ?>
         </div>
     </div>
 </section>
-<!--Testimonial start-->
-<section class="py-xl-9 py-5">
-    <div class="container">
-        <div class="row gy-7 gx-lg-7">
-            <div class="col-lg-6 col-12" data-cue="fadeIn">
-                <div class="d-flex flex-column gap-3 mb-6">
-                    <div>
-                        <h2>Certified insurance companies</h2>
-                        <p class="lead lh-lg mt-5">
-                            Explore our curated selection of certified insurance companies, trusted providers offering comprehensive coverage for your peace of mind. Rest assured with top-notch service and reliable protection for your travel needs.
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6 col-12" data-cue="fadeIn">
-                <div class="row g-4">
-                    <?php foreach(\common\models\InsuranceCountries::find()->all() as $company): ?>
-                    <div class="col-xl-4 col-6 col-md-4" data-cue="zoomIn">
-                        <div class="card card-lift text-center py-3">
-                            <div class="d-flex justify-content-center align-items-center">
-                                <img src="<?= $company->company_logo ?>" alt="company" style="max-width: 150px;height: 80px;" />
-                            </div>
-                        </div>
-                    </div>
-                    <?php endforeach; ?>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!--Testimonial end-->
+
 
 <!--5m member start-->
 <section class="pt-xl-9 py-5 bg-primary-dark">
@@ -323,3 +271,36 @@ $this->title = 'About';
     </div>
 </section>
 <!--5m member end-->
+
+
+<!--Testimonial start-->
+<section class="py-xl-9 py-5">
+    <div class="container">
+        <div class="row gy-7 gx-lg-7">
+            <div class="col-lg-6 col-12" data-cue="fadeIn">
+                <div class="d-flex flex-column gap-3 mb-6">
+                    <div>
+                        <h2>Certified insurance companies</h2>
+                        <p class="lead lh-lg mt-5">
+                            Explore our curated selection of certified insurance companies, trusted providers offering comprehensive coverage for your peace of mind. Rest assured with top-notch service and reliable protection for your travel needs.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-12" data-cue="fadeIn">
+                <div class="row g-4">
+                    <?php foreach (\common\models\InsuranceCountries::find()->all() as $company) : ?>
+                        <div class="col-xl-4 col-6 col-md-4" data-cue="zoomIn">
+                            <div class="card card-lift text-center py-3">
+                                <div class="d-flex justify-content-center align-items-center">
+                                    <img src="<?= Yii::$app->request->baseUrl ?>/dashboard/images/<?= $insurance->photo ?>"" alt="company" style="max-width: 150px;height: 80px;" />
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--Testimonial end-->

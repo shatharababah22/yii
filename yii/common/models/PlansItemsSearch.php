@@ -20,7 +20,7 @@ class PlansItemsSearch extends PlansItems
     {
         return [
             [['id'], 'integer'],
-            [['title', 'plan_code'], 'safe'],
+            [['title'], 'safe'],
         ];
     }
 
@@ -44,7 +44,7 @@ class PlansItemsSearch extends PlansItems
         $query = PlansItems::find();
 
         // Join with the Plans table
-        $query->joinWith(['plan']);
+        // $query->joinWith(['plan']);
 
         $totalCount = $query->count();
 
@@ -56,10 +56,10 @@ class PlansItemsSearch extends PlansItems
             'totalCount' => $totalCount,
         ]);
 
-        $dataProvider->sort->attributes['plan_code'] = [
-            'asc' => ['plans.plan_code' => SORT_ASC],
-            'desc' => ['plans.plan_code' => SORT_DESC],
-        ];
+        // $dataProvider->sort->attributes['plan_code'] = [
+        //     'asc' => ['plans.plan_code' => SORT_ASC],
+        //     'desc' => ['plans.plan_code' => SORT_DESC],
+        // ];
 
         $this->load($params);
 
@@ -72,8 +72,8 @@ class PlansItemsSearch extends PlansItems
             'id' => $this->id,
         ]);
 
-        $query->andFilterWhere(['like', 'title', $this->title])
-              ->andFilterWhere(['like', 'plans.plan_code', $this->plan_code]);
+        $query->andFilterWhere(['like', 'title', $this->title]);
+            //   ->andFilterWhere(['like', 'plans.plan_code', $this->plan_code]);
 
         return $dataProvider;
     }

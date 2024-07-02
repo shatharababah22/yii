@@ -14,24 +14,24 @@ class m240624_093108_create_plans_items_table extends Migration
     {
         $this->createTable('{{%plans_items}}', [
             'id' => $this->primaryKey(),
-            'plan_id' => $this->integer()->notNull(),
+            // 'plan_id' => $this->integer()->notNull(),
             'title' => $this->string()->notNull(), 
         ]);
 
-        $this->createIndex(
-            'idx-plans_items-plan_id',
-            '{{%plans_items}}',
-            'plan_id'
-        );
+        // $this->createIndex(
+        //     'idx-plans_items-plan_id',
+        //     '{{%plans_items}}',
+        //     'plan_id'
+        // );
 
-        $this->addForeignKey(
-            'fk-plans_items-plan_id',
-            '{{%plans_items}}',
-            'plan_id',
-            '{{%plans}}',
-            'id',
-            'CASCADE'
-        );
+        // $this->addForeignKey(
+        //     'fk-plans_items-plan_id',
+        //     '{{%plans_items}}',
+        //     'plan_id',
+        //     '{{%plans}}',
+        //     'id',
+        //     'CASCADE'
+        // );
     }
     /**
      * {@inheritdoc}

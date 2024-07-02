@@ -260,6 +260,8 @@ $this->title = 'My Yii Application';
     </div>
 </div>
 <!--Featured in end-->
+
+
 <div class="my-3">
     <div class="container">
         <div class="row">

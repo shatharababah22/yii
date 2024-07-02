@@ -22,7 +22,8 @@
         "perminder-klair/yii2-dropzone": "^1.0",
         "yii2mod/yii2-sweet-alert": "*",
         "dominus77/yii2-sweetalert2-widget": "2.0",
-        "arogachev/yii2-excel": "^0.1.1"
+        "arogachev/yii2-excel": "^0.1.1",
+        "phpoffice/phpspreadsheet": "^2.1"
         
     },
     "require-dev": {

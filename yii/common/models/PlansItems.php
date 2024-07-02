@@ -28,9 +28,8 @@ class PlansItems extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'plan_id'], 'required'],
+            [['title'], 'required'],
             [['title'], 'string', 'max' => 255],
-            [['plan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Plans::class, 'targetAttribute' => ['plan_id' => 'id']],
 
         ];
     }
@@ -43,7 +42,7 @@ class PlansItems extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'title' => Yii::t('app', 'Title'),
-            'plan_id' => Yii::t('app', 'Plan Code'),
+            // 'plan_id' => Yii::t('app', 'Plan Code'),
         ];
     }
 
@@ -52,14 +51,14 @@ class PlansItems extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getPlansCoverages()
+    public function getCoverages()
     {
         return $this->hasMany(PlansCoverage::class, ['item_id' => 'id']);
     }
 
 
-    public function getPlan()
-    {
-        return $this->hasOne(Plans::class, ['id' => 'plan_id']);
-    }
+    // public function getPlan()
+    // {
+    //     return $this->hasOne(Plans::class, ['id' => 'plan_id']);
+    // }
 }

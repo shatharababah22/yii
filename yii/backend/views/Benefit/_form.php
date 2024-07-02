@@ -23,17 +23,10 @@ use yii\helpers\Url;
 
                 <div class="row mb-2">
         
-            <?= $form->field($model, 'title',['options' => ['class' => 'col-sm-6']])->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'title',['options' => ['class' => 'col-sm-8']])->textInput(['maxlength' => true]) ?>
       
        
-        <?= $form->field($model, 'plan_id', ['options' => ['class' => 'col-sm-6']])->dropDownList(
-            \yii\helpers\ArrayHelper::map(
-                \common\models\Plans::find()->all(),
-                'id',
-                'plan_code'
-            ),
-            ['class' => 'form-select']
-        ) ?>
+    
         
     </div>
 

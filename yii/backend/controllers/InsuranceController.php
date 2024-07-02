@@ -170,6 +170,15 @@ class InsuranceController extends Controller
     {
         $this->findModel($id)->delete();
 
+        $insurances = Insurances::find()->orderBy(['id' => SORT_ASC])->all();
+    
+        
+        $newId = 1;
+        foreach ($insurances as $insurance) {
+            $insurance->id = $newId++;
+            $insurance->save(false); 
+        }
+
         return $this->redirect(['index']);
     }
 

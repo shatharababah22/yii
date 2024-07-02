@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\behaviors\SluggableBehavior;
 
 /**
  * This is the model class for table "insurances".
@@ -43,6 +44,18 @@ class Insurances extends \yii\db\ActiveRecord
             [['name'], 'string', 'max' => 255],
         ];
     }
+
+    public function behaviors()
+{
+    return [
+        [
+            'class' => SluggableBehavior::class,
+                'attribute' => 'name', // Attribute from which the slug will be generated
+                'slugAttribute' => 'slug'
+            
+        ],
+    ];
+}
 
     /**
      * {@inheritdoc}
