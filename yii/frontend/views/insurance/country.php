@@ -50,7 +50,7 @@ $this->title = 'About';
                                 <div class="col-lg-12">
                                     <div class="mb-3">
                                         <h3 class="mb-0 text-center">Get Covered</h3>
-                                        <?= $form->field($model, 'type')->hiddenInput(['value' => 1])->label(false) ?>
+                                        <?= $form->field($model, 'type')->hiddenInput(['value' => $insurance->id])->label(false) ?>
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-12">

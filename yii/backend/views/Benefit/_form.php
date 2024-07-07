@@ -21,14 +21,22 @@ use yii\helpers\Url;
                 <?php $form = ActiveForm::begin(); ?>
 
 
-                <div class="row mb-2">
-        
-            <?= $form->field($model, 'title',['options' => ['class' => 'col-sm-8']])->textInput(['maxlength' => true]) ?>
       
-       
+
     
-        
-    </div>
+
+<div class="row mb-2">
+
+<?= $form->field($model, 'insurance_id', ['options' => ['class' => 'col-sm-6']])->dropDownList(
+    \yii\helpers\ArrayHelper::map(
+        \common\models\Insurances::find()->all(),
+        'id',
+        'name'
+    ),
+    ['class' => 'form-select']
+) ?>
+<?= $form->field($model, 'title', ['options' => ['class' => 'col-sm-6']]) ?>
+</div>
 
 
 

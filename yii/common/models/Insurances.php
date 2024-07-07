@@ -92,4 +92,9 @@ class Insurances extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Plans::class, ['insurance_id' => 'id']);
     }
+
+    public function getItem()
+    {
+        return $this->hasMany(Insurances::class, ['insurance_id' => 'id']);
+    }
 }

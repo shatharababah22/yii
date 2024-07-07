@@ -2,13 +2,17 @@
 
 namespace backend\controllers;
 
+use common\models\Plans;
 use common\models\PlansCoverage;
 use common\models\PlansCoverageSearch;
+use common\models\PlansItems;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii;
+
+
 use yii\data\Pagination;
 
 /**
@@ -80,19 +84,37 @@ class CoverageController extends Controller
     public function actionCreate()
     {
         $model = new PlansCoverage();
-
+    
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->load($this->request->post())) {
+                $item = PlansItems::findOne($model->item_id);
+                if ($item) {
+                    $insuranceId = $item->insurance_id;
+                    $planCount = Plans::find()->where(['insurance_id' => $insuranceId])->count();
+                    $coverageCount = PlansCoverage::find()
+                        ->where(['item_id' => $model->item_id])
+                        ->count();
+                    if ($coverageCount >= $planCount) {
+                        Yii::$app->session->setFlash('error', 'The number of coverages exceeds the number of plans for the associated insurance.');
+                    } else {
+                        if ($model->save()) {
+                            return $this->redirect(['view', 'id' => $model->id]);
+                        }
+                    }
+                } else {
+                    Yii::$app->session->setFlash('error', 'Invalid item ID.');
+                }
             }
         } else {
             $model->loadDefaultValues();
         }
-
         return $this->render('create', [
             'model' => $model,
         ]);
     }
+    
+    
+    
 
     /**
      * Updates an existing PlansCoverage model.

@@ -1,5 +1,4 @@
 <?php
-
 namespace common\models;
 
 use Yii;
@@ -47,7 +46,7 @@ class PlansCoverage extends \yii\db\ActiveRecord
             'id' => Yii::t('app', 'ID'),
             'item_id' => Yii::t('app', 'Title'),
             'YorN' => Yii::t('app', 'Status'),
-            'description' => Yii::t('app', 'Description'),
+            'description' => Yii::t('app', 'Coverage'),
         ];
     }
 
@@ -60,10 +59,4 @@ class PlansCoverage extends \yii\db\ActiveRecord
     {
         return $this->hasOne(PlansItems::class, ['id' => 'item_id']);
     }
-
-
-    
 }
-
-
-

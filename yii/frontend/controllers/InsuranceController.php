@@ -29,6 +29,7 @@ class InsuranceController extends \yii\web\Controller
         $model = new InquiryForm();
       
         $model->setAttributes(\Yii::$app->request->get('InquiryForm'));
+        // dd($model);
         $fromCountryName = $this->getCountryName($model->from_country);
         $toCountryName = $this->getCountryName($model->to_country);
         if ($model->load(Yii::$app->request->post())) {
@@ -66,9 +67,10 @@ class InsuranceController extends \yii\web\Controller
             ->andWhere(['country_code' => $model->from_country])
             ->one();
 
-        $plansItemsTitles = [];
-        $planCoverageItems = [];
+     
+
         $options = [];
+   
         foreach ($plans as $plan) {
             $insuranceTitle = $plan->insurance->name;
 
@@ -84,26 +86,31 @@ class InsuranceController extends \yii\web\Controller
                 ];
             $plansItemsTitles[$plan->id] = [];
             $planCoverageItems[$plan->id] = [];
-            $planItems = PlansItems::find()->all();
-        }
+           
 
+         
+        }
+        $planItems = PlansItems::findAll(['insurance_id' => $model->type]);
+
+        $plansItemsTitles = [];
+        $planCoverageItems = [];
         foreach ($planItems as $planItem) {
-            $plansItemsTitles[$plan->id][] = [
+            $plansItemsTitles[$planItem->id] = [
                 'title' => $planItem->title,
                 'id' => $planItem->id,
             ];
-
-            $planCoverage = PlansCoverage::findAll(['item_id' => $planItem->id]);
-
-            foreach ($planCoverage as $coverageItem) {
-                $planCoverageItems[$plan->id][] = [
+        
+           
+            $planCoverages = PlansCoverage::findAll(['item_id' => $planItem->id]);
+        
+            foreach ($planCoverages as $coverageItem) {
+                $planCoverageItems[$planItem->id][] = [
                     'description' => $coverageItem->description,
-                    'item_id' => $coverageItem->item_id,
+                    'item_id' => $coverageItem->item->title, 
                     'YorN' => $coverageItem->YorN,
                 ];
             }
         }
-
 
         return $this->render('index', [
             'model' => $model,

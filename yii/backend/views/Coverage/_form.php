@@ -21,6 +21,12 @@ use yii\widgets\LinkPager;
 <?php $form = ActiveForm::begin(); ?>
 
 
+<?php if (Yii::$app->session->hasFlash('error')): ?>
+    <div class="alert alert-danger alert-dismissible">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="font-size: 0.75rem;"></button>
+        <?= Yii::$app->session->getFlash('error') ?>
+    </div>
+<?php endif; ?>
 
 <div class="row mb-2">
 
