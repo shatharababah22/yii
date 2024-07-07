@@ -83,4 +83,12 @@ class Policy extends \yii\db\ActiveRecord
             'price' => Yii::t('app', 'Price'),
         ];
     }
+
+
+ 
+
+    public function getCustomer()
+    {
+        return $this->hasOne(Customers::class, ['id' => 'customer_id']);
+    }
 }

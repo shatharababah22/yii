@@ -45,16 +45,14 @@ class PolicySearch extends Policy
 
         // add conditions that should always apply here
 
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-        ]);
+
         
         $totalCount = $query->count();
     
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
-                'pageSize' => 1,
+                'pageSize' => 10,
             ],
             'totalCount' => $totalCount
         ]);

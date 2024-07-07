@@ -31,9 +31,18 @@ use yii\widgets\ActiveForm;
 
 
 
+    <?= $form->field($model, 'status', ['options' => ['class' => 'mt-2']])
+    ->dropDownList(
+        [
+            '' => 'Select Status', 
+            '1' => 'Active',
+            '0' => 'Inactive',
+        ],
+        ['class' => 'form-select']
+    )
+    ; 
+?>
 
-
-    <?php  echo $form->field($model, 'status', ['options' => ['class' => 'mt-2']])  ?>
 
 
  

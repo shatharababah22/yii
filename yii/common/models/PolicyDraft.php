@@ -32,7 +32,8 @@ use yii\behaviors\TimestampBehavior;
  * @property PolicyDraftPassengers[] $policyDraftPassengers
  */
 class PolicyDraft extends \yii\db\ActiveRecord
-{
+{    const SCENARIO_UPDATE = 'update';
+
     /**
      * {@inheritdoc}
      */
@@ -52,19 +53,29 @@ class PolicyDraft extends \yii\db\ActiveRecord
      */
     public function rules()
     {
-        return [
-            [['mobile', 'email'], 'required', 'on' => 'update'],
-            [[ 'plan_id', 'departure_date', 'return_date'], 'required'],
-            [[ 'plan_id', 'departure_date', 'return_date', 'created_at', 'updated_at', 'source', 'adult', 'children', 'infant'], 'integer'],
-            [['price'], 'number'],
-            [['email', 'mobile'], 'string', 'max' => 255],
-            [['from_airport', 'going_to'], 'string', 'max' => 100],
-            [['DepartCountryCode', 'ArrivalCountryCode'], 'string', 'max' => 11],
-            ['exist', 'skipOnError' => true, 'targetClass' => Insurances::class, 'targetAttribute' => ['insurance_id' => 'id']],
-            [['plan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Plans::class, 'targetAttribute' => ['plan_id' => 'id']],
-        ];
-    }
+    //     return [
+    //         [['mobile', 'email'], 'required', 'on' => 'update'],
+    //         [[ 'plan_id', 'departure_date', 'return_date'], 'required'],
+    //         [[ 'plan_id', 'departure_date', 'return_date', 'created_at', 'updated_at', 'source', 'adult', 'children', 'infant'], 'integer'],
+    //         [['price'], 'number'],
+    //         [['email', 'mobile'], 'string', 'max' => 255],
+    //         [['from_airport', 'going_to'], 'string', 'max' => 100],
+    //         [['DepartCountryCode', 'ArrivalCountryCode'], 'string', 'max' => 11],
+    //         ['exist', 'skipOnError' => true, 'targetClass' => Insurances::class, 'targetAttribute' => ['insurance_id' => 'id']],
+    //         [['plan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Plans::class, 'targetAttribute' => ['plan_id' => 'id']],
+    //     ];
 
+       
+            return [
+                [['insurance_id', 'plan_id', 'departure_date', 'return_date', 'adult', 'children', 'infant'], 'required'],
+                [['insurance_id', 'plan_id', 'departure_date', 'return_date', 'created_at', 'updated_at', 'source', 'adult', 'children', 'infant'], 'integer'],
+                [['price'], 'number'],
+                [['email', 'mobile'], 'string', 'max' => 255],
+                [['from_airport', 'going_to'], 'string', 'max' => 100],
+                [['DepartCountryCode', 'ArrivalCountryCode'], 'string', 'max' => 11],
+                [['insurance_id'], 'exist', 'skipOnError' => true, 'targetClass' => Insurances::class, 'targetAttribute' => ['insurance_id' => 'id']],
+                [['plan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Plans::class, 'targetAttribute' => ['plan_id' => 'id']],
+            ];}
     /**
      * {@inheritdoc}
      */
@@ -107,7 +118,10 @@ class PolicyDraft extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Plans::class, ['id' => 'plan_id']);
     }
-
+    public function getInsurance()
+    {
+        return $this->hasOne(Insurances::class, ['id' => 'insurance_id']);
+    }
     /**
      * Gets query for [[PolicyDraftPassengers]].
      *
@@ -116,5 +130,15 @@ class PolicyDraft extends \yii\db\ActiveRecord
     public function getPolicyDraftPassengers()
     {
         return $this->hasMany(PolicyDraftPassengers::class, ['draft_id' => 'id']);
+    }
+
+
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+
+        $scenarios[self::SCENARIO_UPDATE] = ['field1', 'field2'];
+        $scenarios[self::SCENARIO_UPDATE] = ['email', 'mobile', 'from_airport', 'going_to']; 
+        return $scenarios;
     }
 }

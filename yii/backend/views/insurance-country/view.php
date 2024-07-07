@@ -37,7 +37,17 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'country_code',
             'company_name',
-            'company_logo',
+           
+            [
+                'attribute' => 'company_logo',
+                'format' => 'html', 
+                'value' => function ($model) {
+                    $imageUrl = $model->company_logo ? Yii::getAlias('@web') . '/images/' . $model->company_logo : "https://i.pinimg.com/564x/85/75/6f/85756f80922443841cb0072e1b1a7408.jpg";
+                    return Html::img($imageUrl, [
+                        'style' => 'max-width:120px; border-radius:60%;',
+                    ]);
+                },
+            ],
             'source_country',
             'source_country_code',
         ],

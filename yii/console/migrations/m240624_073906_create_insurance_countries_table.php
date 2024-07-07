@@ -20,6 +20,8 @@ class m240624_073906_create_insurance_countries_table extends Migration
             'company_logo' => $this->string()->notNull(),
             'source_country' => $this->string(255)->notNull(),
             'source_country_code' => $this->string(100)->notNull(),
+            'slug' => $this->string()->unique()->notNull(),
+
         ]);
 
         

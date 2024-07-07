@@ -41,7 +41,7 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                'insurance/country/<slug:\w+>' => 'insurance/country',
+              //'insurance/type/slug:\w+>' => 'insurance/type',
 
             ],
         ],

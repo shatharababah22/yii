@@ -16,7 +16,7 @@ use yii\bootstrap5\ActiveForm;
 
 <div class="country-form">
     <?php $form = ActiveForm::begin([
-        'options' => ['enctype' => 'multipart/form-data'] // Important for file uploads
+        'options' => ['enctype' => 'multipart/form-data'] 
     ]); ?>
 
     <div class="row mb-2">

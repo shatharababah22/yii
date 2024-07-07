@@ -24,10 +24,13 @@ AppAsset::register($this);
 
     <meta name="msapplication-TileColor" content="#8b3dff" />
     <meta name="msapplication-config" content="/images/favicon/tile.xml" />
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
     <script src="/js/vendors/color-modes.js"></script>
+
 </head>
 
 <body>
@@ -35,13 +38,13 @@ AppAsset::register($this);
     <header>
         <nav class="navbar navbar-expand-lg  transparent navbar-transparent navbar-dark">
             <div class="container px-3">
-                <a class="navbar-brand" href="/"><img class="img-fluid" width="70" src="/images/logo/logo-dark.png" alt /></a>
+                <a class="navbar-brand" href="/insurance/type"><img class="img-fluid" width="70" src="/images/logo/logo-dark.png" alt /></a>
                 <button class="navbar-toggler offcanvas-nav-btn" type="button">
                     <i class="bi bi-list"></i>
                 </button>
                 <div class="offcanvas offcanvas-start offcanvas-nav" style="width: 20rem">
                     <div class="offcanvas-header">
-                        <a href="/" class="text-inverse"><img class="img-fluid" width="70" src="/images/logo/logo-dark.png" alt /></a>
+                        <a href="/insurance/type" class="text-inverse"><img class="img-fluid" width="70" src="/images/logo/logo-dark.png" alt /></a>
                         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                     </div>
                     <div class="offcanvas-body pt-0 align-items-center">
@@ -49,20 +52,15 @@ AppAsset::register($this);
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Countries</a>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="./index.html">Landing Overview</a></li>
-                                    <li><a class="dropdown-item" href="./landing-sass-v1.html">Saas v.1</a></li>
-                                    <li><a class="dropdown-item" href="./landing-sass-v2.html">Sass v.2</a></li>
+                                <?php foreach (\common\models\InsuranceCountries::find()->all() as $countries) : ?>
+
                                     <li>
-                                        <a class="dropdown-item" href="./landing-it-company.html">
-                                            IT Company
-                                            <span class="badge text-bg-success ms-2">New</span>
-                                        </a>
-                                    </li>
-                                    <li><a class="dropdown-item" href="./landing-accounting.html">Accounting</a></li>
-                                    <li><a class="dropdown-item" href="./landing-finance.html">Finance</a></li>
-                                    <li><a class="dropdown-item" href="./landing-jamstack-agancy.html">Jamstack Agency</a></li>
-                                    <li><a class="dropdown-item" href="./landing-conference.html">Conference</a></li>
-                                    <li><a class="dropdown-item" href="./landing-personal.html">Personal</a></li>
+
+                                    <?= Html::a(Yii::t('app', $countries->source_country), ['/insurance/type', 'slug' => $countries->slug], ['class'=>'dropdown-item', 'data-cue'=>'fadeUp']) ?>
+
+
+                                    </li> <?php endforeach; ?>
+                                    
                                 </ul>
                             </li>
                             <li class="nav-item dropdown">
@@ -71,16 +69,14 @@ AppAsset::register($this);
 
                                     <?php foreach (\common\models\Insurances::find()->all() as $insurance) : ?>
                                         <li>
-                                            <a href="<?= Url::to(['insurance/country', 'slug' => $insurance->slug]) ?>" class="dropdown-item" data-cue="fadeUp">
-                                                <?= $insurance->name ?>
-                                            </a>
+                                            <?= Html::a(Yii::t('app', $insurance->name), ['/insurance/type', 'slug' => $insurance->slug], ['class'=>'dropdown-item', 'data-cue'=>'fadeUp']) ?>
                                         </li>
                                     <?php endforeach; ?>
                                 </ul>
 
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#" role="button" aria-expanded="false">Check Policy</a>
+                                <a class="nav-link" href="/insurance/check" role="button" aria-expanded="false"><?= Yii::t('app', 'Check Policy') ?></a>
                             </li>
                         </ul>
                         <div class="mt-3 mt-lg-0 d-flex align-items-center">

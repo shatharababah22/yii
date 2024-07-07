@@ -40,6 +40,14 @@ $this->params['breadcrumbs'][] = $this->title;
             'duration',
             'passenger',
             'price',
+            'discount_price',
+   
+            [
+                'attribute' => 'status',
+                'value' => function ($model) {
+                    return $model->status == 1 ? 'Active' : 'Inactive';
+                },
+            ],
         ],
     ]) ?>
 

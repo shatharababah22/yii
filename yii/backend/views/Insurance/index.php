@@ -15,7 +15,49 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
 
+$this->registerJs("
+    $(document).on('click', '.read-more-description', function(e) {
+        e.preventDefault();
+        var id = $(this).data('id');
+        $('#description-' + id + ' .full-description').slideDown(); // Slide down to show full description
+        $(this).hide(); // Hide 'Read more' link
+        $('#description-' + id + ' .read-less-description').show(); // Show 'Read less' link
+    });
+
+    $(document).on('click', '.read-less-description', function(e) {
+        e.preventDefault();
+        var id = $(this).data('id');
+        $('#description-' + id + ' .full-description').slideUp(); // Slide up to hide full description
+        $(this).hide(); // Hide 'Read less' link
+        $('#description-' + id + ' .read-more-description').show(); // Show 'Read more' link
+    });
+");
+
+
+
+
+$this->registerJs("
+    $(document).on('click', '.read-more-overview', function(e) {
+        e.preventDefault();
+        var id = $(this).data('id');
+        $('#overview-' + id + ' .full-overview').slideDown(); // Slide down to show full overview
+        $(this).hide(); // Hide 'Read more' link
+        $('#overview-' + id + ' .read-less-overview').show(); // Show 'Read less' link
+    });
+
+    $(document).on('click', '.read-less-overview', function(e) {
+        e.preventDefault();
+        var id = $(this).data('id');
+        $('#overview-' + id + ' .full-overview').slideUp(); // Slide up to hide full overview
+        $(this).hide(); // Hide 'Read less' link
+        $('#overview-' + id + ' .read-more-overview').show(); // Show 'Read more' link
+    });
+");
 ?>
+
+
+
+
 
 
 <!-- Page Header -->
@@ -23,18 +65,11 @@ $this->params['breadcrumbs'][] = $this->title;
   <div class="row align-items-center mb-3">
     <div class="col-sm mb-2 mb-sm-0">
       <h1 class="page-header-title"><?= Html::encode($this->title) ?> <span class="badge bg-soft-dark text-dark ms-2"><?= Yii::$app->formatter->asInteger($dataProvider->totalCount) ?></span></h1>
-      <div class="mt-2">
-        <a class="text-body me-3" href="javascript:;" data-bs-toggle="modal" data-bs-target="#exportProductsModal">
-          <i class="bi-download me-1"></i> Export
-        </a>
-        <a class="text-body" href="javascript:;" data-bs-toggle="modal" data-bs-target="#importProductsModal">
-          <i class="bi-upload me-1"></i> Import
-        </a>
-      </div>
+ 
     </div>
 
     <div class="col-sm-auto">
-      <?= Html::a('Create insurance', ['create'], ['class' => 'btn btn-primary']) ?>
+      <?= Html::a('New insurance', ['create'], ['class' => 'btn btn-primary']) ?>
     </div>
   </div>
 </div>
@@ -118,29 +153,77 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
               </a>
             </td>
-            <td><?= Html::encode($model->overview) ?></td>
+            <!-- <td><?= Html::encode($model->overview) ?></td> -->
+
+
+            <td id="overview-<?= $model->id ?>">
+    <?php
+    $fullOverview = Html::encode($model->overview);
+    $words = explode(' ', $fullOverview);
+    $chunkedWords = array_chunk($words, 4); 
+
+    echo '<div class="overview-container" data-id="' . $model->id . '">';
+    echo '<span class="short-overview">';
+    foreach ($chunkedWords[0] as $word) {
+        echo $word . ' ';
+    }
+    echo '</span><br>';
+
+    if (count($chunkedWords) > 1) {
+        echo '<span class="full-overview" style="display: none;">';
+        for ($i = 1; $i < count($chunkedWords); $i++) {
+            echo '<span class="chunk-' . $i . '">';
+            foreach ($chunkedWords[$i] as $word) {
+                echo $word . ' ';
+            }
+            echo '</span><br>';
+        }
+        echo '</span>';
+        
+   
+        echo Html::a('Read more', '#', [
+            'class' => 'read-more-overview',
+            'data-id' => $model->id,
+            'style' => 'display: inline;'
+        ]);
+        echo Html::a('Read less', '#', [
+            'class' => 'read-less-overview',
+            'data-id' => $model->id,
+            'style' => 'display: none;'
+        ]);
+    }
+    echo '</div>'; 
+    ?>
+</td>
+
+
+
             <td id="description-<?= $model->id ?>">
-              <?php
-              $fullDescription = Html::encode($model->description);
-              if (strlen($fullDescription) > 100) {
-                $shortDescription = Html::encode(substr($fullDescription, 0, 80)) . '... ';
-                echo '<span class="short-description">' . $shortDescription . '</span>';
-                echo '<span class="full-description" style="display: none;">' . $fullDescription . '</span>';
-                echo Html::a('Read more', '#', [
-                  'class' => 'read-more',
-                  'data-id' => $model->id,
-                  'style' => 'display: inline;'
-                ]);
-                echo Html::a('Read less', '#', [
-                  'class' => 'read-less',
-                  'data-id' => $model->id,
-                  'style' => 'display: none;'
-                ]);
-              } else {
-                echo '<span class="short-description">' . $fullDescription . '</span>';
-              }
-              ?>
-            </td>
+    <?php
+    $fullDescription = Html::encode($model->description);
+    $words = explode(' ', $fullDescription);
+    $line1 = implode(' ', array_slice($words, 0, 4));
+    $line2 = implode(' ', array_slice($words, 4, 4));
+    
+    echo '<span class="short-description">' . $line1 . '</span><br>';
+    echo '<span class="short-description">' . $line2 . '</span>';
+    
+    if (count($words) > 8) {
+        echo '<span class="full-description" style="display: none;">' . $fullDescription . '</span>';
+        echo Html::a('Read more', '#', [
+            'class' => 'read-more',
+            'data-id' => $model->id,
+            'style' => 'display: inline;'
+        ]);
+        echo Html::a('Read less', '#', [
+            'class' => 'read-less',
+            'data-id' => $model->id,
+            'style' => 'display: none;'
+        ]);
+    }
+    ?>
+</td>
+
             <td><?= Html::encode($model->price) ?></td>
             <td>
               <a class="btn btn-white btn-sm" href="<?= Url::to(['update', 'id' => $model->id]) ?>">

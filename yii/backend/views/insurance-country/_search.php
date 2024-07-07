@@ -17,13 +17,16 @@ use yii\widgets\ActiveForm;
 
     <!-- <?= $form->field($model, 'id',['options' => ['class' => 'mt-2']])  ?> -->
 
-    <?= $form->field($model, 'insurance_name',['options' => ['class' => 'mt-2']])  ?>
+
+    <?= $form->field($model, 'insurance_name', ['options' => ['class' => 'mt-2']])  ?>
+
+   
 
     <?= $form->field($model, 'country_code',['options' => ['class' => 'mt-2']])  ?>
 
     <?= $form->field($model, 'company_name',['options' => ['class' => 'mt-2']])  ?>
 
-    <?= $form->field($model, 'company_logo',['options' => ['class' => 'mt-2']])  ?>
+    <!-- <?= $form->field($model, 'company_logo',['options' => ['class' => 'mt-2']])  ?> -->
 
     <?php  echo $form->field($model, 'source_country',['options' => ['class' => 'mt-2']])  ?>
 

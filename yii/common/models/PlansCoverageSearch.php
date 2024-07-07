@@ -39,42 +39,44 @@ class PlansCoverageSearch extends PlansCoverage
      * @return ActiveDataProvider
      */
     public function search($params)
-    {
-        $query = PlansCoverage::find();
+{
+    $query = PlansCoverage::find();
 
-        // add conditions that should always apply here
+    $totalCount = $query->count();
 
     
-        $totalCount = $query->count();
+    $dataProvider = new ActiveDataProvider([
+        'query' => $query,
+        'pagination' => [
+            'pageSize' => 10, 
+        ],
+        'totalCount' => $totalCount, 
+    ]);
 
-     
+    $this->load($params);
 
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-            'pagination' => [
-                'pageSize' => 1,
-            ],
-             
-            'totalCount' => $totalCount
-        ]);
-
-        $this->load($params);
-
-        if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
-            return $dataProvider;
-        }
-
-        // grid filtering conditions
-        $query->andFilterWhere([
-            'id' => $this->id,
-            'item_id' => $this->item_id,
-        ]);
-
-        $query->andFilterWhere(['like', 'YorN', $this->YorN])
-            ->andFilterWhere(['like', 'description', $this->description]);
-
+    
+    if (!$this->validate()) {
         return $dataProvider;
     }
+
+
+    $query->andFilterWhere([
+        'id' => $this->id,
+        'item_id' => $this->item_id,
+    ]);
+
+    $query->andFilterWhere(['like', 'YorN', $this->YorN])
+          ->andFilterWhere(['like', 'description', $this->description]);
+
+ 
+    $totalCount = $query->count();
+
+ 
+    $dataProvider->query = $query;
+    $dataProvider->totalCount = $totalCount;
+
+    return $dataProvider;
+}
+
 }

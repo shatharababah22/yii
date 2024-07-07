@@ -40,33 +40,43 @@ class PricingSearch extends Pricing
      * @return ActiveDataProvider
      */
     public function search($params)
-    {
-        $query = Pricing::find();
+{
+    $query = Pricing::find();
 
-        // add conditions that should always apply here
+    $this->load($params);
 
-        $dataProvider = new ActiveDataProvider([
+    if (!$this->validate()) {
+    
+        $query->where('0=1');
+        return new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pageSize' => 10,
+            ],
         ]);
-
-        $this->load($params);
-
-        if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
-            return $dataProvider;
-        }
-
-        // grid filtering conditions
-        $query->andFilterWhere([
-            'id' => $this->id,
-            'plan_id' => $this->plan_id,
-            'duration' => $this->duration,
-            'price' => $this->price,
-        ]);
-
-        $query->andFilterWhere(['like', 'passenger', $this->passenger]);
-
-        return $dataProvider;
     }
+
+    
+    $query->andFilterWhere([
+        'id' => $this->id,
+        'plan_id' => $this->plan_id,
+        'duration' => $this->duration,
+        'price' => $this->price,
+    ]);
+
+    $query->andFilterWhere(['like', 'passenger', $this->passenger]);
+
+    $totalCount = $query->count();
+
+    $dataProvider = new ActiveDataProvider([
+        'query' => $query,
+        'pagination' => [
+            'pageSize' => 10,
+        ],
+        'totalCount' => $totalCount,
+    ]);
+
+    return $dataProvider;
+}
+
 }

@@ -52,7 +52,7 @@ class Airportssearch extends Airports
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
-                'pageSize' => 1,
+                'pageSize' => 10,
             ],
              
             'totalCount' => $totalCount

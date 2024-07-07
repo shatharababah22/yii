@@ -26,14 +26,18 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'zone',['options' => ['class' => 'mt-2']])  ?>
 
     <?php echo $form->field($model, 'currency') ?>
-    <?= $form->field($model, 'active' ,['options' => ['class' => 'mt-2']])->dropDownList(
-                [
-                  '1' => 'Active',
-                    '0' => 'Inactive',
-                   
-                ],
-                ['class' => 'form-select']
-            ) ?>
+    <?= $form->field($model, 'active', ['options' => ['class' => 'mt-2']])
+    ->dropDownList(
+        [
+            '' => 'Select Status', 
+            '1' => 'Active',
+            '0' => 'Inactive',
+        ],
+        ['class' => 'form-select']
+    )
+    ; 
+?>
+
  
     <div class="offcanvas-footer ">
       <div class="row ">

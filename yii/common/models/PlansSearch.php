@@ -1,5 +1,4 @@
 <?php
-
 namespace common\models;
 
 use yii\base\Model;
@@ -14,14 +13,13 @@ class PlansSearch extends Plans
     /**
      * {@inheritdoc}
      */
-
-     public $insurance_name;
+    public $insurance_name;
 
     public function rules()
     {
         return [
             [['id', 'max_age', 'min_age'], 'integer'],
-            [['name', 'description', 'overview', 'plan_code','insurance_name'], 'safe'],
+            [['name', 'description', 'overview', 'plan_code', 'insurance_name'], 'safe'],
         ];
     }
 
@@ -45,35 +43,25 @@ class PlansSearch extends Plans
     {
         $query = Plans::find();
     
+        // Join with the 'insurance' relation
         $query->joinWith(['insurance']);
-    
-        $totalCount = $query->count();
-    
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-            'pagination' => [
-                'pageSize' => 1,
-            ],
-            'totalCount' => $totalCount
-        ]);
     
         $this->load($params);
     
-        $dataProvider->sort->attributes['insurance_name'] = [
-            'asc' => ['insurances.name' => SORT_ASC],
-            'desc' => ['insurances.name' => SORT_DESC],
-        ];
-    
         if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
-            return $dataProvider;
+            // If validation fails, return a data provider with no records
+            $query->where('0=1');
+            return new ActiveDataProvider([
+                'query' => $query,
+                'pagination' => [
+                    'pageSize' => 10,
+                ],
+                'totalCount' => 0,
+            ]);
         }
-    
-        
+
         $query->andFilterWhere([
             'plans.id' => $this->id,
-            'insurances.name' => $this->insurance_name,
             'plans.max_age' => $this->max_age,
             'plans.min_age' => $this->min_age,
         ]);
@@ -81,7 +69,25 @@ class PlansSearch extends Plans
         $query->andFilterWhere(['like', 'plans.name', $this->name])
             ->andFilterWhere(['like', 'plans.description', $this->description])
             ->andFilterWhere(['like', 'plans.overview', $this->overview])
-            ->andFilterWhere(['like', 'plans.plan_code', $this->plan_code]);
+            ->andFilterWhere(['like', 'plans.plan_code', $this->plan_code])
+            ->andFilterWhere(['like', 'insurances.name', $this->insurance_name]);
+    
+      
+        $totalCount = $query->count();
+    
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+            'totalCount' => $totalCount,
+        ]);
+    
+        // Define sorting attributes for 'insurance_name'
+        $dataProvider->sort->attributes['insurance_name'] = [
+            'asc' => ['insurances.name' => SORT_ASC],
+            'desc' => ['insurances.name' => SORT_DESC],
+        ];
     
         return $dataProvider;
     }

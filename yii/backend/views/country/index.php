@@ -34,20 +34,13 @@ $this->params['breadcrumbs'][] = $this->title;
       <h1 class="page-header-title">Countries <span class="badge bg-soft-dark text-dark ms-2"><?= Yii::$app->formatter->asInteger($dataProvider->totalCount) ?></span></h1>
 
 
-      <div class="mt-2">
-        <a class="text-body me-3" href="javascript:;" data-bs-toggle="modal" data-bs-target="#exportProductsModal">
-          <i class="bi-download me-1"></i> Export
-        </a>
-        <a class="text-body" href="javascript:;" data-bs-toggle="modal" data-bs-target="#importProductsModal">
-          <i class="bi-upload me-1"></i> Import
-        </a>
-      </div>
+   
     </div>
     <!-- End Col -->
 
     <div class="col-sm-auto">
       <!-- <a class="btn btn-primary" href="./ecommerce-add-product.html">Add product</a> -->
-      <?= Html::a('Create Country', ['create'], ['class' => 'btn btn-primary']) ?>
+      <?= Html::a('New Country', ['create'], ['class' => 'btn btn-primary']) ?>
     </div>
     <!-- End Col -->
   </div>
@@ -192,20 +185,20 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
         <div class="col-sm-auto">
-            <div class="d-flex justify-content-center justify-content-sm-end">
-              <?= LinkPager::widget([
-                'pagination' => $dataProvider->pagination,
-                'options' => [
-                  'class' => 'pagination', 
-                ],
-                'linkContainerOptions' => ['class' => 'page-item'], // Individual page container class
-                'linkOptions' => ['class' => 'page-link'], // Link class
-                'prevPageCssClass' => 'page-item', // Class for the previous page button
-                'nextPageCssClass' => 'page-item', // Class for the next page button
-                'prevPageLabel' => '&laquo;', // Custom label for the previous page button
-                'nextPageLabel' => '&raquo;', // Custom label for the next page button
-              ]) ?> <nav id="datatablePagination" aria-label="Activity pagination"></nav>
-            </div>
+        <div class="d-flex justify-content-center justify-content-sm-end">
+    <?= LinkPager::widget([
+        'pagination' => $dataProvider->pagination,
+        'options' => ['class' => 'pagination'],
+        'linkContainerOptions' => ['class' => 'page-item'], // Individual page container class
+        'linkOptions' => ['class' => 'page-link'], // Link class
+        'prevPageCssClass' => 'page-item', // Class for the previous page button
+        'nextPageCssClass' => 'page-item', // Class for the next page button
+        'prevPageLabel' => '&laquo;', // Custom label for the previous page button
+        'nextPageLabel' => '&raquo;', // Custom label for the next page button
+    ]) ?>
+    <nav id="datatablePagination" aria-label="Activity pagination"></nav>
+</div>
+
           </div>
         <!-- End Col -->
       </div>

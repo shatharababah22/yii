@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use common\models\Insurances;
 use common\models\Plans;
 use common\models\PlansSearch;
 use yii\web\Controller;
@@ -9,7 +10,12 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\data\Pagination;
 use yii\filters\AccessControl;
-
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use common\models\UploadForm;
+use Exception;
+use yii\web\UploadedFile;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 use Yii;
 
 /**
@@ -50,17 +56,142 @@ class PlansController extends Controller
      *
      * @return string
      */
-    public function actionIndex()
-    {
-       
-    $searchModel = new PlansSearch();
-    $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-    return $this->render('index', [
-        'searchModel' => $searchModel,
-        'dataProvider' => $dataProvider,
-      
-    ]);
-    }
+
+
+
+
+
+
+
+
+
+     public function actionExport()
+     {
+         $models = Plans::find()->all();
+ 
+         $durationLabels = [
+             7 => '7 days',
+             10 => '10 days',
+             15 => '15 days',
+             21 => '21 days',
+             30 => '1 month',
+             60 => '2 months',
+             90 => '3 months',
+             180 => '6 months',
+             365 => '1 year',
+             730 => '2 years',
+             1095 => '3 years',
+         ];
+ 
+         $spreadsheet = new Spreadsheet();
+         $sheet = $spreadsheet->getActiveSheet();
+ 
+         $sheet->setCellValue('A1', 'Name');
+         $sheet->setCellValue('B1', 'Plan Code');
+         $sheet->setCellValue('C1', 'Max age');
+         $sheet->setCellValue('D1', 'Min age');
+         $sheet->setCellValue('E1', 'Insurance Name');
+ 
+ 
+         $headerStyle = [
+             'fill' => [
+                 'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                 'startColor' => [
+                     'argb' => 'FF808080',
+                 ],
+                 'font' => [
+                     'color' => [
+                         'argb' => 'FFFFFFFF',
+                     ],
+                 ],
+             ],
+         ];
+         $sheet->getStyle('A1:E1')->applyFromArray($headerStyle);
+ 
+         $row = 2;
+         foreach ($models as $model) {
+             $sheet->setCellValue('A' . $row, $model->name);
+             $sheet->setCellValue('B' . $row, $model->plan_code);
+             $sheet->setCellValue('C' . $row, $model->max_age);
+             $sheet->setCellValue('D' . $row, $model->min_age);
+             $sheet->setCellValue('E' . $row, $model->insurance->name);
+             $row++;
+         }
+ 
+         $writer = new Xlsx($spreadsheet);
+         $fileName = 'Plans.xlsx';
+         $temp_file = tempnam(sys_get_temp_dir(), $fileName);
+         $writer->save($temp_file);
+ 
+         return Yii::$app->response->sendFile($temp_file, $fileName);
+     }
+
+     
+
+     public function actionIndex()
+     {
+         $searchModel = new PlansSearch();
+         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+     
+         $model = new UploadForm();
+     
+         if (Yii::$app->request->isPost) {
+             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+             if ($model->upload()) {
+                 $inputFile = 'images/' . $model->imageFile->baseName . '.' . $model->imageFile->extension;
+                 try {
+                     $spreadsheet = IOFactory::load($inputFile);
+                 } catch (Exception $e) {
+                     die('Error loading file "' . pathinfo($inputFile, PATHINFO_BASENAME) . '": ' . $e->getMessage());
+                 }
+     
+                 $sheet = $spreadsheet->getActiveSheet();
+                 $highestRow = $sheet->getHighestRow();
+                 $highestColumn = $sheet->getHighestColumn();
+     
+                 $startRow = 2; // Assuming the first row is the header
+                 for ($row = $startRow; $row <= $highestRow; $row++) {
+                     $rowData = $sheet->rangeToArray('A' . $row . ':' . $highestColumn . $row, NULL, TRUE, FALSE);
+     
+                     $planCode = $rowData[0][1];
+                     $existingPlan = Plans::findOne(['plan_code' => $planCode]);
+                     $insuranceName = $rowData[0][4];
+                     $insurance = Insurances::find()->where(['name' => $insuranceName])->one();
+                     
+                     if ($existingPlan) {
+                         continue; 
+                     }
+                     if ($insurance) {
+                         $newPlan = new Plans();
+                         $newPlan->name = $rowData[0][0];
+                         $newPlan->plan_code = $rowData[0][1];
+                         $newPlan->max_age = $rowData[0][2];
+                         $newPlan->min_age = $rowData[0][3];
+                         $newPlan->insurance_id = $insurance->id;
+     
+                         if (!$newPlan->save()) {
+                             print_r($newPlan->getErrors());
+                         }
+                     } else {
+                         continue;
+                     }
+                 }
+             }
+         }
+     
+         return $this->render('index', [
+             'searchModel' => $searchModel,
+             'model' => $model,
+             'dataProvider' => $dataProvider,
+         ]);
+     }
+     
+
+
+
+
+
+
     /**
      * Displays a single Plans model.
      * @param int $id ID

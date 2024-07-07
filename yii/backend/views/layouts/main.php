@@ -238,13 +238,13 @@ AppAsset::register($this);
                 <i class="bi-search"></i>
               </div>
 
-              <input type="search" class="js-form-search form-control" placeholder="Search in front" aria-label="Search in front" data-hs-form-search-options='{
+              <!-- <input type="search" class="js-form-search form-control" placeholder="Search in front" aria-label="Search in front" data-hs-form-search-options='{
                        "clearIcon": "#clearSearchResultsIcon",
                        "dropMenuElement": "#searchDropdownMenu",
                        "dropMenuOffset": 20,
                        "toggleIconOnFocus": true,
                        "activeClass": "focus"
-                     }'>
+                     }'> -->
               <a class="input-group-append input-group-text" href="javaScript:;">
                 <i id="clearSearchResultsIcon" class="bi-x-lg" style="display: none;"></i>
               </a>
@@ -270,7 +270,7 @@ AppAsset::register($this);
 
             <?php if (!Yii::$app->user->isGuest) : ?>
               <span class="me-2 text-dark">
-                Welcome <?= Yii::$app->user->identity->username ?>
+                Hey, <?= Yii::$app->user->identity->username ?>
               </span>
 
 
@@ -300,12 +300,12 @@ AppAsset::register($this);
     <div class="navbar-vertical-container">
       <div class="navbar-vertical-footer-offset">
         <!-- Logo -->
-        <a class="navbar-brand d-flex align-items-center" href="<?= Url::to(['/site/index']) ?>" aria-label="Front">
-  <img class="navbar-brand-logo mt-4" src="<?= Url::to('@web/svg/logos/logo-dark.png') ?>" alt="Logo" data-hs-theme-appearance="default">
-  <!-- <span class="logo-span mt-4 ml-2 d-block">Insurances</span> -->
-  <img class="navbar-brand-logo-mini" src="<?= Url::to('@web/svg/logos/logo-dark.png') ?>" alt="Logo" data-hs-theme-appearance="default">
+        <a class="navbar-brand d-flex align-items-center justify-content-center" href="<?= Url::to(['/site/index']) ?>" aria-label="Front">
+    <img class="navbar-brand-logo mt-4 ml-4" src="<?= Url::to('@web/svg/logos/logo-dark.png') ?>" alt="Logo" data-hs-theme-appearance="default">
+          <!-- <span class="logo-span mt-4 ml-2 d-block">Insurances</span> -->
+          <img class="navbar-brand-logo-mini" src="<?= Url::to('@web/svg/logos/logo-dark.png') ?>" alt="Logo" data-hs-theme-appearance="default">
 
-</a>
+        </a>
         <!-- End Logo -->
 
 
@@ -339,99 +339,69 @@ AppAsset::register($this);
 
             </div>
             <div id="navbarVerticalMenuPagesMenu">
+
+
+
               <!-- Collapse -->
               <div class="nav-item">
-                <a class="nav-link dropdown-toggle " href="<?= Url::to(['/insurance/index']) ?>" role="button" data-bs-toggle="collapse" data-bs-target="#navbarVerticalMenuPagesUsersMenu" aria-expanded="false" aria-controls="navbarVerticalMenuPagesUsersMenu">
-
+                <a class="nav-link " href="<?= Url::to(['/insurance/index']) ?>">
                   <i class="bi bi-umbrella nav-icon"></i>
                   <span class="nav-link-title">Insurance</span>
                 </a>
-
-                <div id="navbarVerticalMenuPagesUsersMenu" class="nav-collapse collapse " data-bs-parent="#navbarVerticalMenuPagesMenu">
-                  <a class="nav-link " href="<?= Url::to(['/insurance/index']) ?>">Overview</a>
-                  <a class="nav-link " href="<?= Url::to(['/insurance/create']) ?>">Add insurance</a>
-                </div>
               </div>
               <!-- End Collapse -->
 
-              <!-- Collapse -->
-              <div class="nav-item">
-                <a class="nav-link dropdown-toggle " href="<?= Url::to(['/plans/index']) ?>" role="button" data-bs-toggle="collapse" data-bs-target="#navbarVerticalMenuPagesProjectsMenu" aria-expanded="false" aria-controls="navbarVerticalMenuPagesProjectsMenu">
-                  <i class="bi-stickies nav-icon"></i>
-                  <span class="nav-link-title">Plans</span>
+               <!-- Collapse -->
+               <div class="nav-item">
+                <a class="nav-link " href="<?= Url::to(['/plans/index']) ?>">
+                <i class="bi-stickies nav-icon"></i>
+                <span class="nav-link-title">Plans</span>
                 </a>
-
-                <div id="navbarVerticalMenuPagesProjectsMenu" class="nav-collapse collapse " data-bs-parent="#navbarVerticalMenuPagesMenu">
-                  <a class="nav-link " href="<?= Url::to(['/plans/index']) ?>">Overview</a>
-                  <a class="nav-link " href="<?= Url::to(['/plans/create']) ?>">Add plan</a>
-                </div>
               </div>
               <!-- End Collapse -->
 
 
-              <!-- Collapse -->
-              <div class="nav-item">
-                <a class="nav-link dropdown-toggle " href="<?= Url::to(['/country/index']) ?>" role="button" data-bs-toggle="collapse" data-bs-target="#navbarVerticalMenuPagesUserProfileMenu" aria-expanded="false" aria-controls="navbarVerticalMenuPagesUserProfileMenu">
-                  <i class="bi bi-globe nav-icon"></i>
+                <!-- Collapse -->
+                <div class="nav-item">
+                <a class="nav-link " href="<?= Url::to(['/country/index']) ?>">
+                <i class="bi bi-globe nav-icon"></i>
                   <span class="nav-link-title">Countries</span>
                 </a>
-
-                <div id="navbarVerticalMenuPagesUserProfileMenu" class="nav-collapse collapse " data-bs-parent="#navbarVerticalMenuPagesMenu">
-                  <a class="nav-link " href="<?= Url::to(['/country/index']) ?>">Overview</a>
-                  <a class="nav-link " href="<?= Url::to(['/country/create']) ?>">Add country</a>
-                </div>
               </div>
               <!-- End Collapse -->
 
 
-        <!-- Collapse -->
-        <div class="nav-item">
-                <a class="nav-link dropdown-toggle " href="<?= Url::to(['/insurance-country/index']) ?>" role="button" data-bs-toggle="collapse" data-bs-target="#navbarVerticalMenuPagesEcommerceMenu" aria-expanded="false" aria-controls="navbarVerticalMenuPagesEcommerceMenu">
-                  <i class="bi bi-building nav-icon"></i>
-                  <span class="nav-link-title">Companies</span>
+          
+                <!-- Collapse -->
+                <div class="nav-item">
+                <a class="nav-link " href="<?= Url::to(['/insurance-country/index']) ?>">
+                <i class="bi bi-building nav-icon"></i>
+                <span class="nav-link-title">Companies</span>
                 </a>
-
-                <div id="navbarVerticalMenuPagesEcommerceMenu" class="nav-collapse collapse " data-bs-parent="#navbarVerticalMenuPagesMenu">
-                  <a class="nav-link " href="<?= Url::to(['/insurance-country/index']) ?>">Overview</a>
-                  <a class="nav-link " href="<?= Url::to(['/insurance-country/create']) ?>">Add insurance-country</a>
-
               </div>
               <!-- End Collapse -->
-                
-            </div>
-            <!-- End Collapse -->
 
-
-              <!-- Collapse -->
-              <div class="nav-item">
-                <a class="nav-link dropdown-toggle " href="<?= Url::to(['/airport/index']) ?>" role="button" data-bs-toggle="collapse" data-bs-target="#navbarVerticalMenuPagesAccountMenu" aria-expanded="false" aria-controls="navbarVerticalMenuPagesAccountMenu">
-                  <i class="bi bi-airplane-engines nav-icon"></i>
+    <!-- Collapse -->
+    <div class="nav-item">
+                <a class="nav-link " href="<?= Url::to(['/airport/index']) ?>">
+                <i class="bi bi-airplane-engines nav-icon"></i>
 
                   <span class="nav-link-title">Airport</span>
                 </a>
-
-                <div id="navbarVerticalMenuPagesAccountMenu" class="nav-collapse collapse " data-bs-parent="#navbarVerticalMenuPagesMenu">
-                  <a class="nav-link " href="<?= Url::to(['/airport/index']) ?>">Overview</a>
-                  <a class="nav-link " href="<?= Url::to(['/airport/create']) ?>">Add airport</a>
-
-                </div>
               </div>
               <!-- End Collapse -->
-
-              <!-- Collapse -->
-              <div class="nav-item">
-                <a class="nav-link dropdown-toggle " href="<?= Url::to(['/pricing/index']) ?>" role="button" data-bs-toggle="collapse" data-bs-target="#navbarVerticalMenuPagesProjectMenu" aria-expanded="false" aria-controls="navbarVerticalMenuPagesProjectMenu">
-                  <i class="bi bi-coin  nav-icon"></i>
-                  <span class="nav-link-title">Pricing</span>
+   
+  <!-- Collapse -->
+  <div class="nav-item">
+                <a class="nav-link " href="<?= Url::to(['/pricing/index']) ?>">
+                <i class="bi bi-coin  nav-icon"></i>
+                <span class="nav-link-title">Pricing</span>
                 </a>
-
-                <div id="navbarVerticalMenuPagesProjectMenu" class="nav-collapse collapse " data-bs-parent="#navbarVerticalMenuPagesMenu">
-                  <a class="nav-link " href="<?= Url::to(['/pricing/index']) ?>">Overview</a>
-                  <a class="nav-link " href="<?= Url::to(['/pricing/create']) ?>">Add pricing</a>
-
-                </div>
               </div>
               <!-- End Collapse -->
+
+           
+
 
               <!-- Collapse -->
               <div class="nav-item">
@@ -477,7 +447,7 @@ AppAsset::register($this);
               <!-- Collapse -->
               <div class="nav-item">
                 <a class="nav-link " href="<?= Url::to(['/policy/index']) ?>">
-                <i class="bi bi-card-checklist nav-icon"></i>
+                  <i class="bi bi-card-checklist nav-icon"></i>
                   <span class="nav-link-title">Policies</span>
                 </a>
               </div>
@@ -502,11 +472,11 @@ AppAsset::register($this);
 
 
 
-        
-            <!-- End Content -->
 
+              <!-- End Content -->
+
+            </div>
           </div>
-        </div>
   </aside>
   <main id="content" role="main" class="main">
     <!-- Content -->

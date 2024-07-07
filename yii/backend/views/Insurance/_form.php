@@ -104,11 +104,12 @@ use yii\helpers\Url;
 </div>
 
 
+<label class="form-label">Photo</label><hr class="mb-2" style="margin: 1px 2px ;">
 
 <?php $photoUrl = $model->photo ? Url::to('@web/images/' . $model->photo) : Url::to('@web/svg/illustrations/oc-browse.svg') ?>
 <div class="row mb-3 align-items-center">
     <div class="col-md-auto">
-        <img id="defaultImage" class="avatar avatar-xl avatar-4x3 mb-3" src="<?= $photoUrl ?>" alt="Image Description" data-hs-theme-appearance="default">
+        <img id="defaultImage" class="avatar avatar-xl avatar-4x3 mb-3 mt-2" src="<?= $photoUrl ?>" alt="Image Description" data-hs-theme-appearance="default">
     </div>
     <div class="col-md">
         <?= $form->field($model, 'photo')->fileInput(['class' => 'form-control image-form', 'id' => 'basicFormFile',])->label(false) ?>

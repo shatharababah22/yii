@@ -2,16 +2,22 @@
 
 namespace backend\controllers;
 
+use common\models\Plans;
 use common\models\Pricing;
 use common\models\PricingSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii;
+
 use yii\data\Pagination;
 use yii\filters\AccessControl;
-
-
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use common\models\UploadForm;
+use Exception;
+use yii\web\UploadedFile;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 /**
  * PricingController implements the CRUD actions for Pricing model.
@@ -25,7 +31,8 @@ class PricingController extends Controller
     {
         return array_merge(
             parent::behaviors(),
-            ['access' => [
+            [
+                'access' => [
                     'class' => AccessControl::class,
                     'rules' => [
                         [
@@ -49,16 +56,133 @@ class PricingController extends Controller
      *
      * @return string
      */
+
+
+
+    public function actionExport()
+    {
+        $models = Pricing::find()->all();
+
+        $durationLabels = [
+            7 => '7 days',
+            10 => '10 days',
+            15 => '15 days',
+            21 => '21 days',
+            30 => '1 month',
+            60 => '2 months',
+            90 => '3 months',
+            180 => '6 months',
+            365 => '1 year',
+            730 => '2 years',
+            1095 => '3 years',
+        ];
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $sheet->setCellValue('A1', 'Plan code');
+        $sheet->setCellValue('B1', 'Duration');
+        $sheet->setCellValue('C1', 'Passenger');
+        $sheet->setCellValue('D1', 'Price');
+
+
+        $headerStyle = [
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => [
+                    'argb' => 'FF808080',
+                ],
+                'font' => [
+                    'color' => [
+                        'argb' => 'FFFFFFFF',
+                    ],
+                ],
+            ],
+        ];
+        $sheet->getStyle('A1:D1')->applyFromArray($headerStyle);
+
+        $row = 2;
+        foreach ($models as $model) {
+            $sheet->setCellValue('A' . $row, $model->plan->plan_code);
+
+            $duration = isset($durationLabels[$model->duration]) ? $durationLabels[$model->duration] : $model->duration;
+            $sheet->setCellValue('B' . $row, $duration);
+            $sheet->setCellValue('C' . $row, $model->passenger);
+            $sheet->setCellValue('D' . $row, $model->price);
+
+            $row++;
+        }
+
+        $writer = new Xlsx($spreadsheet);
+        $fileName = 'Pricing.xlsx';
+        $temp_file = tempnam(sys_get_temp_dir(), $fileName);
+        $writer->save($temp_file);
+
+        return Yii::$app->response->sendFile($temp_file, $fileName);
+    }
+
     public function actionIndex()
     {
         $searchModel = new PricingSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+    
+        $model = new UploadForm();
+    
+        if (Yii::$app->request->isPost) {
+            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+            if ($model->upload()) {
+                $inputFile = 'images/' . $model->imageFile->baseName . '.' . $model->imageFile->extension;
+                try {
+                    $spreadsheet = IOFactory::load($inputFile);
+                } catch (Exception $e) {
+                    die('Error loading file "' . pathinfo($inputFile, PATHINFO_BASENAME) . '": ' . $e->getMessage());
+                }
+    
+                $sheet = $spreadsheet->getActiveSheet();
+                $highestRow = $sheet->getHighestRow();
+                $highestColumn = $sheet->getHighestColumn();
+    
+                $startRow = 2;
+                for ($row = $startRow; $row <= $highestRow; $row++) {
+                    $rowData = $sheet->rangeToArray('A' . $row . ':' . $highestColumn . $row, NULL, TRUE, FALSE);
+    
+                    $planCode = $rowData[0][0];
+                    $plan = Plans::find()->where(['plan_code' => $planCode])->one();
+                    if (!$plan) {
+                        print_r("Plan with code " . $planCode . " not found.");
+                        continue;
+                    }
+    
+                    $existingPricing = Pricing::find()
+                        ->where(['plan_id' => $plan->id, 'duration' => (int)$rowData[0][1]])
+                        ->one();
+    
+                    if ($existingPricing) {
+                        // print_r("Pricing entry for plan with code " . $planCode . " and duration " . (int)$rowData[0][1] . " already exists.");
+                        continue;
+                    }
+    
+                    $pricing = new Pricing();
+                    $pricing->plan_id = $plan->id;
+                    $pricing->duration = (int)$rowData[0][1];
+                    $pricing->passenger = $rowData[0][2];
+                    $pricing->price = $rowData[0][3];
+    
+                    if (!$pricing->save()) {
+                        print_r($pricing->getErrors());
+                    }
+                }
+            }
+        }
+    
         return $this->render('index', [
             'searchModel' => $searchModel,
+            'model' => $model,
             'dataProvider' => $dataProvider,
-          
         ]);
     }
+    
+    
 
     /**
      * Displays a single Pricing model.
@@ -83,6 +207,7 @@ class PricingController extends Controller
         $model = new Pricing();
 
         if ($this->request->isPost) {
+          
             if ($model->load($this->request->post()) && $model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
@@ -107,6 +232,7 @@ class PricingController extends Controller
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+            // dd($model);
             return $this->redirect(['view', 'id' => $model->id]);
         }
 

@@ -59,22 +59,22 @@ $this->registerJs("
         <div class="row align-items-center mb-3">
           <div class="col-sm mb-2 mb-sm-0">
           <h1 class="page-header-title"><?= Html::encode($this->title) ?> <span class="badge bg-soft-dark text-dark ms-2"><?= Yii::$app->formatter->asInteger($dataProvider->totalCount) ?></span></h1>
+          <div class="mt-2">
+        <a class="text-body me-3" href="<?= Url::to(['plans/export']) ?>">
+          <i class="bi-download me-1"></i> Export
+        </a>
 
+        <a class="text-body" href="javascript:;" data-bs-toggle="modal" data-bs-target="#importProductsModal">
+          <i class="bi-upload me-1"></i> Import
+        </a>
+      </div>
 
-            <div class="mt-2">
-              <a class="text-body me-3" href="javascript:;" data-bs-toggle="modal" data-bs-target="#exportProductsModal">
-                <i class="bi-download me-1"></i> Export
-              </a>
-              <a class="text-body" href="javascript:;" data-bs-toggle="modal" data-bs-target="#importProductsModal">
-                <i class="bi-upload me-1"></i> Import
-              </a>
-            </div>
           </div>
           <!-- End Col -->
 
           <div class="col-sm-auto">
             <!-- <a class="btn btn-primary" href="./ecommerce-add-product.html">Add product</a> -->
-            <?= Html::a('Create Plan', Url::to(['create']), ['class' => 'btn btn-primary']) ?>
+            <?= Html::a('New Plan', Url::to(['create']), ['class' => 'btn btn-primary']) ?>
             </div>
           <!-- End Col -->
         </div>
@@ -139,10 +139,9 @@ $this->registerJs("
                   </div>
                 </th>
                 <th class="table-column-ps-0">Plan name</th>
-                <th>Overview</th>
-     <th>Description</th>
-                <th>Max age</th>
-                <th>Min age</th>
+       
+   
+              
                 <th>Plan code</th>
                 <th>Insurance name</th>
                 <th>Actions</th>
@@ -169,8 +168,8 @@ $this->registerJs("
                 </div>
             </a>
         </td>
-        <td><?= Html::encode($plan->overview) ?></td>
-        <td id="description-<?= $plan->id ?>">
+        <!-- <td><?= Html::encode($plan->overview) ?></td> -->
+        <!-- <td id="description-<?= $plan->id ?>">
             <?php 
             $fullDescription = Html::encode($plan->description);
             if (strlen($fullDescription) > 100) {
@@ -192,10 +191,9 @@ $this->registerJs("
             }
             ?>
         </td>
-     
+      -->
         <!-- Additional columns for Plans model fields -->
-        <td><?= Html::encode($plan->max_age) ?></td>
-        <td><?= Html::encode($plan->min_age) ?></td>
+     
         <td><?= Html::encode($plan->plan_code) ?></td>
         <td><?= Html::encode($plan->insurance->name) ?></td>
         <td>
@@ -304,7 +302,58 @@ $this->registerJs("
     <div class="mb-2">
       <?php echo $this->render('_search', ['model' => $searchModel]); ?>
     </div>
+  </div></div>
+
+
+
+
+     <!-- Import Products Modal -->
+     <div class="modal fade" id="importProductsModal" tabindex="-1" aria-labelledby="importProductsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <!-- Header -->
+        <div class="modal-header">
+          <h4 class="modal-title" id="importProductsModalLabel">Import Pricing</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <!-- End Header -->
+
+        <!-- Body -->
+        <div class="modal-body">
+          <p><a class="link" href="#">Download pricing as Excel</a> to see an example of the format required.</p>
+
+          <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
+
+          <?= $form->errorSummary($model); ?>
+
+          <!-- <?= $form->field($model, 'imageFile')->fileInput(); ?> -->
+
+          <?= $form->field($model, 'imageFile')->fileInput(['class' => 'form-control', 'id' => 'basicFormFile',])->label(false) ?>
+
+
+          <!-- Form Check -->
+          <!-- <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="overwriteCurrentProductsCheckbox">
+            <label class="form-check-label" for="overwriteCurrentProductsCheckbox">
+              Overwrite any current products that have the same handle. Existing values will be used for any missing columns. <a href="#">Learn more</a>
+            </label>
+          </div> -->
+          <!-- End Form Check -->
+        </div>
+        <!-- End Body -->
+
+        <!-- Footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-white" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+          <button type="submit" class="btn btn-primary">Upload and continue</button>
+        </div>
+        <?php ActiveForm::end(); ?>
+        <!-- End Footer -->
+      </div>
+    </div>
   </div>
+
+  <!-- End Import Products Modal -->
 
 
 

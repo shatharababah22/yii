@@ -16,7 +16,7 @@ $this->title = 'My Yii Application';
                 <div class="text-center text-lg-start mb-7 mb-lg-0" data-cues="slideInDown">
                     <div class="mb-4">
                         <h1 class="mb-5 display-5 text-white-stable">
-                            Claim your travel insurance
+                            Claim your insurance
                             <span class="text-pattern-line text-warning"> within minutes</span>
                         </h1>
                         <p class="mb-0 text-white-50">

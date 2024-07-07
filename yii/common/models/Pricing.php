@@ -31,10 +31,11 @@ class Pricing extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['plan_id', 'duration', 'passenger', 'price'], 'required'],
+            [['plan_id', 'duration', 'passenger', 'price', 'status'], 'required'],
             [['plan_id', 'duration'], 'integer'],
-            [['price'], 'number'],
+            [['price', 'discount_price'], 'number'],
             [['passenger'], 'string', 'max' => 255],
+            [['status'], 'in', 'range' => [0, 1]], 
             [['plan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Plans::class, 'targetAttribute' => ['plan_id' => 'id']],
         ];
     }
@@ -50,9 +51,10 @@ class Pricing extends \yii\db\ActiveRecord
             'duration' => Yii::t('app', 'Duration'),
             'passenger' => Yii::t('app', 'Passenger'),
             'price' => Yii::t('app', 'Price'),
+            'discount_price' => Yii::t('app', 'Discount Price'), // Add this label
+            'status' => Yii::t('app', 'Status'), // Add this label
         ];
     }
-
     /**
      * Gets query for [[Plan]].
      *

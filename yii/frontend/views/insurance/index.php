@@ -5,6 +5,7 @@
 
 use common\models\Plans;
 use common\models\PlansCoverage;
+use common\models\Pricing;
 use yii\bootstrap5\ActiveForm;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -41,7 +42,7 @@ $this->title = 'About';
                             <?= $insuranceTitle ?>
                         </h1>
                         <p class="mb-0 text-white">
-                            <span class="text-white-50">From</span> <?= $model->from_country ?> <span class="text-white-50">To</span> <?= $model->to_country ?>
+                            <span class="text-white-50">From</span> <?= $fromCountryName ?> <span class="text-white-50">To</span> <?= $toCountryName ?>
                             <a href="javascript:void(0);" onclick="history.back();" class="btn btn-link text-white-50 px-0 me-3"><i class="bi bi-pencil-square"></i></a>
                             <br />
                             <span class="text-white-50">Departure Date:</span> <?= $model->date ?> (<?= $model->duration ?> days)<br />
@@ -84,21 +85,34 @@ $this->title = 'About';
                                     <p>Select a plan that suits you and your options</p>
                                 </div>
                                 <div class="options">
-                                    <?= $form->field($model, 'plan')->radioList($options, [
-                                        'item' => function ($index, $label, $name, $checked, $value) {
+                                <?= $form->field($model, 'plan')->radioList($options, [
+    'item' => function ($index, $label, $name, $checked, $value) {
+        $return = '<div class="purchasing-option"><div class="border-content">';
+        $return .= '<label class="radio">';
+        $return .= '<span class="radio-input">';
+        $return .= '<input type="radio" name="' . $name . '" value="' . $value . '" ' . ($checked ? "checked" : "") . '>';
+        $return .= '<span class="radio-control"></span>';
+        $return .= '</span>';
+        $return .= '<span class="radio-label"><h5 id="buyNowHeading">' . ucwords($label['name']) . '</h5>';
+        
+    
+        if ($label['discount_price'] && $label['status']) {
+            $return .= '<div class="price has_subscript">';
+$return .= '<h5><span style="font-size:15px">USD $' . $label['discount_price'] . '</span><br><strike style="font-size:13px">USD $' . $label['price'] . '</strike></h5>';
+            $return .= '<div class="subscript">per person</div>';
+            $return .= '</div>';
+        } else {
+            $return .= '<div class="price has_subscript">';
+            $return .= '<h5>USD $' . $label['price'] . '</h5>';
+            $return .= '<div class="subscript">per person</div>';
+            $return .= '</div>';
+        }
 
-                                            $return = '<div class="purchasing-option"><div class="border-content">';
-                                            $return .= '<label aria-controls="collapseOne" aria-expanded="true" class="radio">';
-                                            $return .= '<span class="radio-input">';
-                                            $return .= '<input type="radio" name="' . $name . '" value="' . $value . '" ' . ($checked ? "checked" : "") . '><span class="radio-control"></span>';
-                                            $return .= '</span>';
-                                            $return .= '<span class="radio-label"><h5 id="buyNowHeading">' . ucwords($label['name']) . '</h5>';
-                                            $return .= '<div class="price has_subscript"><h5>USD $' . $label['price'] . '</h5><div class="subscript">per person</div></div>';
-                                            $return .= '</span></label></div></div>';
-                                            return $return;
-                                        },
+        $return .= '</span></label></div></div>';
+        return $return;
+    },
+])->label(false); ?>
 
-                                    ])->label(false); ?>
                                 </div>
                             </div>
                             <div class="next-button">

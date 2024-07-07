@@ -1,6 +1,7 @@
 <?php
 
 namespace common\models;
+namespace common\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -14,13 +15,13 @@ class InsuranceCountriesSearch extends InsuranceCountries
     /**
      * {@inheritdoc}
      */
+    public $insurance_name;
 
-     public $insurance_name;
     public function rules()
     {
         return [
-            [['id',], 'integer'],
-            [['country_code','insurance_name', 'company_name', 'company_logo', 'source_country', 'source_country_code'], 'safe'],
+            [['id'], 'integer'],
+            [['country_code', 'insurance_name', 'company_name', 'company_logo', 'source_country', 'source_country_code'], 'safe'],
         ];
     }
 
@@ -43,36 +44,51 @@ class InsuranceCountriesSearch extends InsuranceCountries
     public function search($params)
     {
         $query = InsuranceCountries::find();
-
-        // add conditions that should always apply here
-        $query->joinWith(['insurance']);
+    
+       
+        $query->joinWith(['insurance']); 
+    
+        $this->load($params);
+    
+        if (!$this->validate()) {
+            // If validation fails, return a data provider with no records
+            $query->where('0=1');
+            return new ActiveDataProvider([
+                'query' => $query,
+                'pagination' => [
+                    'pageSize' => 10,
+                ],
+                'totalCount' => 0,
+            ]);
+        }
+    
+        
+        $query->andFilterWhere([
+            'insurance_countries.id' => $this->id,
+        ]);
+    
+        $query->andFilterWhere(['like', 'country_code', $this->country_code])
+            ->andFilterWhere(['like', 'company_name', $this->company_name])
+            ->andFilterWhere(['like', 'source_country', $this->source_country])
+            ->andFilterWhere(['like', 'source_country_code', $this->source_country_code])
+            ->andFilterWhere(['like', 'insurances.name', $this->insurance_name]); 
+        $totalCount = $query->count();
+    
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+            'totalCount' => $totalCount,
         ]);
+    
         $dataProvider->sort->attributes['insurance_name'] = [
             'asc' => ['insurances.name' => SORT_ASC],
             'desc' => ['insurances.name' => SORT_DESC],
         ];
     
-        $this->load($params);
-
-        if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
-            return $dataProvider;
-        }
-
-        $query->andFilterWhere([
-            'id' => $this->id,
-            'insurances.name' => $this->insurance_name,
-        ]);
-
-        $query->andFilterWhere(['like', 'country_code', $this->country_code])
-            ->andFilterWhere(['like', 'company_name', $this->company_name])
-            ->andFilterWhere(['like', 'company_logo', $this->company_logo])
-            ->andFilterWhere(['like', 'source_country', $this->source_country])
-            ->andFilterWhere(['like', 'source_country_code', $this->source_country_code]);
-
         return $dataProvider;
     }
+    
+    
 }

@@ -1,13 +1,10 @@
 <?php
 
-use common\models\InsuranceCountries;
+
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\grid\ActionColumn;
-use yii\grid\GridView;
-
 use yii\widgets\LinkPager;
-use yii\bootstrap5\ActiveForm;
+
 
 /** @var yii\web\View $this */
 /** @var common\models\InsuranceCountriesSearch $searchModel */
@@ -25,20 +22,12 @@ $this->params['breadcrumbs'][] = $this->title;
           <h1 class="page-header-title"><?= Html::encode($this->title) ?> <span class="badge bg-soft-dark text-dark ms-2"><?= Yii::$app->formatter->asInteger($dataProvider->totalCount) ?></span></h1>
 
 
-          <div class="mt-2">
-            <a class="text-body me-3" href="javascript:;" data-bs-toggle="modal" data-bs-target="#exportProductsModal">
-              <i class="bi-download me-1"></i> Export
-            </a>
-            <a class="text-body" href="javascript:;" data-bs-toggle="modal" data-bs-target="#importProductsModal">
-              <i class="bi-upload me-1"></i> Import
-            </a>
-          </div>
         </div>
       
 
         <div class="col-sm-auto">
          
-          <?= Html::a('Create company', ['create'], ['class' => 'btn btn-primary']) ?>
+          <?= Html::a('New company', ['create'], ['class' => 'btn btn-primary']) ?>
         </div>
         
       </div>
@@ -121,7 +110,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <td class="table-column-ps-0">
               <a class="d-flex align-items-center" href="<?= Url::to(['view', 'id' => $model->id]) ?>">
                 <div class="flex-shrink-0">
-                  <img class="avatar avatar-lg" src="<?= Yii::$app->request->baseUrl ?>/images/<?= $model->company_logo ?>" alt="Image Description">
+                  <img class="avatar avatar-lg" src="<?= Yii::$app->request->baseUrl ?>/images/<?= $model->company_logo ?>" alt="Image Description" >
                 </div>
                 <div class="flex-grow-1 ms-3">
                   <h5 class="text-inherit mb-0"><?= Html::encode($model->company_name) ?></h5>

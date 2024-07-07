@@ -31,6 +31,7 @@ use yii\helpers\Url;
         <?= $form->field($model, 'country_code', ['options' => ['class' => 'col-sm-6']])->textInput(['maxlength' => true]) ?>
         <?= $form->field($model, 'source_country_code', ['options' => ['class' => 'col-sm-6']])->textInput(['maxlength' => true]) ?>
     </div>
+    <label class="form-label">Photo</label><hr class="mb-2" style="margin: 1px 2px ;">
 
     <?php $photoUrl = $model->company_logo ? Url::to('@web/images/' . $model->company_logo) : Url::to('@web/svg/illustrations/oc-browse.svg') ?>
     <div class="row mb-3 align-items-center">

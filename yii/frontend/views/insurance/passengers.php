@@ -1,6 +1,8 @@
 <?php
+
 use yii\bootstrap5\ActiveForm;
 use yii\bootstrap5\Html;
+
 /** @var \common\models\PolicyDraft $policy */
 
 $this->title = 'Contact';
@@ -11,7 +13,7 @@ $this->title = 'Contact';
     <div class="container mt-5">
         <div class="row">
             <div class="col-md-12 col-12">
-                <h1 class="mb-3 text-white-stable"><span class="text-warning">Trip</span>  Information - New Insurance</h1>
+                <h1 class="mb-3 text-white-stable"><span class="text-warning">Trip</span> Information - New Insurance</h1>
             </div>
         </div>
     </div>
@@ -26,37 +28,47 @@ $this->title = 'Contact';
                     <div class="col-md-7 col-12">
                         <div class="card shadow-sm">
                             <div class="card-body">
-                                <?php $form = ActiveForm::begin(['options'=>['enctype' => 'multipart/form-data', 'class'=>'row needs-validation g-3']]) ?>
+                                <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data', 'class' => 'row needs-validation g-3']]) ?>
                                 <div class="col-md-6">
                                     <?= $form->field($policy, 'from_airport')->dropDownList(
-                                            \yii\helpers\ArrayHelper::map(
-                                                    \common\models\Airports::find()->where(['countryCode'=>$policy->DepartCountryCode])->all(), 'code', 'name'
-                                            )
+                                        \yii\helpers\ArrayHelper::map(
+                                            \common\models\Airports::find()
+                                                ->leftJoin('countries', 'countries.id = airports.country_id')
+                                                ->where(['countries.code' => $policy->DepartCountryCode])
+                                                ->all(),
+                                            'code',
+                                            'name'
+                                        )
                                     ) ?>
                                 </div>
                                 <div class="col-md-6">
                                     <?= $form->field($policy, 'going_to')->dropDownList(
                                         \yii\helpers\ArrayHelper::map(
-                                            \common\models\Airports::find()->where(['countryCode'=>$policy->ArrivalCountryCode])->all(), 'code', 'name'
+                                            \common\models\Airports::find()
+                                                ->leftJoin('countries', 'countries.id = airports.country_id')
+                                                ->where(['countries.code' => $policy->ArrivalCountryCode])
+                                                ->all(),
+                                            'code',
+                                            'name'
                                         )
                                     ) ?>
                                 </div>
 
                                 <p>Upload all passengers passports separated</p>
-                                <?php foreach ($model->attributes() as $input): ?>
-                                <div class="col-md-12">
-                                    <?= $form->field($model, $input)->fileInput() ?>
-                                </div>
+                                <?php foreach ($model->attributes() as $input) : ?>
+                                    <div class="col-md-12">
+                                        <?= $form->field($model, $input)->fileInput() ?>
+                                    </div>
                                 <?php endforeach; ?>
-                                    <div class="col-md-6">
-                                        <?= $form->field($policy, 'email')->textInput() ?>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <?= $form->field($policy, 'mobile')->textInput() ?>
-                                    </div>
-                                    <div class="d-grid">
-                                        <?= Html::submitButton('Review', ['class' => 'btn w-100 btn-primary text-white', 'name' => 'login-button']) ?>
-                                    </div>
+                                <div class="col-md-6">
+                                    <?= $form->field($policy, 'email')->textInput() ?>
+                                </div>
+                                <div class="col-md-6">
+                                    <?= $form->field($policy, 'mobile')->textInput() ?>
+                                </div>
+                                <div class="d-grid">
+                                    <?= Html::submitButton('Review', ['class' => 'btn w-100 btn-primary text-white', 'name' => 'login-button']) ?>
+                                </div>
                                 <?php ActiveForm::end() ?>
                             </div>
                         </div>
@@ -66,15 +78,15 @@ $this->title = 'Contact';
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-md-6">
-                                       <span>Departure: </span>
+                                        <span>Departure: </span>
                                     </div>
                                     <div class="col-md-6 text-end">
-                                       <span class="fw-bold"><?= $policy->DepartCountryCode  ?></span>
+                                        <span class="fw-bold"><?= $policy->DepartCountryCode  ?></span>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6">
-                                       <span>Arrival: </span>
+                                        <span>Arrival: </span>
                                     </div>
                                     <div class="col-md-6 text-end">
                                         <span class="fw-bold"><?= $policy->ArrivalCountryCode  ?></span>
@@ -82,7 +94,7 @@ $this->title = 'Contact';
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6">
-                                       <span>Date: </span>
+                                        <span>Date: </span>
                                     </div>
                                     <div class="col-md-6 text-end">
                                         <span class="fw-bold"><?= date('Y-m-d', $policy->departure_date)  ?></span>
@@ -90,7 +102,7 @@ $this->title = 'Contact';
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6">
-                                       <span>Return Date: </span>
+                                        <span>Return Date: </span>
                                     </div>
                                     <div class="col-md-6 text-end">
                                         <span class="fw-bold"><?= date('Y-m-d', $policy->return_date)  ?></span>
@@ -98,7 +110,7 @@ $this->title = 'Contact';
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6">
-                                       <span>Passengers: </span>
+                                        <span>Passengers: </span>
                                     </div>
                                     <div class="col-md-6 text-end">
                                         <span class="fw-bold"><?= ($policy->adult + $policy->children + $policy->infant)  ?></span>
@@ -106,13 +118,12 @@ $this->title = 'Contact';
                                 </div>
                                 <hr>
                                 <div class="d-grid">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <span>Total: </span>
-                                            </div>
-                                            <div class="col-md-6 text-end">
-                                                <span class="fw-bold text-success"><?= $policy->price ?></span>
-                                            </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <span>Total: </span>
+                                        </div>
+                                        <div class="col-md-6 text-end">
+                                            <span class="fw-bold text-success"><?= $policy->price ?></span>
                                         </div>
                                     </div>
                                 </div>
@@ -122,6 +133,7 @@ $this->title = 'Contact';
                 </div>
             </div>
         </div>
+    </div>
     </div>
 </section>
 

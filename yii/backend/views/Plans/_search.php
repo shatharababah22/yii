@@ -20,14 +20,14 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'insurance_name', ['options' => ['class' => 'mt-2']])  ?>
 
     <?= $form->field($model, 'name', ['options' => ['class' => 'mt-2']])  ?>
-
+<!-- 
     <?= $form->field($model, 'description', ['options' => ['class' => 'mt-2']])  ?>
 
-    <?= $form->field($model, 'overview', ['options' => ['class' => 'mt-2']])  ?>
-
+    <?= $form->field($model, 'overview', ['options' => ['class' => 'mt-2']])  ?> -->
+<!-- 
     <?php  echo $form->field($model, 'max_age', ['options' => ['class' => 'mt-2']])  ?>
 
-    <?php  echo $form->field($model, 'min_age', ['options' => ['class' => 'mt-2']])  ?>
+    <?php  echo $form->field($model, 'min_age', ['options' => ['class' => 'mt-2']])  ?> -->
 
     <?php  echo $form->field($model, 'plan_code', ['options' => ['class' => 'mt-2']])  ?>
 

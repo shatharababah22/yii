@@ -47,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="col-sm-auto">
       <!-- <a class="btn btn-primary" href="./ecommerce-add-product.html">Add product</a> -->
-      <?= Html::a('Create Benefit', Url::to(['create']), ['class' => 'btn btn-primary']) ?>
+      <?= Html::a('New Benefit', Url::to(['create']), ['class' => 'btn btn-primary']) ?>
     </div>
     <!-- End Col -->
   </div>
@@ -250,50 +250,3 @@ $this->params['breadcrumbs'][] = $this->title;
   </div>
 
 
-  <!-- Import Products Modal -->
-  <div class="modal fade" id="importProductsModal" tabindex="-1" aria-labelledby="importProductsModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <!-- Header -->
-        <div class="modal-header">
-          <h4 class="modal-title" id="importProductsModalLabel">Import benefits by CSV</h4>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <!-- End Header -->
-
-        <!-- Body -->
-        <div class="modal-body">
-          <p><a class="link" href="#">Download a sample CSV template</a> to see an example of the format required.</p>
-
-          <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
-
-          <?= $form->errorSummary($model); ?>
-
-          <!-- <?= $form->field($model, 'imageFile')->fileInput(); ?> -->
-
-          <?= $form->field($model, 'imageFile')->fileInput(['class' => 'form-control', 'id' => 'basicFormFile',])->label(false) ?>
-
-
-          <!-- Form Check -->
-          <!-- <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="overwriteCurrentProductsCheckbox">
-            <label class="form-check-label" for="overwriteCurrentProductsCheckbox">
-              Overwrite any current products that have the same handle. Existing values will be used for any missing columns. <a href="#">Learn more</a>
-            </label>
-          </div> -->
-          <!-- End Form Check -->
-        </div>
-        <!-- End Body -->
-
-        <!-- Footer -->
-        <div class="modal-footer">
-          <button type="button" class="btn btn-white" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
-          <button type="submit" class="btn btn-primary">Upload and continue</button>
-        </div>
-        <?php ActiveForm::end(); ?>
-        <!-- End Footer -->
-      </div>
-    </div>
-  </div>
-
-  <!-- End Import Products Modal -->

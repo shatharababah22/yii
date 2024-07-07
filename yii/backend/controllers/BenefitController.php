@@ -8,12 +8,8 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use common\models\UploadForm;
-use Exception;
-use yii\web\UploadedFile;
-use PhpOffice\PhpSpreadsheet\IOFactory;
+
+
 
 
 // use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -54,73 +50,8 @@ class BenefitController extends Controller
 
 
 
-    public function actionExport()
-    {
-        $models = PlansItems::find()->all();
 
-        $spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
 
-        
-        $sheet->setCellValue('A1', 'Title');
-        $sheet->setCellValue('B1', 'Plan Code');
-     
-
-       
-        $row = 2; 
-        foreach ($models as $model) {
-            $sheet->setCellValue('A' . $row, $model->title);
-            $sheet->setCellValue('B' . $row, $model->plan_id);
-            
-            $row++;
-        }
-
-        $writer = new Xlsx($spreadsheet);
-        $fileName = 'plans_items_export.xlsx';
-        $temp_file = tempnam(sys_get_temp_dir(), $fileName);
-        $writer->save($temp_file);
-
-        return Yii::$app->response->sendFile($temp_file, $fileName);
-    }
-
-    // public function actionImport(){
-    //     $model = new UploadForm();
-    
-    //     if (Yii::$app->request->isPost) {
-    //         $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
-    //         if ($model->upload()) {
-    //             $inputFile = 'images/' . $model->imageFile->baseName . '.' . $model->imageFile->extension;
-    //             try {
-    //                 $spreadsheet = IOFactory::load($inputFile);
-    //             } catch (Exception $e) {
-    //                 die('Error loading file "' . pathinfo($inputFile, PATHINFO_BASENAME) . '": ' . $e->getMessage());
-    //             }
-    
-    //             $sheet = $spreadsheet->getActiveSheet();
-    //             $highestRow = $sheet->getHighestRow();
-    //             $highestColumn = $sheet->getHighestColumn();
-    //             // dd($highestRow, $highestColumn);
-
-    
-    //             for ($row = 1; $row <= $highestRow; $row++) { // Start from the second row
-    //                 $rowData = $sheet->rangeToArray('A' . $row . ':' . $highestColumn . $row, NULL, TRUE, FALSE);
-    //                 // dd("shata");
-                    
-    //                 $plans = new PlansItems();
-    //                 $plans->title = $rowData[0][0]; 
-    //                 $plans->plan_id = $rowData[0][1]; 
-    //                 if (!$plans->save()) {
-    //                     print_r($rowData);
-    //                     print_r($plans->getErrors());
-    //                 }
-    //             }
-    //             die('Import completed');
-    //         }
-    //     }
-    //     return $this->render('import', [
-    //         'model' => $model,
-    //     ]);
-    // }
 
     /**
      * Lists all PlansItems models.
@@ -131,41 +62,10 @@ class BenefitController extends Controller
     {
         $searchModel = new PlansItemsSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $model = new UploadForm();
-    
-        if (Yii::$app->request->isPost) {
-            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
-            if ($model->upload()) {
-                $inputFile = 'images/' . $model->imageFile->baseName . '.' . $model->imageFile->extension;
-                try {
-                    $spreadsheet = IOFactory::load($inputFile);
-                } catch (Exception $e) {
-                    die('Error loading file "' . pathinfo($inputFile, PATHINFO_BASENAME) . '": ' . $e->getMessage());
-                }
-    
-                $sheet = $spreadsheet->getActiveSheet();
-                $highestRow = $sheet->getHighestRow();
-                $highestColumn = $sheet->getHighestColumn();
-                  
-                for ($row = 1; $row <= $highestRow; $row++) { 
-                    $rowData = $sheet->rangeToArray('A' . $row . ':' . $highestColumn . $row, NULL, TRUE, FALSE);
-                    
-                    
-                    $plans = new PlansItems();
-                    $plans->title = $rowData[0][0]; 
-                    // $plans->plan_id = $rowData[0][1]; 
-                    if (!$plans->save()) {
-                        print_r($rowData);
-                        print_r($plans->getErrors());
-                    }
-                }
-                die('Import completed');
-            }
-        }
-
+       
         return $this->render('index', [
             'searchModel' => $searchModel,
-            'model' => $model,
+        
             'dataProvider' => $dataProvider,
           
         ]);

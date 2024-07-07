@@ -48,4 +48,10 @@ class Customers extends \yii\db\ActiveRecord
             'country' => Yii::t('app', 'Country'),
         ];
     }
+
+
+    public function getPolicy()
+    {
+        return $this->hasOne(Policy::class, ['customer_id' => 'id']);
+    }
 }

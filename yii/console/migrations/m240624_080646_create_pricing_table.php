@@ -18,7 +18,10 @@ class m240624_080646_create_pricing_table extends Migration
             'duration' => $this->integer()->notNull(),
             'passenger' => $this->string()->notNull(),
             'price' => $this->decimal(10, 2)->notNull(),
+            'discount_price' => $this->decimal(10, 2), 
+            'status' => $this->boolean()->defaultValue(true), 
         ]);
+        
 
      
         $this->createIndex(

@@ -42,42 +42,44 @@ class Insurancessearch extends Insurances
     public function search($params)
     {
         $query = Insurances::find();
-
-        // add conditions that should always apply here
-
-        $totalCount = $query->count();
-
-     
-
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-            'pagination' => [
-                'pageSize' => 1,
-            ],
-             
-            'totalCount' => $totalCount
-        ]);
-
+    
+        // Load the search form data and validate
         $this->load($params);
-
+    
         if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
-            return $dataProvider;
+            $query->where('0=1');
+            return new ActiveDataProvider([
+                'query' => $query,
+                'pagination' => [
+                    'pageSize' => 10,
+                ],
+                'totalCount' => 0
+            ]);
         }
-
-        // grid filtering conditions
+    
+     
         $query->andFilterWhere([
             'id' => $this->id,
             'price' => $this->price,
         ]);
-
+    
         $query->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'overview', $this->overview])
             ->andFilterWhere(['like', 'description', $this->description])
             ->andFilterWhere(['like', 'photo', $this->photo])
             ->andFilterWhere(['like', 'benefits_link', $this->benefits_link]);
-
-        return $dataProvider;
+    
+        
+        $totalCount = $query->count();
+    
+      
+        return new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+            'totalCount' => $totalCount
+        ]);
     }
+    
 }

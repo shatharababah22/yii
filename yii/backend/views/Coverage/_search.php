@@ -19,7 +19,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'item_id', ['options' => ['class' => 'mt-2']])->dropDownList(
         \yii\helpers\ArrayHelper::map(
-            \common\models\Countries::find()->all(),
+            \common\models\PlansItems::find()->all(),
+            
             'id',
             'title'
         ),
@@ -28,6 +29,7 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'description',['options' => ['class' => 'mt-2']])  ?>
     <?= $form->field($model, 'YorN' ,['options' => ['class' => 'mt-2']])->dropDownList(
                 [
+                  '' => 'Select Status', 
                   'Yes' => 'yes',
                     'No' => 'No',
                    

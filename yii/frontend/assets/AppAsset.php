@@ -20,6 +20,7 @@ class AppAsset extends AssetBundle
         'assets/fonts/css/boxicons.min.css',
         'assets/css/theme.min.css',
         'assets/css/main.css',
+        'css/datepicker-kv',
         'assets/css/style.css',
     ];
     public $js = [
@@ -37,6 +38,8 @@ class AppAsset extends AssetBundle
       'assets/js/vendors/glight.js',
       'assets/libs/scrollcue/scrollCue.min.js',
       'assets/js/vendors/scrollcue.js',
+      'js/bootstrap-datepicker',
+      'js/datepicker-kv'
     ];
     public $depends = [
         'yii\web\YiiAsset',

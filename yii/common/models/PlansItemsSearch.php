@@ -42,39 +42,40 @@ class PlansItemsSearch extends PlansItems
     public function search($params)
     {
         $query = PlansItems::find();
-
-        // Join with the Plans table
-        // $query->joinWith(['plan']);
-
+    
+       
         $totalCount = $query->count();
-
+    
+       
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
-                'pageSize' => 1,
+                'pageSize' => 10, 
             ],
             'totalCount' => $totalCount,
         ]);
-
-        // $dataProvider->sort->attributes['plan_code'] = [
-        //     'asc' => ['plans.plan_code' => SORT_ASC],
-        //     'desc' => ['plans.plan_code' => SORT_DESC],
-        // ];
-
+    
+   
         $this->load($params);
-
+    
+        
         if (!$this->validate()) {
             return $dataProvider;
         }
-
- 
+    
+   
         $query->andFilterWhere([
             'id' => $this->id,
         ]);
-
+    
         $query->andFilterWhere(['like', 'title', $this->title]);
-            //   ->andFilterWhere(['like', 'plans.plan_code', $this->plan_code]);
-
+    
+        $totalCount = $query->count();
+    
+        $dataProvider->query = $query;
+        $dataProvider->totalCount = $totalCount;
+    
         return $dataProvider;
     }
+    
 }

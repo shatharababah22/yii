@@ -26,14 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <h1 class="page-header-title">Policies <span class="badge bg-soft-dark text-dark ms-2"><?= Yii::$app->formatter->asInteger($dataProvider->totalCount) ?></span></h1>
 
 
-        <div class="mt-2">
-          <a class="text-body me-3" href="javascript:;" data-bs-toggle="modal" data-bs-target="#exportProductsModal">
-            <i class="bi-download me-1"></i> Export
-          </a>
-          <a class="text-body" href="javascript:;" data-bs-toggle="modal" data-bs-target="#importProductsModal">
-            <i class="bi-upload me-1"></i> Import
-          </a>
-        </div>
+   
       </div>
       <!-- End Col -->
 
@@ -114,7 +107,7 @@ $this->params['breadcrumbs'][] = $this->title;
         
                 <td><?= Html::encode(Yii::$app->formatter->asDate($policy->return_date)) ?></td>
       
-                <td><?= Html::encode(Yii::$app->formatter->asCurrency($policy->price)) ?></td>
+                <td><?= $policy->price ?></td>
                 <td><?= Html::encode($policy->status == 0 ? "Inactive" : "Active") ?></td>
     
 

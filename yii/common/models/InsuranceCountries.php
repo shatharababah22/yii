@@ -1,6 +1,7 @@
 <?php
 
 namespace common\models;
+use yii\behaviors\SluggableBehavior;
 
 use Yii;
 
@@ -41,7 +42,17 @@ class InsuranceCountries extends \yii\db\ActiveRecord
             [['insurance_id'], 'exist', 'skipOnError' => true, 'targetClass' => Insurances::class, 'targetAttribute' => ['insurance_id' => 'id']],
         ];
     }
-
+    public function behaviors()
+{
+    return [
+        [
+            'class' => SluggableBehavior::class,
+                'attribute' => 'source_country', 
+                'slugAttribute' => 'slug'
+            
+        ],
+    ];
+}
     /**
      * {@inheritdoc}
      */

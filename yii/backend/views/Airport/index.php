@@ -32,14 +32,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         <h1 class="page-header-title"><?= Html::encode($this->title) ?> <span class="badge bg-soft-dark text-dark ms-2"><?= Yii::$app->formatter->asInteger($dataProvider->totalCount) ?></span></h1>
 
 
-                        <div class="mt-2">
-                            <a class="text-body me-3" href="javascript:;" data-bs-toggle="modal" data-bs-target="#exportProductsModal">
-                                <i class="bi-download me-1"></i> Export
-                            </a>
-                            <a class="text-body" href="javascript:;" data-bs-toggle="modal" data-bs-target="#importProductsModal">
-                                <i class="bi-upload me-1"></i> Import
-                            </a>
-                        </div>
                     </div>
                     <!-- End Col -->
 
