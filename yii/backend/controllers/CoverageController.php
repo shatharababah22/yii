@@ -114,7 +114,38 @@ class CoverageController extends Controller
     }
     
     
-    
+    public function actionFetchInsurance()
+{
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+    $itemId = Yii::$app->request->get('item_id');
+    if ($itemId !== null) {
+        $item = PlansItems::findOne($itemId);
+        if ($item !== null) {
+            return ['insurance_id' => $item->insurance_id];
+        }
+    }
+
+    return ['insurance_id' => null];
+}
+
+public function actionFetchPlans()
+{
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+    $insuranceId = Yii::$app->request->get('insurance_id');
+    if ($insuranceId !== null) {
+        $plans = Plans::find()->where(['insurance_id' => $insuranceId])->all();
+        $data = [];
+        foreach ($plans as $plan) {
+            $data[$plan->id] = $plan->name;
+        }
+        return $data;
+    }
+
+    return [];
+}
+
 
     /**
      * Updates an existing PlansCoverage model.

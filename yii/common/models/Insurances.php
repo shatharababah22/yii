@@ -37,9 +37,9 @@ class Insurances extends \yii\db\ActiveRecord
         return [
             [['name','photo','price'], 'required'],
             [['photo'], 'file',  'extensions' => 'png, jpg, jpeg'],
-
+            [['benefits_link'], 'file'],
             [['overview', 'description','name'], 'string'],
-            ['benefits_link', 'url'],
+            // ['benefits_link', 'url'],
             [['price'], 'number'],
             [['name'], 'string', 'max' => 255],
         ];

@@ -27,13 +27,13 @@ class InsuranceController extends \yii\web\Controller
     {
         // dd("shatha");
         $model = new InquiryForm();
-      
+
         $model->setAttributes(\Yii::$app->request->get('InquiryForm'));
         // dd($model);
         $fromCountryName = $this->getCountryName($model->from_country);
         $toCountryName = $this->getCountryName($model->to_country);
         if ($model->load(Yii::$app->request->post())) {
-         
+
             $passengers = $model->adult + $model->children;
             $price = Pricing::find()
                 ->where(['plan_id' => $model->plan])
@@ -67,58 +67,34 @@ class InsuranceController extends \yii\web\Controller
             ->andWhere(['country_code' => $model->from_country])
             ->one();
 
-     
 
-        $options = [];
-   
-        foreach ($plans as $plan) {
-            $insuranceTitle = $plan->insurance->name;
 
-            $price = Pricing::find()
-                ->where(['plan_id' => $plan->id])
-                ->andWhere(['duration' => $model->duration])
-                ->one();
+       
+        
+            
+            foreach ($plans as $plan) {
+                $insuranceTitle = $plan->insurance->name;
+            
+                $price = Pricing::find()
+                    ->where(['plan_id' => $plan->id])
+                    ->andWhere(['duration' => $model->duration])
+                    ->one();
                 $options[$plan->id] = [
                     'name' => $plan->name,
-                    'price' => $price ? $price->price : 0, 
-                    'discount_price' => $price ? $price->discount_price : null, 
-                    'status' => $price ? $price->status : 'Pricing::STATUS_INACTIVE', 
-                ];
-            $plansItemsTitles[$plan->id] = [];
-            $planCoverageItems[$plan->id] = [];
-           
-
-         
-        }
-        $planItems = PlansItems::findAll(['insurance_id' => $model->type]);
-
-        $plansItemsTitles = [];
-        $planCoverageItems = [];
-        foreach ($planItems as $planItem) {
-            $plansItemsTitles[$planItem->id] = [
-                'title' => $planItem->title,
-                'id' => $planItem->id,
-            ];
-        
-           
-            $planCoverages = PlansCoverage::findAll(['item_id' => $planItem->id]);
-        
-            foreach ($planCoverages as $coverageItem) {
-                $planCoverageItems[$planItem->id][] = [
-                    'description' => $coverageItem->description,
-                    'item_id' => $coverageItem->item->title, 
-                    'YorN' => $coverageItem->YorN,
+                    'price' => $price ? $price->price : 0,
+                    'discount_price' => $price ? $price->discount_price : null,
+                    'status' => $price ? $price->status : 'Pricing::STATUS_INACTIVE',
                 ];
             }
-        }
-
+            
+            
+            
+        // dd($planCoverageItems);
         return $this->render('index', [
             'model' => $model,
             'options' => $options,
             'insuranceTitle' => $insuranceTitle ?? '',
             'insuranceCountry' => $insuranceCountry,
-            'plansItemsTitles' => $plansItemsTitles,
-            'planCoverageItems' => $planCoverageItems,
             'fromCountryName' => $fromCountryName,
             'toCountryName' => $toCountryName,
         ]);
@@ -276,25 +252,27 @@ class InsuranceController extends \yii\web\Controller
             'model' => $model,
         ]);
     }
-
     public function actionCheck()
     {
-        $model = new Customers();
-
-        if ($model->load(Yii::$app->request->post())) {
-            // dd("shatha");
+        $model = new \yii\base\DynamicModel(['country_code', 'mobile']);
+        $model->addRule(['country_code', 'mobile'], 'required');
+        
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $country_code = $model->country_code;
             $mobile = $model->mobile;
-            // dd($mobile);
 
-            $customer = Customers::findOne(['mobile' => $mobile]);
+            
+            $full_mobile = $country_code . ltrim($mobile, '0');
+    
+            $customer = Customers::findOne(['mobile' => $full_mobile]);
             if ($customer) {
                 // Send OTP
-                $response = $this->sendOtp($mobile);
+                $response = $this->sendOtp($full_mobile);
                 $responseData = json_decode($response, true);
-
+    
                 if ($responseData['status'] == 201) {
                     Yii::$app->session->setFlash('success', 'OTP sent successfully.');
-                    Yii::$app->session->set('mobile', $mobile);
+                    Yii::$app->session->set('mobile', $full_mobile);
                     return $this->redirect(['verify-otp']);
                 } else {
                     Yii::$app->session->setFlash('error', 'Failed to send OTP.');
@@ -303,18 +281,17 @@ class InsuranceController extends \yii\web\Controller
                 Yii::$app->session->setFlash('error', 'Mobile number not found.');
             }
         }
-
+    
         return $this->render('policy', [
             'model' => $model,
         ]);
     }
-
+    
     private function sendOtp($mobile)
     {
         $curl = curl_init();
-
+    
         $from = "360Protect";
-        $to = "+962" . ltrim($mobile, '0');
         $message = "Hello from Releans API";
         curl_setopt_array($curl, array(
             CURLOPT_URL => "https://api.releans.com/v2/otp/send",
@@ -325,103 +302,103 @@ class InsuranceController extends \yii\web\Controller
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => "POST",
-            CURLOPT_POSTFIELDS => "sender=$from&mobile=$to&content=$message",
+            CURLOPT_POSTFIELDS => "sender=$from&mobile=$mobile&content=$message",
             CURLOPT_HTTPHEADER => array(
                 "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6ImEzNWE5MmFmLWVhMGItNGYwNy04ZmMzLWQ2NmM3NWVmOTlkZCIsImlhdCI6MTcyMDA3NzI4MSwiaXNzIjoxOTQ3OH0.-cHxsksuyLILpuuBbKmNAo_TiZSJTwmtjNPF1CeyRug"
             ),
         ));
-
+    
         $response = curl_exec($curl);
-        // dd($response);
         curl_close($curl);
-
+    
         return $response;
     }
+    
     public function actionVerifyOtp()
     {
         $model = new \yii\base\DynamicModel(['otp']);
-        $otp = Yii::$app->request->post('otp');
         $model->addRule(['otp'], 'required');
-        // dd($model);var_dump(Yii::$app->request->post());
-
+    
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $otp = $model->otp;
             $mobile = Yii::$app->session->get('mobile');
-            // dd( $otp,$mobile );
-
-            $response = $this->verifyOtp($mobile, $otp);
-
+    
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => "https://api.releans.com/v2/otp/check",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "POST",
+                CURLOPT_POSTFIELDS => "mobile=$mobile&code=$otp",
+                CURLOPT_HTTPHEADER => array(
+                    "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6ImEzNWE5MmFmLWVhMGItNGYwNy04ZmMzLWQ2NmM3NWVmOTlkZCIsImlhdCI6MTcyMDA3NzI4MSwiaXNzIjoxOTQ3OH0.-cHxsksuyLILpuuBbKmNAo_TiZSJTwmtjNPF1CeyRug"
+                ),
+            ));
+    
+            $response = curl_exec($curl);
+            curl_close($curl);
+    
             $responseData = json_decode($response, true);
-
-            if (isset($responseData['status']) && $responseData['status'] == 422) {
-                // dd("shatha0");
-                Yii::$app->session->setFlash('error', $responseData['message']);
-            } elseif (isset($responseData['status']) && $responseData['status'] == 200) {
+    
+            if (isset($responseData['status']) && $responseData['status'] == 200) {
                 Yii::$app->session->setFlash('success', 'OTP verified successfully.');
                 return $this->redirect(['display-policy']);
             } else {
                 Yii::$app->session->setFlash('error', 'Failed to verify OTP.');
             }
         }
-
+    
         return $this->render('verify-otp', [
             'model' => $model,
         ]);
     }
-
-    private function verifyOtp($mobile, $otp)
-    {
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://api.releans.com/v2/otp/check",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "POST",
-            CURLOPT_POSTFIELDS => "mobile=$mobile&code=$otp",
-            CURLOPT_HTTPHEADER => array(
-                "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6ImEzNWE5MmFmLWVhMGItNGYwNy04ZmMzLWQ2NmM3NWVmOTlkZCIsImlhdCI6MTcyMDA3NzI4MSwiaXNzIjoxOTQ3OH0.-cHxsksuyLILpuuBbKmNAo_TiZSJTwmtjNPF1CeyRug"
-            ),
-        ));
-
-        $response = curl_exec($curl);
-        $err = curl_error($curl);
-
-        if ($err) {
-         
-            Yii::$app->session->setFlash('error', 'Curl Error: ' . $err);
-       
-            error_log('Curl Error: ' . $err);
-        } else {
-            $http_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-            if ($http_code != 200) {
-         
-                Yii::$app->session->setFlash('error', 'HTTP Error: ' . $http_code);
-              
-                error_log('HTTP Error: ' . $http_code);
-            } else {
-               
-                $responseData = json_decode($response, true);
-                if (isset($responseData['status']) && $responseData['status'] == 422) {
-                    Yii::$app->session->setFlash('error', $responseData['message']);
     
-                    error_log('API Error: ' . $responseData['message']);
-                } else {
-           
-                    Yii::$app->session->setFlash('success', 'OTP successfully verified!');
-           
-                    error_log('OTP successfully verified!');
-                }
-            }
-        }
 
-        curl_close($curl);
 
-        return $response;
-    }
+
+
+    // private function verifyOtp($mobile, $otp)
+    // {
+    //     $curl = curl_init();
+    //     curl_setopt_array($curl, array(
+    //         CURLOPT_URL => "https://api.releans.com/v2/otp/check",
+    //         CURLOPT_RETURNTRANSFER => true,
+    //         CURLOPT_ENCODING => "",
+    //         CURLOPT_MAXREDIRS => 10,
+    //         CURLOPT_TIMEOUT => 0,
+    //         CURLOPT_FOLLOWLOCATION => true,
+    //         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    //         CURLOPT_CUSTOMREQUEST => "POST",
+    //         CURLOPT_POSTFIELDS => "mobile=$mobile&code=$otp",
+    //         CURLOPT_HTTPHEADER => array(
+    //             "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6ImEzNWE5MmFmLWVhMGItNGYwNy04ZmMzLWQ2NmM3NWVmOTlkZCIsImlhdCI6MTcyMDA3NzI4MSwiaXNzIjoxOTQ3OH0.-cHxsksuyLILpuuBbKmNAo_TiZSJTwmtjNPF1CeyRug"
+    //         ),
+    //     ));
+
+
+    //     dd( array(
+    //         CURLOPT_URL => "https://api.releans.com/v2/otp/check",
+    //         CURLOPT_RETURNTRANSFER => true,
+    //         CURLOPT_ENCODING => "",
+    //         CURLOPT_MAXREDIRS => 10,
+    //         CURLOPT_TIMEOUT => 0,
+    //         CURLOPT_FOLLOWLOCATION => true,
+    //         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    //         CURLOPT_CUSTOMREQUEST => "POST",
+    //         CURLOPT_POSTFIELDS => "mobile=$mobile&code=$otp",
+    //         CURLOPT_HTTPHEADER => array(
+    //             "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6ImEzNWE5MmFmLWVhMGItNGYwNy04ZmMzLWQ2NmM3NWVmOTlkZCIsImlhdCI6MTcyMDA3NzI4MSwiaXNzIjoxOTQ3OH0.-cHxsksuyLILpuuBbKmNAo_TiZSJTwmtjNPF1CeyRug"
+    //         ),
+    //     ) );
+    //     $response = curl_exec($curl);
+
+    //     curl_close($curl);
+    //     return $response;
+    // }
 
 
     public function actionDisplayPolicy()

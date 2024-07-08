@@ -131,7 +131,8 @@ $this->registerJs("
                                 </div>
                             </th>
                             <th class="table-column-ps-0">Title</th>
-                            <th>Description</th>
+                            <th>Coverage</th>
+                            <th>Plan Name</th>
                             <th>Status</th>
                             <th>Actions</th>
                         </tr>
@@ -179,7 +180,7 @@ $this->registerJs("
                                     }
                                     ?>
                                 </td>
-
+<td><?= Html::encode($benefit->plan->name) ?></td>
                                 <td><?= Html::encode($benefit->YorN) ?></td>
 
 

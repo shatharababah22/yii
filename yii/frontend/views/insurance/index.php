@@ -85,33 +85,38 @@ $this->title = 'About';
                                     <p>Select a plan that suits you and your options</p>
                                 </div>
                                 <div class="options">
-                                <?= $form->field($model, 'plan')->radioList($options, [
-    'item' => function ($index, $label, $name, $checked, $value) {
-        $return = '<div class="purchasing-option"><div class="border-content">';
-        $return .= '<label class="radio">';
-        $return .= '<span class="radio-input">';
-        $return .= '<input type="radio" name="' . $name . '" value="' . $value . '" ' . ($checked ? "checked" : "") . '>';
-        $return .= '<span class="radio-control"></span>';
-        $return .= '</span>';
-        $return .= '<span class="radio-label"><h5 id="buyNowHeading">' . ucwords($label['name']) . '</h5>';
-        
-    
-        if ($label['discount_price'] && $label['status']) {
-            $return .= '<div class="price has_subscript">';
-$return .= '<h5><span style="font-size:15px">USD $' . $label['discount_price'] . '</span><br><strike style="font-size:13px">USD $' . $label['price'] . '</strike></h5>';
-            $return .= '<div class="subscript">per person</div>';
-            $return .= '</div>';
-        } else {
-            $return .= '<div class="price has_subscript">';
-            $return .= '<h5>USD $' . $label['price'] . '</h5>';
-            $return .= '<div class="subscript">per person</div>';
-            $return .= '</div>';
-        }
+                                    <?= $form->field($model, 'plan')->radioList($options, [
+                                        'item' => function ($index, $label, $name, $checked, $value) {
+                                            $return = '<div class="purchasing-option"><div class="border-content">';
+                                            $return .= '<label class="radio">';
+                                            $return .= '<span class="radio-input">';
 
-        $return .= '</span></label></div></div>';
-        return $return;
-    },
-])->label(false); ?>
+                                            $return .= '<input type="radio" name="' . $name . '" value="' . $value . '" ' . ($checked ? "checked" : "") . '>';
+
+                                            $return .= '<span class="radio-control"></span>';
+                                            $return .= '</span>';
+
+                                            $return .= '<span class="radio-label"><h5 id="buyNowHeading">' . ucwords($label['name']) .
+                                                ' <small class="subscript" style="font-size: 11px;"><a href="#benefits">Check Benefits</a></small>' . '</h5>';
+
+
+
+                                            if ($label['discount_price'] && $label['status']) {
+                                                $return .= '<div class="price has_subscript">';
+                                                $return .= '<h5><span style="font-size:15px">USD $' . $label['discount_price'] . '</span><br><strike style="font-size:13px">USD $' . $label['price'] . '</strike></h5>';
+                                                $return .= '<div class="subscript">per person</div>';
+                                                $return .= '</div>';
+                                            } else {
+                                                $return .= '<div class="price has_subscript">';
+                                                $return .= '<h5>USD $' . $label['price'] . '</h5>';
+                                                $return .= '<div class="subscript">per person</div>';
+                                                $return .= '</div>';
+                                            }
+
+                                            $return .= '</span></label></div></div>';
+                                            return $return;
+                                        },
+                                    ])->label(false); ?>
 
                                 </div>
                             </div>
@@ -129,7 +134,7 @@ $return .= '<h5><span style="font-size:15px">USD $' . $label['discount_price'] .
 </section>
 <!--Hero start-->
 <!--Compare plan start-->
-<section class="my-xl-9 py-5">
+<section class="my-xl-9 py-5" id="benefits">
     <div class="container">
         <div class="row">
             <div class="col-lg-12 col-md-12 col-12">
@@ -149,51 +154,59 @@ $return .= '<h5><span style="font-size:15px">USD $' . $label['discount_price'] .
                                 <th scope="col">
                                     <div class="fs-5 text-dark fw-semibold">Plans</div>
                                 </th>
-                                <?php foreach ($options as $planId => $option) : ?>
+                                <?php foreach (\common\models\Plans::find()->where(['insurance_id' => $model->type])->all() as $plan) : ?>
                                     <th scope="col">
                                         <div class="fs-5 text-dark fw-semibold">
-                                            <?= Plans::findOne($planId)->name ?>
+                                            <?= $plan->name ?>
                                         </div>
                                     </th>
                                 <?php endforeach; ?>
+
                             </tr>
                         </thead>
                         <tbody>
-
-                        <?php foreach ($plansItemsTitles as $planId => $planItem) : ?>
-    <tr class="clickable-row" data-index="<?= $planId ?>">
-        <td>
-            <?= $planItem['title'] ?>
-        </td>
-        <?php if (isset($planCoverageItems[$planId])) : ?>
-            <?php foreach ($planCoverageItems[$planId] as $planCoverageItem) : ?>
-                <td>
-                    <?php if ($planCoverageItem['YorN'] == 'Active') : ?>
-                        <span>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill text-success" viewBox="0 0 16 16">
-                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                            </svg>
-                        </span>
-                        <span class="ms-2"><?= $planCoverageItem['description'] ?></span>
-                    <?php else : ?>
-                        <span>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-x-circle-fill  text-danger" viewBox="0 0 16 16">
-                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z" />
-                            </svg>
-                        </span>
-                        <span class="ms-2"><?= $planCoverageItem['description'] ?></span>
-                    <?php endif; ?>
-                </td>
-            <?php endforeach; ?>
-        <?php endif; ?>
-    </tr>
-<?php endforeach; ?>
-
-
-
+                            <?php foreach (\common\models\PlansItems::find()->where(['insurance_id' => $model->type])->all() as $planitem) : ?>
+                                <tr class="clickable-row">
+                                    <td>
+                                        <?= $planitem->title ?>
+                                    </td>
+                                    <?php foreach (\common\models\Plans::find()->where(['insurance_id' => $model->type])->all() as $plan) : ?>
+                                        <td>
+                                            <?php
+                                            $planCoverage = \common\models\PlansCoverage::find()->where(['item_id' => $planitem->id, 'plan_id' => $plan->id])->one();
+                                            if ($planCoverage) :
+                                            ?>
+                                                <?php if ($planCoverage->YorN == 'Active') : ?>
+                                                    <span>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill text-success" viewBox="0 0 16 16">
+                                                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+                                                        </svg>
+                                                    </span>
+                                                    <span class="ms-2"><?= $planCoverage->description ?></span>
+                                                <?php else : ?>
+                                                    <span>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-x-circle-fill text-danger" viewBox="0 0 16 16">
+                                                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z" />
+                                                        </svg>
+                                                    </span>
+                                                    <span class="ms-2">N/A</span>
+                                                <?php endif; ?>
+                                            <?php else : ?>
+                                                <span>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-x-circle-fill text-danger" viewBox="0 0 16 16">
+                                                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z" />
+                                                    </svg>
+                                                </span>
+                                                <span class="ms-2">N/A</span>
+                                            <?php endif; ?>
+                                        </td>
+                                    <?php endforeach; ?>
+                                </tr>
+                            <?php endforeach; ?>
 
                         </tbody>
                     </table>
+
                 </div>
             </div>
         </div>

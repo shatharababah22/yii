@@ -15,7 +15,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
 
+$anyActive = Pricing::find()->where(['!=', 'discount_price', 0])->andWhere(['status' => 1])->exists();
 
+$buttonText = $anyActive ? 'Inactivate Discount' : 'Activate Discount';
 ?>
 
 
@@ -33,21 +35,23 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
             <div class="mt-2">
-        <a class="text-body me-3" href="<?= Url::to(['pricing/export']) ?>">
-          <i class="bi-download me-1"></i> Export
-        </a>
+                <a class="text-body me-3" href="<?= Url::to(['pricing/export']) ?>">
+                    <i class="bi-download me-1"></i> Export
+                </a>
 
-        <a class="text-body" href="javascript:;" data-bs-toggle="modal" data-bs-target="#importProductsModal">
-          <i class="bi-upload me-1"></i> Import
-        </a>
-      </div>
+                <a class="text-body" href="javascript:;" data-bs-toggle="modal" data-bs-target="#importProductsModal">
+                    <i class="bi-upload me-1"></i> Import
+                </a>
+            </div>
         </div>
         <!-- End Col -->
 
         <div class="col-sm-auto">
-            <!-- <a class="btn btn-primary" href="./ecommerce-add-product.html">Add product</a> -->
             <?= Html::a('New Pricing', Url::to(['create']), ['class' => 'btn btn-primary']) ?>
-        </div>
+            <?= Html::a($buttonText, Url::to(['/pricing/toggle-discount']), [
+    'class' => 'btn border-1', 
+    'style' => 'color: black; border: 1px solid black; box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);'
+]) ?>            </div>
         <!-- End Col -->
     </div>
     <!-- End Row -->
@@ -66,7 +70,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="card-header card-header-content-md-between">
         <div class="mb-2 mb-md-0">
 
-        
+
         </div>
 
         <div class="d-grid d-sm-flex gap-2">
@@ -110,80 +114,84 @@ $this->params['breadcrumbs'][] = $this->title;
                     <th class="table-column-ps-0">Plan code</th>
                     <th>duration</th>
                     <th>passenger</th>
-                 
+
                     <th>price</th>
                     <th>Actions</th>
                 </tr>
             </thead>
 
             <tbody>
-                      <?php if ($dataProvider->models) : ?>
+                <?php if ($dataProvider->models) : ?>
 
-                <?php foreach ($dataProvider->models as $price) : ?>
-                    <tr>
-                        <td class="table-column-pe-0">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="productsCheck<?= $price->id ?>">
-                                <label class="form-check-label" for="productsCheck<?= $price->id ?>">
-                                </label>
+                    <?php foreach ($dataProvider->models as $price) : ?>
+                        <tr>
+                            <td class="table-column-pe-0">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="productsCheck<?= $price->id ?>">
+                                    <label class="form-check-label" for="productsCheck<?= $price->id ?>">
+                                    </label>
+                                </div>
+                            </td>
+                            <td class="table-column-ps-0">
+                                <a class="d-flex align-items-center" href="<?= Url::to(['view', 'id' => $price->id]) ?>">
+
+                                    <div class="flex-grow-1 ms-3">
+                                        <h5 class="text-inherit mb-0"><?= Html::encode($price->plan->plan_code) ?></h5>
+                                    </div>
+                                </a>
+                            </td>
+
+                            <?php
+                            $durationLabels = [
+                                7 => '7 days',
+                                10 => '10 days',
+                                15 => '15 days',
+                                21 => '21 days',
+                                30 => '1 month',
+                                60 => '2 months',
+                                90 => '3 months',
+                                180 => '6 months',
+                                365 => '1 year',
+                                730 => '2 years',
+                                1095 => '3 years',
+                            ];
+
+                            $durationLabel = isset($durationLabels[$price->duration]) ? $durationLabels[$price->duration] : 'Unknown';
+                            ?>
+
+                            <td><?= Html::encode($durationLabel) ?></td>
+
+                            <td><?= Html::encode($price->passenger) ?></td>
+
+                            <td><?= Html::encode($price->price) ?></td>
+
+
+                            <td>
+                                <!-- Actions -->
+                                <a class="btn btn-white btn-sm" href="<?= Url::to(['update', 'id' => $price->id]) ?>">
+                                    <i class="bi-pencil-fill" style="font-size: 15px;"></i>
+                                </a>
+                                <a class="btn btn-white btn-sm" href="<?= Url::to(['delete', 'id' => $price->id]) ?>" data-method="post" data-confirm="Are you sure you want to delete this item?">
+                                    <i class="bi bi-trash" style="font-size: 15px; color:red"></i>
+                                </a>
+                                <a class="btn btn-white btn-sm" href="<?= Url::to(['view', 'id' => $price->id]) ?>">
+                                    <i class="bi bi-eye-fill" style="font-size: 15px; color: #377DFF;"></i>
+                                </a>
+                                <!-- End Actions -->
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else : ?>
+                    <tr class="odd">
+                        <td valign="top" colspan="8" class="dataTables_empty">
+                            <div class="text-center p-4">
+
+                                <img class="mb-3" src="<?= Url::to('@web/svg/illustrations/oc-error.svg') ?>" alt="Image Description" style="width: 10rem;" data-hs-theme-appearance="default">
+                                <p class="mb-0">No data to show</p>
                             </div>
                         </td>
-                        <td class="table-column-ps-0">
-                            <a class="d-flex align-items-center" href="<?= Url::to(['view', 'id' => $price->id]) ?>">
-
-                                <div class="flex-grow-1 ms-3">
-                                    <h5 class="text-inherit mb-0"><?= Html::encode($price->plan->plan_code) ?></h5>
-                                </div>
-                            </a>
-                        </td>
-
-                        <?php
-                        $durationLabels = [
-                            7 => '7 days',
-                            10 => '10 days',
-                            15 => '15 days',
-                            21 => '21 days',
-                            30 => '1 month',
-                            60 => '2 months',
-                            90 => '3 months',
-                            180 => '6 months',
-                            365 => '1 year',
-                            730 => '2 years',
-                            1095 => '3 years',
-                        ];
-
-                        $durationLabel = isset($durationLabels[$price->duration]) ? $durationLabels[$price->duration] : 'Unknown';
-                        ?>
-
-                        <td><?= Html::encode($durationLabel) ?></td>
-
-                        <td><?= Html::encode($price->passenger) ?></td>
-                     
-                        <td><?= Html::encode($price->price) ?></td>
-                       
-
-                        <td>
-                            <!-- Actions -->
-                            <a class="btn btn-white btn-sm" href="<?= Url::to(['update', 'id' => $price->id]) ?>">
-                                <i class="bi-pencil-fill" style="font-size: 15px;"></i>
-                            </a>
-                            <a class="btn btn-white btn-sm" href="<?= Url::to(['delete', 'id' => $price->id]) ?>" data-method="post" data-confirm="Are you sure you want to delete this item?">
-                                <i class="bi bi-trash" style="font-size: 15px; color:red"></i>
-                            </a>
-                            <a class="btn btn-white btn-sm" href="<?= Url::to(['view', 'id' => $price->id]) ?>">
-                                <i class="bi bi-eye-fill" style="font-size: 15px; color: #377DFF;"></i>
-                            </a>
-                            <!-- End Actions -->
-                        </td>
                     </tr>
-                     <?php endforeach; ?>
-                     <?php else: ?>
-            <tr class="odd"><td valign="top" colspan="8" class="dataTables_empty"><div class="text-center p-4">
-              
-            <img class="mb-3" src="<?= Url::to('@web/svg/illustrations/oc-error.svg') ?>" alt="Image Description" style="width: 10rem;" data-hs-theme-appearance="default">
-            <p class="mb-0">No data to show</p>
-            </div></td></tr>
-    <?php endif; ?>
+                <?php endif; ?>
 
             </tbody>
         </table>
@@ -251,65 +259,62 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <!--Filter Modal -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasEcommerceProductFilter" aria-labelledby="offcanvasEcommerceProductFilterLabel">
-  <div class="offcanvas-header ">
-    <h4 id="offcanvasEcommerceProductFilterLabel" class="mb-0">Filters</h4>
-    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-  </div>
-  <div class="offcanvas-body">
-    <span class="text-cap small mb-4">filter by:</span>
-    <div class="mb-2">
-      <?php echo $this->render('_search', ['model' => $searchModel]); ?>
+    <div class="offcanvas-header ">
+        <h4 id="offcanvasEcommerceProductFilterLabel" class="mb-0">Filters</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
-  </div>
+    <div class="offcanvas-body">
+        <span class="text-cap small mb-4">filter by:</span>
+        <div class="mb-2">
+            <?php echo $this->render('_search', ['model' => $searchModel]); ?>
+        </div>
+    </div>
 </div>
 
-   <!-- Import Products Modal -->
-   <div class="modal fade" id="importProductsModal" tabindex="-1" aria-labelledby="importProductsModalLabel" aria-hidden="true">
+<!-- Import Products Modal -->
+<div class="modal fade" id="importProductsModal" tabindex="-1" aria-labelledby="importProductsModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <!-- Header -->
-        <div class="modal-header">
-          <h4 class="modal-title" id="importProductsModalLabel">Import Pricing</h4>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <!-- End Header -->
+        <div class="modal-content">
+            <!-- Header -->
+            <div class="modal-header">
+                <h4 class="modal-title" id="importProductsModalLabel">Import Pricing</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <!-- End Header -->
 
-        <!-- Body -->
-        <div class="modal-body">
-          <p><a class="link" href="#">Download pricing as Excel</a> to see an example of the format required.</p>
+            <!-- Body -->
+            <div class="modal-body">
+                <p><a class="link" href="#">Download pricing as Excel</a> to see an example of the format required.</p>
 
-          <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
+                <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
-          <?= $form->errorSummary($model); ?>
+                <?= $form->errorSummary($model); ?>
 
-          <!-- <?= $form->field($model, 'imageFile')->fileInput(); ?> -->
+                <!-- <?= $form->field($model, 'imageFile')->fileInput(); ?> -->
 
-          <?= $form->field($model, 'imageFile')->fileInput(['class' => 'form-control', 'id' => 'basicFormFile',])->label(false) ?>
+                <?= $form->field($model, 'imageFile')->fileInput(['class' => 'form-control', 'id' => 'basicFormFile',])->label(false) ?>
 
 
-          <!-- Form Check -->
-          <!-- <div class="form-check">
+                <!-- Form Check -->
+                <!-- <div class="form-check">
             <input class="form-check-input" type="checkbox" value="" id="overwriteCurrentProductsCheckbox">
             <label class="form-check-label" for="overwriteCurrentProductsCheckbox">
               Overwrite any current products that have the same handle. Existing values will be used for any missing columns. <a href="#">Learn more</a>
             </label>
           </div> -->
-          <!-- End Form Check -->
-        </div>
-        <!-- End Body -->
+                <!-- End Form Check -->
+            </div>
+            <!-- End Body -->
 
-        <!-- Footer -->
-        <div class="modal-footer">
-          <button type="button" class="btn btn-white" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
-          <button type="submit" class="btn btn-primary">Upload and continue</button>
+            <!-- Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+                <button type="submit" class="btn btn-primary">Upload and continue</button>
+            </div>
+            <?php ActiveForm::end(); ?>
+            <!-- End Footer -->
         </div>
-        <?php ActiveForm::end(); ?>
-        <!-- End Footer -->
-      </div>
     </div>
-  </div>
+</div>
 
-  <!-- End Import Products Modal -->
-
-
-  
+<!-- End Import Products Modal -->

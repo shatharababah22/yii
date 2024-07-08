@@ -120,7 +120,25 @@ class PricingController extends Controller
 
         return Yii::$app->response->sendFile($temp_file, $fileName);
     }
+    public function actionToggleDiscount()
+    {
+        $pricings = Pricing::find()->where(['!=', 'discount_price', 0])->all();
+    
 
+        $anyActive = Pricing::find()->where(['!=', 'discount_price', 0])->andWhere(['status' => 1])->exists();
+    
+        foreach ($pricings as $pricing) {
+            $pricing->status = $anyActive ? 0 : 1;
+            $pricing->save(false); 
+        }
+    
+        
+        Yii::$app->session->setFlash('success', 'Discount statuses have been toggled.');
+    
+        return $this->redirect(['index']);
+    }
+    
+    
     public function actionIndex()
     {
         $searchModel = new PricingSearch();

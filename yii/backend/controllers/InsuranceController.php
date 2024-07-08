@@ -81,35 +81,50 @@ class InsuranceController extends Controller
      * @return string|\yii\web\Response
      */
 
-    public function actionCreate()
-    {
-        $model = new Insurances();
-
-        if (Yii::$app->request->isPost) {
-            if ($model->load(Yii::$app->request->post())) {
-                $uploadedFile = UploadedFile::getInstance($model, 'photo');
-                if ($uploadedFile) {
-                    $file = $uploadedFile;
-                    $fileName = rand() . '-' . strtotime(date('Y-m-d H:i:s')) . '.' . $file->extension;
-                    $path = 'images/' . $fileName;
-                    if ($uploadedFile->saveAs($path)) {
-                        $model->photo = $fileName;
-                    } else {
-                        Yii::$app->session->setFlash('error', 'Failed to save the uploaded file.');
-                    }
-                }
-                if ($model->save()) {
-                    return $this->redirect(['view', 'id' => $model->id]);
-                }
-            }
-        } else {
-            $model->loadDefaultValues();
-        }
-
-        return $this->render('create', [
-            'model' => $model,
-        ]);
-    }
+     public function actionCreate()
+     {
+         $model = new Insurances();
+     
+         if (Yii::$app->request->isPost) {
+             if ($model->load(Yii::$app->request->post())) {
+                 $uploadedFile = UploadedFile::getInstance($model, 'photo');
+                 if ($uploadedFile) {
+                     $file = $uploadedFile;
+                     $fileName = rand() . '-' . strtotime(date('Y-m-d H:i:s')) . '.' . $file->extension;
+                     $path = 'images/' . $fileName;
+                     if ($uploadedFile->saveAs($path)) {
+                         $model->photo = $fileName;
+                     } else {
+                         Yii::$app->session->setFlash('error', 'Failed to save the uploaded file.');
+                     }
+                 }
+     
+                 $uploadedBenefitFile = UploadedFile::getInstance($model, 'benefits_link');
+                 if ($uploadedBenefitFile) {
+                     $benefitFile = $uploadedBenefitFile;
+                     $benefitFileName = $benefitFile->baseName . '_' . time() . '.' . $benefitFile->extension; // Use baseName of the file
+                     $benefitPath = 'images/' . $benefitFileName;
+                     if ($uploadedBenefitFile->saveAs($benefitPath)) {
+                         $model->benefits_link = $benefitFileName;
+                     } else {
+                         Yii::$app->session->setFlash('error', 'Failed to save the uploaded benefit file.');
+                     }
+                 }
+                 
+     
+                 if ($model->save()) {
+                     return $this->redirect(['view', 'id' => $model->id]);
+                 }
+             }
+         } else {
+             $model->loadDefaultValues();
+         }
+     
+         return $this->render('create', [
+             'model' => $model,
+         ]);
+     }
+     
 
     
     /**
@@ -119,44 +134,58 @@ class InsuranceController extends Controller
      * @return string|\yii\web\Response
      * @throws NotFoundHttpException if the model cannot be found
      */ public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-        $oldPhoto = $model->photo; // Store the old photo path
+{
+    $model = $this->findModel($id);
+    $oldPhoto = $model->photo; 
+    $oldBenefitLink = $model->benefits_link; 
 
-        if (Yii::$app->request->isPost) {
-            if ($model->load(Yii::$app->request->post())) {
-                $uploadedFile = UploadedFile::getInstance($model, 'photo');
+    if (Yii::$app->request->isPost) {
+        if ($model->load(Yii::$app->request->post())) {
+            $uploadedFile = UploadedFile::getInstance($model, 'photo');
 
-                if ($uploadedFile) {
-                    $file = $uploadedFile;
-                    $fileName = rand() . '-' . strtotime(date('Y-m-d H:i:s')) . '.' . $file->extension;
-                    $path = 'images/' . $fileName;
-                    if ($uploadedFile->saveAs($path)) {
-
-                        if ($oldPhoto && file_exists('images/' . $oldPhoto)) {
-                            unlink('images/' . $oldPhoto);
-                        }
-                        $model->photo = $fileName;
-                    } else {
-                        Yii::$app->session->setFlash('error', 'Failed to save the uploaded file.');
+            if ($uploadedFile) {
+                $file = $uploadedFile;
+                $fileName = rand() . '-' . strtotime(date('Y-m-d H:i:s')) . '.' . $file->extension;
+                $path = 'images/' . $fileName;
+                if ($uploadedFile->saveAs($path)) {
+                    if ($oldPhoto && file_exists('images/' . $oldPhoto)) {
+                        unlink('images/' . $oldPhoto);
                     }
+                    $model->photo = $fileName;
                 } else {
-
-                    $model->photo = $oldPhoto;
+                    Yii::$app->session->setFlash('error', 'Failed to save the uploaded photo file.');
                 }
+            } else {
+                $model->photo = $oldPhoto;
+            }
 
-                if ($model->save()) {
-                    return $this->redirect(['view', 'id' => $model->id]);
+            $uploadedBenefitFile = UploadedFile::getInstance($model, 'benefits_link');
+            if ($uploadedBenefitFile) {
+                $benefitFile = $uploadedBenefitFile;
+                $benefitFileName = $benefitFile->baseName . '_' . time() . '.' . $benefitFile->extension; // Use baseName of the file
+                $benefitPath = 'images/' . $benefitFileName;
+                if ($uploadedBenefitFile->saveAs($benefitPath)) {
+                    if ($oldBenefitLink && file_exists('images/' . $oldBenefitLink)) {
+                        unlink('images/' . $oldBenefitLink);
+                    }
+                    $model->benefits_link = $benefitFileName;
+                } else {
+                    Yii::$app->session->setFlash('error', 'Failed to save the uploaded benefit file.');
                 }
+            } else {
+                $model->benefits_link = $oldBenefitLink;
+            }
+
+            if ($model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
             }
         }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
     }
 
-
+    return $this->render('update', [
+        'model' => $model,
+    ]);
+}
 
 
     /**

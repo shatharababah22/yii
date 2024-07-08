@@ -13,20 +13,20 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 
-    <h1><?= Html::encode($this->title) ?></h1>
+<h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
+<p>
+    <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+    <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+        'class' => 'btn btn-danger',
+        'data' => [
+            'confirm' => 'Are you sure you want to delete this item?',
+            'method' => 'post',
+        ],
+    ]) ?>
+</p>
 
-    <?= DetailView::widget([
+<?= DetailView::widget([
     'model' => $model,
     'attributes' => [
         'id',
@@ -35,7 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'description:ntext',
         [
             'attribute' => 'photo',
-            'format' => 'html', 
+            'format' => 'html',
             'value' => function ($model) {
                 $imageUrl = $model->photo ? Yii::getAlias('@web') . '/images/' . $model->photo : "https://i.pinimg.com/564x/85/75/6f/85756f80922443841cb0072e1b1a7408.jpg";
                 return Html::img($imageUrl, [
@@ -44,17 +44,22 @@ $this->params['breadcrumbs'][] = $this->title;
             },
         ],
         'price',
-        'benefits_link:ntext',
+        [
+            'attribute' => 'benefits_link',
+           
+                  'format' => 'raw',
+            'value' => function ($model) {
+                if (!empty($model->benefits_link)) {
+                    // $fileName = basename($model->benefits_link); 
+                    return Html::a('<i class="bi bi-journal-arrow-down "></i> Download', Yii::getAlias('@web') . '/images/' . $model->benefits_link, [
+                        'class' => 'btn border border-secondary',
+                        'target' => '_blank',
+                        'download' => true, 
+                    ]);
+                } else {
+                    return '<span class="not-set">(not set)</span>';
+                }
+            },
+        ],
     ],
 ]) ?>
-
-
-
-
-
-
-
-
-
-
-

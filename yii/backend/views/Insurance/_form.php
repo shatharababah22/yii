@@ -71,8 +71,10 @@ use yii\helpers\Url;
   
     <?= $form->field($model, 'benefits_link', [
     'options' => ['class' => 'col-sm-6'],
-    'labelOptions' => ['class' => 'your-custom-label-class', 'style' => 'color: black;padding-bottom:8px ']
-])->textInput(['maxlength' => true]) ?>
+    'template' => '{label}<div>{input}</div>{error}',
+    'labelOptions' => ['class' => 'your-custom-label-class', 'style' => 'color: black; padding-bottom: 8px;']
+])->fileInput(['maxlength' => true, 'class' => 'form-control']); ?>
+
 
 
 

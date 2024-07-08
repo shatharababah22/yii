@@ -24,17 +24,26 @@ $this->title = 'Contact';
 <section class="mb-xl-9 my-5">
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-lg-8 col-md-10 col-12"> 
+            <div class="col-lg-8 col-md-10 col-12">
                 <div class="card shadow-sm">
                     <div class="card-body">
-                        <?php $form = ActiveForm::begin(['action' => ['insurance/check'], 'options' => ['class' => 'row g-3']]) ?>
-                        <div class="col-md-12">
-                            <?= $form->field($model, 'mobile')->textInput() ?>
+
+                        <div class="policy-form">
+
+                            <?php $form = ActiveForm::begin(); ?>
+
+                            <?= $form->field($model, 'country_code')->textInput(['maxlength' => true, 'placeholder' => '+962']) ?>
+
+                            <?= $form->field($model, 'mobile')->textInput(['maxlength' => true]) ?>
+
+                            <div class="form-group">
+                                <?= Html::submitButton('Send OTP', ['class' => 'btn btn-primary']) ?>
+                            </div>
+
+                            <?php ActiveForm::end(); ?>
+
                         </div>
-                        <div class="col-md-12 d-flex justify-content-end">
-                            <?= Html::submitButton('Review', ['class' => 'btn btn-primary w-50 text-white']) ?>
-                        </div>
-                        <?php ActiveForm::end() ?>
+
                     </div>
                 </div>
             </div>

@@ -50,7 +50,7 @@ $this->title = 'About';
                                 <div class="col-lg-12">
                                     <div class="mb-3">
                                         <h3 class="mb-0 text-center">Get Covered</h3>
-                                        <?= $form->field($model, 'type')->hiddenInput(['value' => $insurance->id])->label(false) ?>
+                                        <?= $form->field($model, 'type')->hiddenInput(['value' => $insurance->id ?? 1])->label(false) ?>
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-12">
@@ -58,11 +58,36 @@ $this->title = 'About';
                                         From
                                         <span class="text-danger">*</span>
                                     </label>
-                                    <?= $form->field($model, 'from_country')->dropDownList(\yii\helpers\ArrayHelper::map(
-                                        Countries::find()->all(),
-                                        'code',
-                                        'country'
-                                    ), ['prompt' => 'Departure'])->label(false) ?>
+                                    <?php if ($country !== null) : ?>
+
+<?= $form->field($model, 'from_country')->dropDownList(
+    \yii\helpers\ArrayHelper::map(
+        Countries::find()->all(),
+        'code',
+        'country'
+    ),
+    [
+        'prompt' => $country->source_country,
+        'options' => [
+            $country->source_country => ['selected' => true],  // Set default selected option
+        ],
+    ]
+)->label(false) ?>
+
+<?php else : ?>
+
+<?= $form->field($model, 'from_country')->dropDownList(
+    \yii\helpers\ArrayHelper::map(
+        Countries::find()->all(),
+        'code',
+        'country'
+    ),
+    ['prompt' => 'Departure']
+)->label(false) ?>
+
+<?php endif; ?>
+
+
                                 </div>
                                 <div class="col-md-6 col-12">
                                     <label for="scheduleLastnameInput" class="form-label">
@@ -81,7 +106,7 @@ $this->title = 'About';
                                         <span class="text-danger">*</span>
                                     </label>
                                     <?= $form->field($model, 'date')->textInput(['type' => 'date', 'min' => date('Y-m-d'), 'onclick' => '$(this).focus();'])->label(false) ?>
-                                    </div>
+                                </div>
                                 <div class="col-md-6">
                                     <label for="scheduleEmailInput" class="form-label">
                                         Days (Duration)
@@ -142,24 +167,24 @@ $this->title = 'About';
 
 <!--Featured in start-->
 <div class="my-5">
-<div class="container">
-    <div class="row">
-        <div class="col-lg-10 offset-lg-1 col-12" data-cue="fadeIn">
-            <ul class="list-inline text-center">
-                <?php foreach (\common\models\Countries::find()->all() as $country) : ?>
-                    <li class="list-inline-item d-inline-flex align-items-center me-3 mb-2 mb-lg-0">
-                        <?php if (!empty($country->code)): ?>
-                            <img src="/assets/flags/<?= $country->code ?>.png" class="rounded-circle" width="24" height="24" alt="<?= $country->country ?>" />
-                        <?php else: ?>
-                            <div class="flag-placeholder rounded-circle"></div>
-                        <?php endif; ?>
-                        <h6 class="my-2 ms-2"><?= $country->country ?></h6>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 offset-lg-1 col-12" data-cue="fadeIn">
+                <ul class="list-inline text-center">
+                    <?php foreach (\common\models\Countries::find()->all() as $country) : ?>
+                        <li class="list-inline-item d-inline-flex align-items-center me-3 mb-2 mb-lg-0">
+                            <?php if (!empty($country->code)) : ?>
+                                <img src="/assets/flags/<?= $country->code ?>.png" class="rounded-circle" width="24" height="24" alt="<?= $country->country ?>" />
+                            <?php else : ?>
+                                <div class="flag-placeholder rounded-circle"></div>
+                            <?php endif; ?>
+                            <h6 class="my-2 ms-2"><?= $country->country ?></h6>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
         </div>
     </div>
-</div>
 
 </div>
 <!--Featured in end-->

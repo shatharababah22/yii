@@ -23,7 +23,9 @@
         "yii2mod/yii2-sweet-alert": "*",
         "dominus77/yii2-sweetalert2-widget": "2.0",
         "arogachev/yii2-excel": "^0.1.1",
-        "phpoffice/phpspreadsheet": "^2.1"
+        "phpoffice/phpspreadsheet": "^2.1",
+        "kartik-v/yii2-widget-fileinput": "^1.1",
+        "borales/yii2-phone-input": "*"
      
         
     },

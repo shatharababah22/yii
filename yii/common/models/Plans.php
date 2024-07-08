@@ -81,8 +81,8 @@ class Plans extends \yii\db\ActiveRecord
     }
 
 
-    public function getPlansItems()
+    public function getCoverage()
     {
-        return $this->hasMany(PlansItems::class, ['plan_id' => 'id']);
+        return $this->hasMany(Plans::class, ['plan_id' => 'id']);
     }
 }

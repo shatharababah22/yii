@@ -36,6 +36,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'item_id',
                 'value' => $model->item->title,
             ],
+            [
+                'attribute' => 'plan_id',
+                'value' => $model->plan->name,
+            ],
             'YorN',
             'description:ntext',
         ],

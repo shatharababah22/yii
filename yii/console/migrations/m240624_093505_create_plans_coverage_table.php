@@ -15,6 +15,7 @@ class m240624_093505_create_plans_coverage_table extends Migration
         $this->createTable('{{%plans_coverage}}', [
             'id' => $this->primaryKey(),
             'item_id' => $this->integer()->notNull(),
+            'plan_id' => $this->integer()->notNull(),
             'YorN' => $this->string(10)->notNull(),
             'description' => $this->text()->notNull(),
         ]);
@@ -28,6 +29,18 @@ class m240624_093505_create_plans_coverage_table extends Migration
             'id',
             'CASCADE',
       
+            
+        );
+
+
+        $this->addForeignKey(
+            'fk-plans_coverage-plan_id',
+            '{{%plans_coverage}}',
+            'plan_id',
+            '{{%plans}}',
+            'id',
+            'CASCADE',
+      
         );
     }
 
@@ -38,6 +51,7 @@ class m240624_093505_create_plans_coverage_table extends Migration
     {
       
         $this->dropForeignKey('fk-plans_coverage-item_id', '{{%plans_coverage}}');
+        $this->dropForeignKey('fk-plans_coverage-plan_id', '{{%plans_coverage}}');
 
        
         $this->dropTable('{{%plans_coverage}}');
