@@ -5,7 +5,7 @@ use yii\db\Migration;
 /**
  * Handles the creation of table `{{%queue}}`.
  */
-class mYYYYMMDD_HHMMSS_create_queue_table extends Migration
+class m240718_142215_create_queue_table extends Migration
 {
     /**
      * {@inheritdoc}
