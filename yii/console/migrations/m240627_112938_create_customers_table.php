@@ -14,7 +14,7 @@ class m240627_112938_create_customers_table extends Migration
     {
         $this->createTable('{{%customers}}', [
             'id' => $this->primaryKey(),
-            'email' => $this->string()->notNull()->unique(),
+            'email' => $this->string()->notNull(),
             'name' => $this->string()->defaultValue(null),
             'mobile' => $this->string()->notNull(),
             'country' => $this->string()->defaultValue(null),

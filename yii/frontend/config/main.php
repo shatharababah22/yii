@@ -9,20 +9,31 @@ $params = array_merge(
 return [
     'id' => 'app-frontend',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
+    'bootstrap' => ['log','queue'],
     'controllerNamespace' => 'frontend\controllers',
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-frontend',
         ],
+        'reCaptcha' => [
+                'class' => 'himiklab\yii2\recaptcha\ReCaptchaConfig',
+                'siteKey' => '6LfutA8qAAAAAEbLnOcFLoc_K_sxlTxwTfoEr1Yp',
+                'secretV3' => '6LfutA8qAAAAAE-Vh475F2Jf60KM8Wgrkqtmu-z9',
+            ],
         'user' => [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-frontend', 'httpOnly' => true],
         ],
-        
+
+        'queue' => [
+            'class' => 'yii\queue\db\Queue', 
+            'db' => 'db', 
+            'tableName' => '{{%queue}}', 
+            'channel' => 'default', 
+            'mutex' => 'yii\mutex\MysqlMutex', 
+        ],
         'session' => [
-            // this is the name of the session cookie used for login on the frontend
             'name' => 'advanced-frontend',
         ],
         'log' => [
@@ -37,14 +48,19 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
+  
         'urlManager' => [
+            'class' => 'yii\web\UrlManager',
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-              //'insurance/type/slug:\w+>' => 'insurance/type',
+                'insurances' => 'insurance/type',
+                // 'insurance/<slug:\w+>' => 'insurance/type/<slug:\w+>',
+                // 'insurance/<slug:\w+>' => 'insurance/programs',
 
             ],
         ],
+
     ],
     'params' => $params,
 ];

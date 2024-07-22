@@ -5,7 +5,7 @@ use yii\helpers\Url;
 /** @var yii\web\View $this */
 /** @var common\models\Pricing $model */
 
-$this->title = 'Update Pricing: ' . $model->plan->plan_code;
+$this->title = 'Update Pricing: ' . $model->plan->name;
 $this->params['breadcrumbs'][] = ['label' => 'Pricings', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';

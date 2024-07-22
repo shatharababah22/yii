@@ -5,7 +5,7 @@ use yii\helpers\Url;
 /** @var yii\web\View $this */
 /** @var common\models\InsuranceCountries $model */
 
-$this->title = 'Update Insurance Countries: ' . $model->source_country;
+$this->title = 'Update Insurance Country: ' . $model->source_country;
 $this->params['breadcrumbs'][] = ['label' => 'Insurance Countries', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';

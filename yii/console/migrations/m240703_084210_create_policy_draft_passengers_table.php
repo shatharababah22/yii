@@ -22,7 +22,7 @@ class m240703_084210_create_policy_draft_passengers_table extends Migration
             'nationality' => $this->string(100)->notNull(),
             'id_type' => $this->string(50)->notNull(),
             'id_number' => $this->string(100)->notNull(),
-            'dob' => $this->integer()->notNull(),
+            'dob' =>  $this->date()->notNull(),
             'country' => $this->string(100)->notNull(),
             'city' => $this->string(100),
             'warning' => $this->text(),

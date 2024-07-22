@@ -13,41 +13,113 @@ $this->title = 'Your Policy';
     <div class="container mt-5">
         <div class="row">
             <div class="col-md-12 col-12">
-                <h1 class="mb-3 text-white-stable"><span class="text-warning">Your</span> Policy</h1>
+                <h1 class="mb-3 text-white-stable"><span class="text-warning">Your</span> Policies</h1>
             </div>
         </div>
     </div>
 </section>
 
+
+
+
+
+
 <section class="mb-xl-9 my-5">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-8 col-md-10 col-12"> 
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <?php if (!empty($policies)): ?>
-                            <ul>
-                                <?php foreach ($policies as $policy): ?>
-                                    <li>
-                                        <strong>Policy No:</strong> <?= Html::encode($policy->PolicyNo) ?><br>
-                                        <strong>Policy URL:</strong> <?= Html::a(Html::encode($policy->PolicyURLLink), Url::to($policy->PolicyURLLink, true), ['target' => '_blank']) ?><br>
-                                        <strong>Departure Date:</strong> <?= date('Y-m-d', $policy->departure_date) ?><br>
-                                        <strong>Return Date:</strong> <?= date('Y-m-d', $policy->return_date) ?><br>
-                                        <strong>From Airport:</strong> <?= Html::encode($policy->from_airport) ?><br>
-                                        <strong>Going To:</strong> <?= Html::encode($policy->going_to) ?><br>
-                                        <strong>Status:</strong> <?= Html::encode($policy->status) ?><br>
-                                        <strong>Status Description:</strong> <?= Html::encode($policy->status_description) ?><br>
-                                        <strong>Price:</strong> <?= Html::encode($policy->price) ?><br>
-                                        <hr>
-                                    </li>
-                                <?php endforeach; ?>
-                            </ul>
-                        <?php else: ?>
-                            <p>No policies found.</p>
-                        <?php endif; ?>
-                    </div>
+  <!-- Card -->
+  <div class="card d-flex justify-content-center m-auto" style="width: 80%;">
+    <!-- Header -->
+    <!-- <div class="card-header card-header-content-md-between">
+      <div class="mb-2 mb-md-0">
+
+      </div>
+      <div class="d-grid d-sm-flex gap-2">
+        <button class="btn btn-white" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasEcommerceProductFilter" aria-controls="offcanvasEcommerceProductFilter">
+          <i class="bi-filter me-1"></i> Filters
+        </button>
+
+
+      </div>
+    </div> -->
+    <!-- End Header -->
+
+    <!-- Table -->
+    <div class="table-responsive datatable-custom">
+
+      <table class="table">
+        <thead class="thead-light" >
+          <tr >
+            <th scope="col" class="table-column-pe-0">
+              <div class="form-check">
+                <!-- <input class="form-check-input" type="checkbox" value="" id="datatableCheckAll">
+                <label class="form-check-label"></label> -->
+              </div>
+            </th>
+
+            <th class="text-bold"><?= Yii::t('app', 'Your email') ?></th>
+            <th><?= Yii::t('app', 'Your Phone') ?></th>
+            <th><?= Yii::t('app', 'From Country') ?></th>
+            <th><?= Yii::t('app', 'To Country') ?></th>
+            <th><?= Yii::t('app', 'Departure Date') ?></th>
+            <th><?= Yii::t('app', 'Return Date') ?></th>
+   
+            <th><?= Yii::t('app', 'Price') ?></th>
+            <th><?= Yii::t('app', 'Status') ?></th>
+
+          </tr>
+        </thead>
+        <tbody>
+        <?php if (!empty($policies)): ?>
+            <?php foreach ($policies as $policy): ?>
+              <tr>
+                <td class="table-column-pe-0">
+                  <div class="form-check">
+                    <!-- <input class="form-check-input" type="checkbox" value="" id="productsCheck<?= $policy->id ?>">
+                    <label class="form-check-label" for="productsCheck<?= $policy->id ?>"></label> -->
+                  </div>
+                </td>
+
+                <td><?= Html::encode($policy->customer->email) ?></td>
+                <td><?= Html::encode($policy->customer->mobile) ?></td>
+                <td><?= Html::encode($policy->from_airport) ?></td>
+                <td><?= Html::encode($policy->going_to) ?></td>
+                <td><?= Html::encode(Yii::$app->formatter->asDate($policy->departure_date)) ?></td>
+                <td><?= Html::encode(Yii::$app->formatter->asDate($policy->return_date)) ?></td>
+                <td><?= $policy->price ?> JD</td>
+                <td><?= Html::encode($policy->status == 0 ? "Inactive" : "Active") ?></td>
+    
+
+              </tr>
+            <?php endforeach; ?>
+          <?php else : ?>
+            <tr class="odd">
+              <td valign="top" colspan="17" class="dataTables_empty">
+                <div class="text-center p-4">
+                <img class="mb-3" src="https://static.vecteezy.com/system/resources/previews/009/007/126/non_2x/document-file-not-found-search-no-result-concept-illustration-flat-design-eps10-modern-graphic-element-for-landing-page-empty-state-ui-infographic-icon-vector.jpg" alt="Image Description" style="width: 10rem;" data-hs-theme-appearance="default">
+
+                  <!-- <img class="mb-3" src="https://as2.ftcdn.net/v2/jpg/02/34/31/27/1000_F_234312709_1CXqUZHqg62VE5VhsVEyQUmj69zZHwk9.jpg" alt="Image Description" style="width: 10rem;" data-hs-theme-appearance="default"> -->
+                  <p class="mb-0">No data to show</p>
                 </div>
-            </div>
-        </div>
+              </td>
+            </tr>
+          <?php endif; ?>
+        </tbody>
+      </table>
     </div>
+    <!-- End Table -->
+
+
+
+
+
+    <!-- <div class="col-sm-auto">
+      <div class="d-flex justify-content-center justify-content-sm-end">
+        <nav id="datatablePagination" aria-label="Activity pagination"></nav>
+      </div>
+    </div> -->
+    <!-- End Col -->
+  </div>
 </section>
+
+
+
+  

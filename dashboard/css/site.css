@@ -1,103 +1,73 @@
-main > .container, main > .container-fluid
-{
-    padding: 70px 15px 20px;
+
+
+
+.dropdown-toggle::after {
+    border-top: initial !important;
 }
 
-.footer {
-    background-color: #f5f5f5;
-    font-size: .9em;
-    height: 60px;
+
+
+
+.help-block {
+    color: #DE2545;
+    font-size: 14px;
+    margin-top: 1%;
 }
 
-.footer > .container, .footer > .container-fluid {
-    padding-right: 15px;
-    padding-left: 15px;
+.navbar-brand-logo{
+
+    width:100%;
+   
+    min-width:4rem;
+    max-width:4rem;
 }
 
-.not-set {
-    color: #c55;
-    font-style: italic;
+.navbar-vertical-aside .navbar-brand-logo-mini{
+
+
+    width:100%;
+   
+    min-width:2.5rem;
+    max-width:2.5rem;
+    
+}
+.logo-span{
+font-size: large;
+font-weight: 700;
+color: #0F172A;
+}
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-/* add sorting icons to gridview sort links */
-a.asc:after, a.desc:after {
-    content: '';
-    left: 3px;
-    display: inline-block;
-    width: 0;
-    height: 0;
-    border: solid 5px transparent;
-    margin: 4px 4px 2px 4px;
-    background: transparent;
+
+  
+.save-button{
+ width: 150px;
 }
 
-a.asc:after {
-    border-bottom: solid 7px #212529;
-    border-top-width: 0;
+.offcanvas-footer {
+    padding: 1.5rem 2rem;
+    border-top: initial;
 }
 
-a.desc:after {
-    border-top: solid 7px #212529;
-    border-bottom-width: 0;
+.offcanvas-backdrop.show {
+    background-color: rgba(255, 255, 255, 0.43);
 }
 
-.grid-view th,
-.grid-view td:last-child {
-    white-space: nowrap;
+.image-form{
+    background-color: #fff;
+    /* padding: 0rem 1rem; */
+    border: .0625rem solid rgba(231, 234, 243, .7);
+    width:110px;
 }
 
-.grid-view .filters input,
-.grid-view .filters select {
-    min-width: 50px;
-}
 
-.hint-block {
-    display: block;
-    margin-top: 5px;
-    color: #999;
-}
+/*  */
 
-.error-summary {
-    color: #a94442;
-    background: #fdf7f7;
-    border-left: 3px solid #eed3d7;
-    padding: 10px 20px;
-    margin: 0 0 15px 0;
-}
+/* Example of increasing width */
 
-/* align the logout "link" (button in form) of the navbar */
-.navbar form > button.logout {
-    padding-top: 7px;
-    color: rgba(255, 255, 255, 0.5);
-}
 
-@media(max-width:767px) {
-    .navbar form > button.logout {
-        display:block;
-        text-align: left;
-        width: 100%;
-        padding: 10px 0;
-    }
-}
 
-.navbar form > button.logout:focus,
-.navbar form > button.logout:hover {
-    text-decoration: none;
-    color: rgba(255, 255, 255, 0.75);
-}
-
-.navbar form > button.logout:focus {
-    outline: none;
-}
-
-/* style breadcrumb widget as in previous bootstrap versions */
-.breadcrumb {
-    background-color: var(--bs-gray-200);
-    border-radius: .25rem;
-    padding: .75rem 1rem;
-}
-
-.breadcrumb-item > a
-{
-    text-decoration: none;
-}

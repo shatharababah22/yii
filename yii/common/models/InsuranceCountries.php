@@ -48,8 +48,8 @@ class InsuranceCountries extends \yii\db\ActiveRecord
         [
             'class' => SluggableBehavior::class,
                 'attribute' => 'source_country', 
-                'slugAttribute' => 'slug'
-            
+                'slugAttribute' => 'slug',
+                // 'ensureUnique' => false,
         ],
     ];
 }

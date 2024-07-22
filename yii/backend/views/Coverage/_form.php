@@ -11,41 +11,50 @@ use yii\helpers\Url;
 $urlFetchInsuranceId = Url::to(['/coverage/fetch-insurance']); 
 $urlFetchPlans = Url::to(['/coverage/fetch-plans']); 
 
+
 $script = <<< JS
 $(document).ready(function() {
     $('#item-id-dropdown').change(function() {
         var itemId = $(this).val();
-        $.ajax({
-            url: '{$urlFetchInsuranceId}',
-            type: 'GET',
-            data: {item_id: itemId},
-            success: function(response) {
-                var insuranceId = response.insurance_id;
-                $.ajax({
-                    url: '{$urlFetchPlans}',
-                    type: 'GET',
-                    data: {insurance_id: insuranceId},
-                    success: function(plans) {
-                        $('#plan-id-dropdown').empty();
-                        $.each(plans, function(id, name) {
-                            $('#plan-id-dropdown').append('<option value="' + id + '">' + name + '</option>');
-                        });
-                    },
-                    error: function() {
-                        alert('Failed to fetch plans.');
-                    }
-                });
-            },
-            error: function() {
-                alert('Failed to fetch insurance information.');
-            }
-        });
+        
+        // Clear the plan dropdown
+        $('#plan-id-dropdown').empty();
+
+        if (itemId) {
+            $.ajax({
+                url: '{$urlFetchInsuranceId}',
+                type: 'GET',
+                data: {item_id: itemId},
+                success: function(response) {
+                    var insuranceId = response.insurance_id;
+                    $.ajax({
+                        url: '{$urlFetchPlans}',
+                        type: 'GET',
+                        data: {insurance_id: insuranceId},
+                        success: function(plans) {
+                            $('#plan-id-dropdown').empty();
+                            $.each(plans, function(id, name) {
+                                $('#plan-id-dropdown').append('<option value="' + id + '">' + name + '</option>');
+                            });
+                        },
+                        error: function() {
+                            alert('Failed to fetch plans.');
+                        }
+                    });
+                },
+                error: function() {
+                    alert('Failed to fetch insurance information.');
+                }
+            });
+        }
     });
 });
 JS;
 
 $this->registerJs($script);
 ?>
+
+
 
 <?php $form = ActiveForm::begin(); ?>
 
@@ -60,10 +69,11 @@ $this->registerJs($script);
     <?= $form->field($model, 'item_id', ['options' => ['class' => 'col-sm-6']])->dropDownList(
         \yii\helpers\ArrayHelper::map(
             \common\models\PlansItems::find()->all(),
+      
             'id',
             'title'
         ),
-        ['class' => 'form-select', 'id' => 'item-id-dropdown']
+        ['class' => 'form-select', 'id' => 'item-id-dropdown','prompt'=>'Please select']
     ) ?>
     <?= $form->field($model, 'YorN', ['options' => ['class' => 'col-sm-6']])->dropDownList(
         [

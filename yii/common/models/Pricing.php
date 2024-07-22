@@ -31,13 +31,33 @@ class Pricing extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['plan_id', 'duration', 'passenger', 'price', 'status'], 'required'],
+            [['plan_id', 'duration', 'passenger', 'price'], 'required'],
+            ['status', 'required', 'when' => function($model) {
+                return !empty($model->discount_price);
+            }, 'whenClient' => "function (attribute, value) {
+                return $('#yourmodel-discount_price').val() != '';
+            }"],
             [['plan_id', 'duration'], 'integer'],
             [['price', 'discount_price'], 'number'],
             [['passenger'], 'string', 'max' => 255],
             [['status'], 'in', 'range' => [0, 1]], 
             [['plan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Plans::class, 'targetAttribute' => ['plan_id' => 'id']],
+            // [['discount_price'], 'compare', 'compareAttribute' => 'price', 'operator' => '<', 'type' => 'number', 'message' => 'Price must be greater than to Discount Price.'],
+
         ];
+    }
+
+
+
+    public function beforeValidate()
+    {
+        if (parent::beforeValidate()) {
+            if ($this->discount_price == 0) {
+                $this->status = 0; 
+            }
+            return true;
+        }
+        return false;
     }
 
     /**

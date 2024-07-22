@@ -5,12 +5,13 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use yii\widgets\LinkPager;
+use yii\widgets\Alert;
 
 /** @var yii\web\View $this */
 /** @var common\models\PricingSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Pricing';
+$this->title = 'Pricings';
 $this->params['breadcrumbs'][] = $this->title;
 
 
@@ -63,7 +64,12 @@ $buttonText = $anyActive ? 'Inactivate Discount' : 'Activate Discount';
 
 </div>
 <!-- End Row -->
-
+<?php if (Yii::$app->session->hasFlash('error')): ?>
+    <div class="alert alert-danger alert-dismissible">
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="font-size: 0.75rem;"></button>
+        <?= Yii::$app->session->getFlash('error') ?>
+    </div>
+<?php endif; ?> 
 <!-- Card -->
 <div class="card">
     <!-- Header -->

@@ -30,7 +30,7 @@ $this->title = 'About';
 
 
 <!--Hero start-->
-<section class="bg-success-dark pt-9 right-slant-shape" data-cue="fadeIn">
+<section class="bg-primary-dark pt-9 right-slant-shape" data-cue="fadeIn">
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-5 col-12">
@@ -97,18 +97,16 @@ $this->title = 'About';
                                             $return .= '</span>';
 
                                             $return .= '<span class="radio-label"><h5 id="buyNowHeading">' . ucwords($label['name']) .
-                                                ' <small class="subscript" style="font-size: 11px;"><a href="#benefits">Check Benefits</a></small>' . '</h5>';
-
-
+                                                ' <small class="subscript" style="font-size: 11px;"><a href="#benefits"><x2>Check Benefits</x2></a></small>' . '</h5>';
 
                                             if ($label['discount_price'] && $label['status']) {
                                                 $return .= '<div class="price has_subscript">';
-                                                $return .= '<h5><span style="font-size:15px">USD $' . $label['discount_price'] . '</span><br><strike style="font-size:13px">USD $' . $label['price'] . '</strike></h5>';
+                                                $return .= '<h5><span style="font-size:15px;">JOD $' . $label['discount_price'] . '</span><br><strike style="font-size:13px">USD $' . $label['price'] . '</strike></h5>';
                                                 $return .= '<div class="subscript">per person</div>';
                                                 $return .= '</div>';
                                             } else {
                                                 $return .= '<div class="price has_subscript">';
-                                                $return .= '<h5>USD $' . $label['price'] . '</h5>';
+                                                $return .= '<h5 >JOD $' . $label['price'] . '</h5>';
                                                 $return .= '<div class="subscript">per person</div>';
                                                 $return .= '</div>';
                                             }
@@ -121,7 +119,7 @@ $this->title = 'About';
                                 </div>
                             </div>
                             <div class="next-button">
-                                <?= Html::submitButton('Next', ['class' => 'btn w-100 btn-success text-white', 'name' => 'login-button']) ?>
+                                <?= Html::submitButton('Next', ['class' => 'btn w-100 btn-warning ', 'name' => 'login-button']) ?>
 
                             </div>
                         </div>
@@ -154,7 +152,16 @@ $this->title = 'About';
                                 <th scope="col">
                                     <div class="fs-5 text-dark fw-semibold">Plans</div>
                                 </th>
-                                <?php foreach (\common\models\Plans::find()->where(['insurance_id' => $model->type])->all() as $plan) : ?>
+                                <?php foreach (\common\models\Plans::find()->where(['insurance_id' => $model->type])->joinWith('pricings')->andWhere(['pricing.duration' => $model->duration])->andWhere([
+                                    'or',
+                                    ['pricing.passenger' => $adultPassenger],
+                                    ['pricing.passenger' => $childrenPassenger],
+                                    [
+                                        'and',
+                                        ['pricing.passenger' => $adultPassenger],
+                                        ['pricing.passenger' => $childrenPassenger]
+                                    ]
+                                ])->all() as $plan) : ?>
                                     <th scope="col">
                                         <div class="fs-5 text-dark fw-semibold">
                                             <?= $plan->name ?>
@@ -170,8 +177,16 @@ $this->title = 'About';
                                     <td>
                                         <?= $planitem->title ?>
                                     </td>
-                                    <?php foreach (\common\models\Plans::find()->where(['insurance_id' => $model->type])->all() as $plan) : ?>
-                                        <td>
+                                    <?php foreach (\common\models\Plans::find()->where(['insurance_id' => $model->type])->joinWith('pricings')->andWhere(['pricing.duration' => $model->duration])->andWhere([
+                                        'or',
+                                        ['pricing.passenger' => $adultPassenger],
+                                        ['pricing.passenger' => $childrenPassenger],
+                                        [
+                                            'and',
+                                            ['pricing.passenger' => $adultPassenger],
+                                            ['pricing.passenger' => $childrenPassenger]
+                                        ]
+                                    ])->all() as $plan) : ?> <td>
                                             <?php
                                             $planCoverage = \common\models\PlansCoverage::find()->where(['item_id' => $planitem->id, 'plan_id' => $plan->id])->one();
                                             if ($planCoverage) :

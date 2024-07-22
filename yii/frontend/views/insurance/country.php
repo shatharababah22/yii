@@ -8,7 +8,7 @@ use yii\bootstrap5\ActiveForm;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
-$insurance_name = ($insurance !== null) ? htmlspecialchars($insurance->name, ENT_QUOTES, 'UTF-8') : $country->insurance->name;
+// $insurance_name = ($insurance !== null) ? htmlspecialchars($insurance->name, ENT_QUOTES, 'UTF-8') : $country->insurance->name;
 $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js');
 
 $this->title = 'About';
@@ -21,7 +21,10 @@ $this->title = 'About';
                 <div class="text-center text-lg-start mb-7 mb-lg-0" data-cues="slideInDown">
                     <div class="mb-4">
                         <h1 class="mb-5 display-5 text-white-stable">
-                            Claim your <?= $insurance_name  ?> insurance
+
+                            Claim your <?php if ($country !== null) : ?>
+                                <?php echo $country->insurance->name; ?>
+                            <?php endif; ?> insurance
                             <span class="text-pattern-line text-warning"> within minutes</span>
                         </h1>
                         <p class="mb-0 text-white-50">
@@ -50,7 +53,7 @@ $this->title = 'About';
                                 <div class="col-lg-12">
                                     <div class="mb-3">
                                         <h3 class="mb-0 text-center">Get Covered</h3>
-                                        <?= $form->field($model, 'type')->hiddenInput(['value' => $insurance->id ?? 1])->label(false) ?>
+                                        <?= $form->field($model, 'type')->hiddenInput(['value' => $country->insurance_id ?? 1])->label(false) ?>
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-12">
@@ -59,33 +62,45 @@ $this->title = 'About';
                                         <span class="text-danger">*</span>
                                     </label>
                                     <?php if ($country !== null) : ?>
+                                        <?php
+                                        $allCountries = \yii\helpers\ArrayHelper::map(
+                                            Countries::find()->orderBy('country')->all(),
+                                            'code',
+                                            'country'
+                                        );
 
-<?= $form->field($model, 'from_country')->dropDownList(
-    \yii\helpers\ArrayHelper::map(
-        Countries::find()->all(),
-        'code',
-        'country'
-    ),
-    [
-        'prompt' => $country->source_country,
-        'options' => [
-            $country->source_country => ['selected' => true],  // Set default selected option
-        ],
-    ]
-)->label(false) ?>
+                                        $sourceCountryCode = $sourceCountry; // Assuming 'jo' is the code for Jordan
+                                        if (isset($allCountries[$sourceCountryCode])) {
+                                            $sourceCountryName = $allCountries[$sourceCountryCode];
+                                            unset($allCountries[$sourceCountryCode]);
+                                            $allCountries = [$sourceCountryCode => $sourceCountryName] + $allCountries;
+                                        }
 
-<?php else : ?>
+                                        echo $form->field($model, 'from_country')->dropDownList(
+                                            $allCountries,
+                                            [
+                                                'options' => [
+                                                    $sourceCountryCode => ['selected' => true],
+                                                ],
+                                            ]
+                                        )->label(false);
+                                        ?>
 
-<?= $form->field($model, 'from_country')->dropDownList(
-    \yii\helpers\ArrayHelper::map(
-        Countries::find()->all(),
-        'code',
-        'country'
-    ),
-    ['prompt' => 'Departure']
-)->label(false) ?>
 
-<?php endif; ?>
+
+
+                                    <?php else : ?>
+
+                                        <?= $form->field($model, 'from_country')->dropDownList(
+                                            \yii\helpers\ArrayHelper::map(
+                                                Countries::find()->all(),
+                                                'code',
+                                                'country'
+                                            ),
+                                            ['prompt' => 'Departure']
+                                        )->label(false) ?>
+
+                                    <?php endif; ?>
 
 
                                 </div>
@@ -212,6 +227,7 @@ $this->title = 'About';
                             </div>
 
                         <?php endforeach; ?>
+                        
 
 
 
@@ -228,29 +244,39 @@ $this->title = 'About';
 <section class="my-xl-9 my-5">
     <div class="container" data-cue="fadeIn">
         <div class="row">
-            <?php foreach (\common\models\Insurances::find()->all() as $insurance) : ?>
-                <div class="col-md-4 mt-5">
+       
 
-                    <a href="<?= Url::to(['/insurance/type', 'slug' => $insurance->slug]) ?>" class="card text-bg-light shadow" data-cue="fadeUp">
-                        <img src="<?= Yii::$app->request->baseUrl ?>/dashboard/images/<?= $insurance->photo ?>" class="card-img" alt="img">
-                        <div class="card-img-overlay text-white d-inline-flex justify-content-start align-items-end overlay-dark">
-                            <div class="text-capitalize">
-                                <h2 class="card-title"><?= $insurance->name ?></h2>
-                                <div class="mb-4 justify-content-center">
-                                    <div class="price-text">
-                                        <span class="small">starts from </span>
-                                        <div class="price price-show h1 text-warning">
-                                            <span>$</span>
-                                            <span><?= $insurance->price ?></span>
-                                        </div>
-                                    </div>
+        <?php if ($country !== null) : ?>
+    <?php foreach ($insurances as $insurance) : ?>
+        <div class="col-md-4 mt-5">
+            <a href="<?= Url::to(['/insurance/programs', 'slug' => $insurance->slug]) ?>" class="card text-bg-light shadow" data-cue="fadeUp">
+                <img src="<?= Yii::$app->request->baseUrl ?>/dashboard/images/<?= $insurance->photo ?>" class="card-img" alt="img">
+                <div class="card-img-overlay text-white d-inline-flex justify-content-start align-items-end overlay-dark">
+                    <div class="text-capitalize">
+                        <h2 class="card-title"><?= $insurance->name ?></h2>
+                        <div class="mb-4 justify-content-center">
+                            <div class="price-text">
+                                <span class="small">starts from </span>
+                                <div class="price price-show h1 text-warning">
+                                    <span>$</span>
+                                    <span><?= $insurance->price ?></span>
                                 </div>
                             </div>
-
                         </div>
-                    </a>
+                    </div>
                 </div>
-            <?php endforeach; ?>
+            </a>
+        </div>
+    <?php endforeach; ?>
+    <?php endif; ?>
+
+  
+
+     
+
+
+
+
         </div>
     </div>
 </section>
@@ -262,9 +288,9 @@ $this->title = 'About';
         <div class="row">
             <div class="col-xl-8 offset-xl-2 col-12">
                 <div class="text-center mb-xl-7 mb-5">
-                    <h2 class="text-white-stable mb-3">Explore with Confidence: <span class="text-warning">Travel Insurance</span></h2>
+                    <h2 class="text-white-stable mb-3">Protect with Confidence: <span class="text-warning">General Insurance</span></h2>
                     <p class="mb-0 text-white-50">
-                        Ensure worry-free adventures with our comprehensive travel insurance plans. Whether you're embarking on a family vacation, solo expedition, or business trip, we've got you covered with protection against unexpected mishaps and emergencies.
+                        Ensure worry-free living with our comprehensive insurance plans. Whether you need health, life, auto, or home insurance, we've got you covered with protection against unexpected events and emergencies.
                     </p>
                 </div>
             </div>
@@ -272,8 +298,8 @@ $this->title = 'About';
         <div class="row mb-7 pb-4 g-5 text-center text-lg-start">
             <div class="col-md-4" data-cue="fadeIn">
                 <img src="/images/4066885_building_company_coverage_insurance_office_icon.png" width="80" />
-                <h4 class="text-white-stable">Medical Assistance</h4>
-                <p class="text-white-50 mb-3">Stay protected against unforeseen medical emergencies while traveling.</p>
+                <h4 class="text-white-stable">Health Insurance</h4>
+                <p class="text-white-50 mb-3">Stay protected against unforeseen medical emergencies.</p>
                 <ul class="text-white-50">
                     <li>Medical Expenses Coverage</li>
                     <li>Emergency Medical Evacuation</li>
@@ -282,22 +308,23 @@ $this->title = 'About';
             </div>
             <div class="col-md-4" data-cue="fadeIn">
                 <img src="/images/4066893_coverage_insurance_liability_protect_travel_icon.png" width="80" />
-                <h4 class="text-white-stable">Trip Protection</h4>
-                <p class="text-white-50 mb-3">Safeguard your investment with coverage for trip cancellations and interruptions.</p>
+                <h4 class="text-white-stable">Travel Assistance</h4>
+                <p class="text-white-50 mb-3">Ensure smooth travels with comprehensive travel assistance services.</p>
                 <ul class="text-white-50">
-                    <li>Trip Cancellation & Interruption Insurance</li>
-                    <li>Travel Delay Reimbursement</li>
-                    <li>Baggage Delay/Loss Coverage</li>
+                    <li>Emergency Travel Assistance</li>
+                    <li>Trip Interruption Services</li>
+                    <li>Lost Passport Assistance</li>
                 </ul>
             </div>
+
             <div class="col-md-4" data-cue="fadeIn">
                 <img src="/images/4066902_coverage_insurance_liability_professional_protection_icon.png" width="80" />
-                <h4 class="text-white-stable">Enhanced Coverage</h4>
-                <p class="text-white-50 mb-3">Elevate your travel experience with added protection and convenience.</p>
+                <h4 class="text-white-stable">Property Insurance</h4>
+                <p class="text-white-50 mb-3">Protect your home and belongings with comprehensive property insurance.</p>
                 <ul class="text-white-50">
-                    <li>Cancel for Any Reason (CFAR) Coverage</li>
-                    <li>Enhanced Baggage Protection</li>
-                    <li>Personal Liability Coverage</li>
+                    <li>Homeowners Insurance</li>
+                    <li>Renters Insurance</li>
+                    <li>Flood Insurance</li>
                 </ul>
             </div>
         </div>
@@ -306,34 +333,92 @@ $this->title = 'About';
 <!--5m member end-->
 
 
-<!--Testimonial start-->
-<section class="py-xl-9 py-5">
-    <div class="container">
-        <div class="row gy-7 gx-lg-7">
-            <div class="col-lg-6 col-12" data-cue="fadeIn">
-                <div class="d-flex flex-column gap-3 mb-6">
-                    <div>
-                        <h2>Certified insurance companies</h2>
-                        <p class="lead lh-lg mt-5">
-                            Explore our curated selection of certified insurance companies, trusted providers offering comprehensive coverage for your peace of mind. Rest assured with top-notch service and reliable protection for your travel needs.
-                        </p>
-                    </div>
+
+
+
+
+
+<!--Get block card start-->
+<section class="my-xl-7 py-5">
+    <div class="container" data-cue="fadeIn">
+        <div class="row">
+            <div class="col-md-12" data-cue="fadeIn">
+                <div class="mb-xl-7 mb-5 text-center">
+                    <h2 class="mb-3">
+                        How to Obtain Insurance in 3 Easy Steps
+                    </h2>
+                    <p class="mb-0">Secure your future in three easy steps: compare plans, choose coverage, and buy </p>
                 </div>
             </div>
-            <div class="col-lg-6 col-12" data-cue="fadeIn">
-                <div class="row g-4">
-                    <?php foreach (\common\models\InsuranceCountries::find()->all() as $company) : ?>
-                        <div class="col-xl-4 col-6 col-md-4" data-cue="zoomIn">
-                            <div class="card card-lift text-center py-3">
-                                <div class="d-flex justify-content-center align-items-center">
-                                    <img src="<?= Yii::$app->request->baseUrl ?>/dashboard/images/<?= $insurance->photo ?>"" alt=" company" style="max-width: 150px;height: 80px;" />
-                                </div>
-                            </div>
+        </div>
+        <div class="table-responsive-xl">
+            <div class="row flex-nowrap pb-4 pb-lg-0 me-5 me-lg-0">
+                <div class="col-lg-4 col-md-6 col-12" data-cue="slideInLeft">
+                    <div class="p-xl-5">
+                        <div class="d-flex align-items-center justify-content-between mb-5">
+                            <div class="icon-xl icon-shape rounded-circle bg-warning border border-warning-subtle border-4 text-dark fw-semibold fs-3">1</div>
+                            <span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-arrow-right text-body-tertiary" viewBox="0 0 24 24">
+                                    <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z" />
+                                </svg>
+                            </span>
                         </div>
-                    <?php endforeach; ?>
+
+                        <h3 class="h4">Compare Plans</h3>
+                        <p class="mb-0">Evaluate different insurance options to find the most suitable coverage for your needs.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-12" data-cue="slideInLeft">
+                    <div class="p-xl-5">
+                        <div class="d-flex align-items-center justify-content-between mb-5">
+                            <div class="icon-xl icon-shape rounded-circle bg-warning border border-warning-subtle border-4 text-dark fw-semibold fs-3">2</div>
+                            <span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-arrow-right text-body-tertiary" viewBox="0 0 24 24">
+                                    <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z" />
+                                </svg>
+                            </span>
+                        </div>
+
+                        <h3 class="h4">Choose Coverage</h3>
+                        <p class="mb-0">Select the specific protections you need, such as health, life, property, or auto insurance.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-12" data-cue="slideInLeft">
+                    <div class="p-xl-5">
+                        <div class="d-flex align-items-center justify-content-between mb-5">
+                            <div class="icon-xl icon-shape rounded-circle bg-warning border border-warning-subtle border-4 text-dark fw-semibold fs-3">3</div>
+                        </div>
+
+                        <h3 class="h4">Purchase Insurance</h3>
+                        <p class="mb-0">Finalize your insurance purchase online or through a provider to ensure comprehensive protection.</p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
-<!--Testimonial end-->
+<!--Get block card end-->
+
+
+<!--Call to action start-->
+<section>
+    <div style="background-image: url(/images/pattern/cta-pattern.png); background-position: center; background-repeat: no-repeat; background-size: cover" class="py-7 bg-primary-dark">
+        <div class="container my-lg-7" data-cue="zoomIn">
+            <div class="row">
+                <div class="col-lg-8 offset-lg-2">
+                    <div class="text-center mb-5">
+                        <h2 class="text-white-stable mb-3">Get your insurance online now</h2>
+                        <p class="mb-0 text-white-50">
+                            Ready to secure your future with peace of mind? Get your insurance online now and enjoy worry-free protection for all your needs!
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="text-center">
+                        <a href="/insurance/type" class="btn btn-primary">Get Started</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

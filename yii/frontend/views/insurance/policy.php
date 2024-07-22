@@ -6,9 +6,17 @@
 
 use yii\bootstrap5\Html;
 use yii\bootstrap5\ActiveForm;
+use himiklab\yii2\recaptcha\ReCaptcha;
+use borales\extensions\phoneInput\PhoneInput;
 
+if (isset($apiResponse)) {
+    echo $this->render('_api-response', ['apiResponse' => $apiResponse]);
+}
 $this->title = 'Contact';
 ?>
+
+
+
 <div class="pattern-square"></div>
 <!--Pageheader start-->
 <section class="pt-10 pb-10 bg-dark text-center">
@@ -21,28 +29,57 @@ $this->title = 'Contact';
     </div>
 </section>
 
-<section class="mb-xl-9 my-5">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-8 col-md-10 col-12">
+
+
+
+
+<section class="mb-xl-9  mt-5">
+    <div class="d-flex justify-content-center container">
+        <div class="row justify-content-center w-75 ">
+            <div class="col-lg-8 col-md-10 col-12 w-75">
                 <div class="card shadow-sm">
                     <div class="card-body">
 
-                        <div class="policy-form">
+                        <div class="policy-form ">
+                            <div class="policy-form">
+                                <?php $form = ActiveForm::begin(); ?>
+                                <!-- <p class="text-bold text-black">Review your policy details to ensure all insurance specifics are accurate and meet your needs:</p> -->
 
-                            <?php $form = ActiveForm::begin(); ?>
 
-                            <?= $form->field($model, 'country_code')->textInput(['maxlength' => true, 'placeholder' => '+962']) ?>
 
-                            <?= $form->field($model, 'mobile')->textInput(['maxlength' => true]) ?>
+                                <div class="col-sm-6 mx-auto text-center">
+                                    <label for="price" class="form-label text-black mb-2" style="font-size: 15px; color: #0F172A;">Enter your mobile</label>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6 mt-2 mx-auto text-center">
+                                        <?= $form->field($model, 'mobile')->widget(PhoneInput::class, [
+                                            'jsOptions' => [
+                                                'preferredCountries' => ['jo'],
+                                                'class' => 'w-100',
+                                            ]
+                                        ])->label(false); ?>
+                                    </div>
+                                </div>
+                                <div class="d-flex mt-2 justify-content-center">
+                                    <div>
+                                        <?= Html::submitButton('Send OTP', ['class' => 'btn btn-primary p-2', 'style' => 'width: 150px']) ?>
+                                    </div>
+                                </div>
 
-                            <div class="form-group">
-                                <?= Html::submitButton('Send OTP', ['class' => 'btn btn-primary']) ?>
+                                    <div class="col-sm-10">
+                                        <?= $form->field($model, 'reCaptcha')->widget(
+                                            \himiklab\yii2\recaptcha\ReCaptcha3::class,
+                                            ['siteKey' => '6LfeOw8qAAAAAAMfV9GShxK0ZwZEnw-JWIMgnyR5']
+                                        )->label(false) ?>
+                                    </div>
+                    
+                                <?php ActiveForm::end(); ?>
                             </div>
-
-                            <?php ActiveForm::end(); ?>
-
                         </div>
+
+
+
+
 
                     </div>
                 </div>
@@ -50,3 +87,11 @@ $this->title = 'Contact';
         </div>
     </div>
 </section>
+
+
+
+
+
+
+
+

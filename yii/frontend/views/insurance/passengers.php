@@ -2,14 +2,14 @@
 
 use yii\bootstrap5\ActiveForm;
 use yii\bootstrap5\Html;
-
+use borales\extensions\phoneInput\PhoneInput;
 /** @var \common\models\PolicyDraft $policy */
 
 $this->title = 'Contact';
 ?>
 <div class="pattern-square"></div>
 <!--Pageheader start-->
-<section class="pt-10 pb-5 bg-dark text-center">
+<section class="pt-10 pb-10 bg-dark text-center">
     <div class="container mt-5">
         <div class="row">
             <div class="col-md-12 col-12">
@@ -64,7 +64,12 @@ $this->title = 'Contact';
                                     <?= $form->field($policy, 'email')->textInput() ?>
                                 </div>
                                 <div class="col-md-6">
-                                    <?= $form->field($policy, 'mobile')->textInput() ?>
+                                <?= $form->field($policy, 'mobile')->widget(PhoneInput::class, [
+                                            'jsOptions' => [
+                                                'preferredCountries' => ['jo'],
+                                                'class' => '',
+                                            ]
+                                        ]); ?>
                                 </div>
                                 <div class="d-grid">
                                     <?= Html::submitButton('Review', ['class' => 'btn w-100 btn-primary text-white', 'name' => 'login-button']) ?>
@@ -97,7 +102,7 @@ $this->title = 'Contact';
                                         <span>Date: </span>
                                     </div>
                                     <div class="col-md-6 text-end">
-                                        <span class="fw-bold"><?= date('Y-m-d', $policy->departure_date)  ?></span>
+                                        <span class="fw-bold"><?=  $policy->departure_date  ?></span>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -105,7 +110,7 @@ $this->title = 'Contact';
                                         <span>Return Date: </span>
                                     </div>
                                     <div class="col-md-6 text-end">
-                                        <span class="fw-bold"><?= date('Y-m-d', $policy->return_date)  ?></span>
+                                        <span class="fw-bold"><?=  $policy->return_date  ?></span>
                                     </div>
                                 </div>
                                 <div class="row">

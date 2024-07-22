@@ -10,7 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii;
 
-use yii\data\Pagination;
+
 use yii\filters\AccessControl;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -42,7 +42,7 @@ class PricingController extends Controller
                     ],
                 ],
                 'verbs' => [
-                    'class' => VerbFilter::className(),
+                    'class' => VerbFilter::class,
                     'actions' => [
                         'delete' => ['POST'],
                     ],
@@ -62,7 +62,10 @@ class PricingController extends Controller
     public function actionExport()
     {
         $models = Pricing::find()->all();
-
+        if (empty($models)) {
+            Yii::$app->session->setFlash('error', 'No pricing data found.');
+            return $this->redirect(['index']); 
+        }
         $durationLabels = [
             7 => '7 days',
             10 => '10 days',
@@ -77,6 +80,11 @@ class PricingController extends Controller
             1095 => '3 years',
         ];
 
+        $statusLabels = [
+            0 => 'Inactive',
+            1 => 'Active'
+        ];
+
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
@@ -84,7 +92,8 @@ class PricingController extends Controller
         $sheet->setCellValue('B1', 'Duration');
         $sheet->setCellValue('C1', 'Passenger');
         $sheet->setCellValue('D1', 'Price');
-
+        $sheet->setCellValue('E1', 'Discount Price');
+        $sheet->setCellValue('F1', 'Status');
 
         $headerStyle = [
             'fill' => [
@@ -92,15 +101,14 @@ class PricingController extends Controller
                 'startColor' => [
                     'argb' => 'FF808080',
                 ],
-                'font' => [
-                    'color' => [
-                        'argb' => 'FFFFFFFF',
-                    ],
+            ],
+            'font' => [
+                'color' => [
+                    'argb' => 'FFFFFFFF',
                 ],
             ],
         ];
-        $sheet->getStyle('A1:D1')->applyFromArray($headerStyle);
-
+        $sheet->getStyle('A1:F1')->applyFromArray($headerStyle);
         $row = 2;
         foreach ($models as $model) {
             $sheet->setCellValue('A' . $row, $model->plan->plan_code);
@@ -109,6 +117,10 @@ class PricingController extends Controller
             $sheet->setCellValue('B' . $row, $duration);
             $sheet->setCellValue('C' . $row, $model->passenger);
             $sheet->setCellValue('D' . $row, $model->price);
+            $sheet->setCellValue('E' . $row, $model->discount_price);
+
+            $status = isset($statusLabels[$model->status]) ? $statusLabels[$model->status] : $model->status;
+            $sheet->setCellValue('F' . $row, $status);
 
             $row++;
         }
@@ -120,38 +132,41 @@ class PricingController extends Controller
 
         return Yii::$app->response->sendFile($temp_file, $fileName);
     }
+
+
     public function actionToggleDiscount()
     {
         $pricings = Pricing::find()->where(['!=', 'discount_price', 0])->all();
-    
+
 
         $anyActive = Pricing::find()->where(['!=', 'discount_price', 0])->andWhere(['status' => 1])->exists();
-    
+
         foreach ($pricings as $pricing) {
             $pricing->status = $anyActive ? 0 : 1;
-            $pricing->save(false); 
+            $pricing->save(false);
         }
-    
-        
-        Yii::$app->session->setFlash('success', 'Discount statuses have been toggled.');
-    
+
+
+
         return $this->redirect(['index']);
     }
-    
-    
+
+
     public function actionIndex()
     {
         $searchModel = new PricingSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-    
+
         $model = new UploadForm();
-    
         if (Yii::$app->request->isPost) {
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
             if ($model->upload()) {
                 $inputFile = 'images/' . $model->imageFile->baseName . '.' . $model->imageFile->extension;
+                echo "File uploaded: " . $inputFile . "<br>";
+    
                 try {
                     $spreadsheet = IOFactory::load($inputFile);
+                    echo "Spreadsheet loaded successfully.<br>";
                 } catch (Exception $e) {
                     die('Error loading file "' . pathinfo($inputFile, PATHINFO_BASENAME) . '": ' . $e->getMessage());
                 }
@@ -161,46 +176,63 @@ class PricingController extends Controller
                 $highestColumn = $sheet->getHighestColumn();
     
                 $startRow = 2;
+                $statusLabels = [
+                    'Inactive' => 0,
+                    'Active' => 1,
+                ];
+    
                 for ($row = $startRow; $row <= $highestRow; $row++) {
                     $rowData = $sheet->rangeToArray('A' . $row . ':' . $highestColumn . $row, NULL, TRUE, FALSE);
     
                     $planCode = $rowData[0][0];
                     $plan = Plans::find()->where(['plan_code' => $planCode])->one();
-                    if (!$plan) {
-                        print_r("Plan with code " . $planCode . " not found.");
-                        continue;
-                    }
+                    // if (!$plan) {
+                    //     echo "Plan with code " . $planCode . " not found.<br>";
+                    //     continue;
+                    // }
     
-                    $existingPricing = Pricing::find()
-                        ->where(['plan_id' => $plan->id, 'duration' => (int)$rowData[0][1]])
-                        ->one();
+                    // $existingPricing = Pricing::find()
+                    //     ->where(['plan_id' => $plan->id])
+                    //     ->one();
     
-                    if ($existingPricing) {
-                        // print_r("Pricing entry for plan with code " . $planCode . " and duration " . (int)$rowData[0][1] . " already exists.");
-                        continue;
-                    }
+                    // if ($existingPricing) {
+                    //     echo "Pricing entry for plan with code " . $planCode . " and duration " . (int)$rowData[0][1] . " already exists.<br>";
+                    //     continue;
+                    // }
     
                     $pricing = new Pricing();
                     $pricing->plan_id = $plan->id;
                     $pricing->duration = (int)$rowData[0][1];
                     $pricing->passenger = $rowData[0][2];
                     $pricing->price = $rowData[0][3];
+                    $pricing->discount_price = $rowData[0][4];
+                    $pricing->status = isset($statusLabels[$rowData[0][5]]) ? $statusLabels[$rowData[0][5]] : null;
     
-                    if (!$pricing->save()) {
+                    if ($pricing->status === null) {
+                        echo "Invalid status value in row " . $row . ".<br>";
+                        continue;
+                    }
+    
+                    if ($pricing->save()) {
+                        echo "Pricing entry for plan with code " . $planCode . " and duration " . (int)$rowData[0][1] . " saved successfully.<br>";
+                    } else {
+                        echo "Error saving pricing entry for plan with code " . $planCode . " and duration " . (int)$rowData[0][1] . ".<br>";
                         print_r($pricing->getErrors());
                     }
                 }
+            } else {
+                echo "File upload failed.<br>";
             }
         }
-    
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'model' => $model,
             'dataProvider' => $dataProvider,
         ]);
     }
-    
-    
+
+
 
     /**
      * Displays a single Pricing model.
@@ -223,21 +255,30 @@ class PricingController extends Controller
     public function actionCreate()
     {
         $model = new Pricing();
-
+    
         if ($this->request->isPost) {
-          
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->load($this->request->post())) {
+                if ($model->price > $model->discount_price) {
+                    if ($model->discount_price == 0 && $model->status == 1) {
+                        Yii::$app->session->setFlash('error', 'Cannot activate when Discount Price is zero.');
+                    } else {
+                        if ($model->save()) {
+                            return $this->redirect(['view', 'id' => $model->id]);
+                        }
+                    }
+                } else {
+                    Yii::$app->session->setFlash('error', 'Price must be greater than Discount Price.');
+                }
             }
         } else {
             $model->loadDefaultValues();
         }
-
+    
         return $this->render('create', [
             'model' => $model,
         ]);
     }
-
+    
     /**
      * Updates an existing Pricing model.
      * If update is successful, the browser will be redirected to the 'view' page.

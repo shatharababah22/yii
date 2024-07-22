@@ -12,7 +12,7 @@ $this->title = 'Contact';
 ?>
 <div class="pattern-square"></div>
 <!--Pageheader start-->
-<section class="pt-10 pb-5 bg-dark text-center">
+<section class="pt-10 pb-10 bg-dark text-center">
     <div class="container mt-5">
         <div class="row">
             <div class="col-md-12 col-12">
@@ -47,9 +47,9 @@ $this->title = 'Contact';
                                         </tr>
                                         <tr>
                                             <td>Date</td>
-                                            <td><strong><?= date('Y-m-d', $policy->departure_date) ?></strong></td>
+                                            <td><strong><?=$policy->departure_date ?></strong></td>
                                             <td>Return Date</td>
-                                            <td><strong><?= date('Y-m-d', $policy->return_date) ?></strong></td>
+                                            <td><strong><?=  $policy->return_date ?></strong></td>
                                         </tr>
                                         <tr>
                                             <td colspan="4">Passengers</td>
@@ -77,7 +77,7 @@ $this->title = 'Contact';
                                                         <td><?= $passenger->first_name . ' ' . $passenger->middle_name . ' ' . $passenger->last_name ?></td>
                                                         <td><?= $passenger->gender ?></td>
                                                         <td><?= $passenger->nationality ?></td>
-                                                        <td><?= date('Y-m-d', $passenger->dob) ?></td>
+                                                        <td><?=  $passenger->dob ?></td>
                                                         <td><?= $passenger->country ?></td>
                                                         <td>
                                                             <a href="#">Retake</a>
@@ -94,7 +94,7 @@ $this->title = 'Contact';
                                     </table>
                                 </div>
                                 <div class="mt-2">
-                                    <?= Html::a('Pay Now', ['#'], ['class'=>'btn btn-success w-100']) ?>
+                                <?= Html::a('Pay Now', ['/insurance/payment', 'id' => $policy->id], ['class' => 'btn btn-warning w-100']) ?>
                                 </div>
                             </div>
                         </div>

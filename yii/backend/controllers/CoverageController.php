@@ -91,9 +91,19 @@ class CoverageController extends Controller
                 if ($item) {
                     $insuranceId = $item->insurance_id;
                     $planCount = Plans::find()->where(['insurance_id' => $insuranceId])->count();
+                    $existingCoverage = PlansCoverage::find()
+                        ->where(['item_id' => $model->item_id,'plan_id' => $model->plan_id])
+                        ->one();
+                        // dd($existingCoverage );
+                    if ($existingCoverage) {
+                        Yii::$app->session->setFlash('error', 'The coverage already exists.');
+                        return $this->redirect(['create']);
+                    }
+                    
                     $coverageCount = PlansCoverage::find()
                         ->where(['item_id' => $model->item_id])
                         ->count();
+                    
                     if ($coverageCount >= $planCount) {
                         Yii::$app->session->setFlash('error', 'The number of coverages exceeds the number of plans for the associated insurance.');
                     } else {
@@ -112,6 +122,7 @@ class CoverageController extends Controller
             'model' => $model,
         ]);
     }
+    
     
     
     public function actionFetchInsurance()

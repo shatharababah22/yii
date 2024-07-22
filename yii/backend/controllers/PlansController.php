@@ -68,7 +68,10 @@ class PlansController extends Controller
      public function actionExport()
      {
          $models = Plans::find()->all();
- 
+         if (empty($models)) {
+            Yii::$app->session->setFlash('error', 'No Plans data found.');
+            return $this->redirect(['index']); 
+        }
          $durationLabels = [
              7 => '7 days',
              10 => '10 days',

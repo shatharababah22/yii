@@ -63,4 +63,17 @@ class Airports extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Countries::class, ['id' => 'country_id']);
     }
+
+
+    public static function getCountryCodeByAirportCode($airportCode)
+    {
+        return self::find()
+            ->joinWith('country')
+            ->where(['airports.code' => $airportCode])
+            ->select('countries.country')
+            ->scalar();
+
+            // ->scalar(); ->one();
+
+    }
 }

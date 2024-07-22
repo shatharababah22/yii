@@ -49,7 +49,7 @@ class PolicyDraftPassengers extends \yii\db\ActiveRecord
     {
         return [
             [['draft_id', 'first_name', 'last_name', 'gender', 'nationality', 'id_type', 'id_number', 'dob', 'country'], 'required'],
-            [['draft_id', 'dob', 'created_at', 'updated_at'], 'integer'],
+            [['draft_id',  'created_at', 'updated_at'], 'integer'],
             [['warning', 'document_link'], 'string'],
             [['first_name', 'last_name', 'nationality', 'id_number', 'country', 'city'], 'string', 'max' => 100],
             [['middle_name'], 'string', 'max' => 255],

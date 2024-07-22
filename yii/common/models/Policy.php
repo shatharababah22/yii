@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "policy".
@@ -29,7 +30,7 @@ use Yii;
  * @property float|null $price
  */
 class Policy extends \yii\db\ActiveRecord
-{
+{public $reCaptcha;
     /**
      * {@inheritdoc}
      */
@@ -37,21 +38,34 @@ class Policy extends \yii\db\ActiveRecord
     {
         return 'policy';
     }
-
+    /**
+     * {@inheritdoc}
+     */
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::class,
+        ];
+    }
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['customer_id', 'from_airport', 'departure_date', 'going_to', 'return_date', 'status', 'created_at', 'updated_at'], 'required'],
-            [['customer_id', 'departure_date', 'return_date', 'status', 'created_at', 'updated_at', 'source'], 'integer'],
+            [['customer_id', 'from_airport', 'departure_date', 'going_to', 'return_date', 'status'], 'required'],
+            [['customer_id',  'status', 'created_at', 'updated_at'], 'integer'],
             [['PolicyURLLink', 'status_description'], 'string'],
             [['price'], 'number'],
             [['from_airport', 'going_to', 'ProposalState'], 'string', 'max' => 100],
             [['DepartCountryCode', 'ArrivalCountryCode'], 'string', 'max' => 11],
             [['ItineraryID'], 'string', 'max' => 255],
             [['PNR', 'PolicyNo', 'PolicyPurchasedDateTime'], 'string', 'max' => 200],
+            [['reCaptcha'], \himiklab\yii2\recaptcha\ReCaptchaValidator3::class,
+            'secret' => '6LfeOw8qAAAAAAMfV9GShxK0ZwZEnw-JWIMgnyR5', 
+            'threshold' =>3,
+            'action' => '/',
+          ],
         ];
     }
 

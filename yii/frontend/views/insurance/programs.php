@@ -20,22 +20,22 @@ $this->title = 'Programs';
                         <small class="text-uppercase ls-lg">Immediate Insurance Coverage</small>
                         <h1 class="mb-5 display-5 text-white-stable">
                             Get Instant
-                            <span class="text-warning">Travel Insurance</span>
+                            <span class="text-warning"><?= $insurance->name ?></span>
                         </h1>
                         <p class="mb-0 text-white-stable lead">
-                            Planning a trip? Get your travel insurance instantly for worry-free travel experiences.
+                        <?= $insurance->overview ?>
                         </p>
                     </div>
                     <div data-cues="slideInDown">
-                        <a href="#" class="btn btn-primary me-2">Get Started</a>
+                        <a href="#booking" class="btn btn-primary me-2">Get Started</a>
                         <a href="#" class="btn btn-outline-warning">Contact Sales</a>
                     </div>
                 </div>
             </div>
-            <div class="offset-lg-1 col-lg-6 col-12">
+            <div class="offset-lg-1 col-lg-5 col-12">
                 <div class="position-relative z-1 pt-lg-9" data-cue="slideInRight">
                     <div class="position-relative">
-                        <img src="/images/travel.jpg" alt="video" class="img-fluid rounded-3" width="837" />
+                        <img src="<?= Yii::$app->request->baseUrl ?>/dashboard/images/<?= $insurance->photo ?>" alt="video" class="img-fluid rounded-3" width="837" />
 
                     </div>
                 </div>
@@ -44,399 +44,7 @@ $this->title = 'Programs';
     </div>
 </section>
 
-<!--Compare plan start-->
-<section class="my-xl-9 py-5">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12 col-md-12 col-12">
-                <div class="text-center mb-7">
-                    <h2>Schedule of Benefits</h2>
-                    <p class="mb-0">Travel with peace of mind with Tune Protect Travel Assurance. Available across the region, enjoy comprehensive benefits.</p>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-12 col-md-12 col-12">
-                <!-- Striped rows -->
-                <div class="table-responsive">
-                    <table class="table table-striped text-nowrap table-lg table-borderless">
-                        <thead>
-                        <tr>
-                            <th scope="col">
-                                <div class="fs-5 text-dark fw-semibold mb-3">Plans</div>
-                            </th>
-                            <th scope="col">
-                                <div class="fs-5 text-dark fw-semibold">Platinum</div>
-                            </th>
-                            <th scope="col">
-                                <div class="fs-5 text-dark fw-semibold">Gold</div>
-                            </th>
-                            <th scope="col">
-                                <div class="fs-5 text-dark fw-semibold">Silver</div>
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>Bandwidth</td>
-                            <td>
-                                    <span>
-                                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill text-success" viewBox="0 0 16 16">
-                                          <path
-                                                  d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                                       </svg>
-                                    </span>
-                                <span class="ms-2">1 GB</span>
-                            </td>
-                            <td>
-                                    <span>
-                                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill text-danger" viewBox="0 0 16 16">
-                                          <path
-                                                  d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                                       </svg>
-                                    </span>
-                                <span class="ms-2">10 GB</span>
-                            </td>
-                            <td>
-                                    <span>
-                                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill text-success" viewBox="0 0 16 16">
-                                          <path
-                                                  d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                                       </svg>
-                                    </span>
-                                <span class="ms-2">100 GB</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span class="me-2">Visitors</span>
-                                <span>
-                                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-question-circle-fill text-gray" viewBox="0 0 16 16">
-                                          <path
-                                                  d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.496 6.033h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286a.237.237 0 0 0 .241.247zm2.325 6.443c.61 0 1.029-.394 1.029-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94 0 .533.425.927 1.01.927z" />
-                                       </svg>
-                                    </span>
-                            </td>
-                            <td>
-                                    <span>
-                                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill text-success" viewBox="0 0 16 16">
-                                          <path
-                                                  d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                                       </svg>
-                                    </span>
-                                <span class="ms-2">1,000</span>
-                            </td>
-                            <td>
-                                    <span>
-                                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill text-danger" viewBox="0 0 16 16">
-                                          <path
-                                                  d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                                       </svg>
-                                    </span>
-                                <span class="ms-2">10,000</span>
-                            </td>
-                            <td>
-                                    <span>
-                                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill text-success" viewBox="0 0 16 16">
-                                          <path
-                                                  d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                                       </svg>
-                                    </span>
-                                <span class="ms-2">100,000</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Web pages</td>
-                            <td>
-                                    <span>
-                                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill text-success" viewBox="0 0 16 16">
-                                          <path
-                                                  d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                                       </svg>
-                                    </span>
-                                <span class="ms-2">5 pages</span>
-                            </td>
-                            <td>
-                                    <span>
-                                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill text-danger" viewBox="0 0 16 16">
-                                          <path
-                                                  d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                                       </svg>
-                                    </span>
-                                <span class="ms-2">20 pages</span>
-                            </td>
-                            <td>
-                                    <span>
-                                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill text-success" viewBox="0 0 16 16">
-                                          <path
-                                                  d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                                       </svg>
-                                    </span>
-                                <span class="ms-2">30 pages</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Image optimization</td>
-                            <td>
-                                    <span>
-                                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill text-gary" viewBox="0 0 16 16">
-                                          <path
-                                                  d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                                       </svg>
-                                    </span>
-                            </td>
-                            <td>
-                                    <span>
-                                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill text-success" viewBox="0 0 16 16">
-                                          <path
-                                                  d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                                       </svg>
-                                    </span>
-                            </td>
-                            <td>
-                                    <span>
-                                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill text-success" viewBox="0 0 16 16">
-                                          <path
-                                                  d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                                       </svg>
-                                    </span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Storage</td>
-                            <td>
-                                    <span>
-                                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill text-success" viewBox="0 0 16 16">
-                                          <path
-                                                  d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                                       </svg>
-                                    </span>
-                                <span class="ms-2">3 GB</span>
-                            </td>
-                            <td>
-                                    <span>
-                                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill text-success" viewBox="0 0 16 16">
-                                          <path
-                                                  d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                                       </svg>
-                                    </span>
-                                <span class="ms-2">10 GB</span>
-                            </td>
-                            <td>
-                                    <span>
-                                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill text-success" viewBox="0 0 16 16">
-                                          <path
-                                                  d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                                       </svg>
-                                    </span>
-                                <span class="ms-2">200 GB</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Data / month</td>
-                            <td>
-                                    <span>
-                                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill text-success" viewBox="0 0 16 16">
-                                          <path
-                                                  d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                                       </svg>
-                                    </span>
-                                <span class="ms-2">5 pages</span>
-                            </td>
-                            <td>
-                                    <span>
-                                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill text-success" viewBox="0 0 16 16">
-                                          <path
-                                                  d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                                       </svg>
-                                    </span>
-                                <span class="ms-2">20 pages</span>
-                            </td>
-                            <td>
-                                    <span>
-                                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill text-success" viewBox="0 0 16 16">
-                                          <path
-                                                  d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                                       </svg>
-                                    </span>
-                                <span class="ms-2">Unlimited</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Requests / month</td>
-                            <td>
-                                    <span>
-                                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill text-success" viewBox="0 0 16 16">
-                                          <path
-                                                  d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                                       </svg>
-                                    </span>
-                                <span class="ms-2">500</span>
-                            </td>
-                            <td>
-                                    <span>
-                                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill text-success" viewBox="0 0 16 16">
-                                          <path
-                                                  d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                                       </svg>
-                                    </span>
-                                <span class="ms-2">20,000</span>
-                            </td>
-                            <td>
-                                    <span>
-                                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill text-success" viewBox="0 0 16 16">
-                                          <path
-                                                  d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                                       </svg>
-                                    </span>
-                                <span class="ms-2">5,00,000</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Subdomain</td>
-                            <td>
-                                    <span>
-                                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill text-success" viewBox="0 0 16 16">
-                                          <path
-                                                  d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                                       </svg>
-                                    </span>
-                            </td>
-                            <td>
-                                    <span>
-                                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill text-success" viewBox="0 0 16 16">
-                                          <path
-                                                  d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                                       </svg>
-                                    </span>
-                            </td>
-                            <td>
-                                    <span>
-                                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill text-success" viewBox="0 0 16 16">
-                                          <path
-                                                  d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                                       </svg>
-                                    </span>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>SSL certificate</td>
-                            <td>
-                                    <span>
-                                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-x-circle-fill text-gary" viewBox="0 0 16 16">
-                                          <path
-                                                  d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z" />
-                                       </svg>
-                                    </span>
-                            </td>
-                            <td>
-                                    <span>
-                                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill text-success" viewBox="0 0 16 16">
-                                          <path
-                                                  d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                                       </svg>
-                                    </span>
-                            </td>
-                            <td>
-                                    <span>
-                                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill text-success" viewBox="0 0 16 16">
-                                          <path
-                                                  d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                                       </svg>
-                                    </span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Access to HTML video</td>
-                            <td>
-                                    <span>
-                                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-x-circle-fill text-gary" viewBox="0 0 16 16">
-                                          <path
-                                                  d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z" />
-                                       </svg>
-                                    </span>
-                            </td>
-                            <td>
-                                    <span>
-                                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill text-success" viewBox="0 0 16 16">
-                                          <path
-                                                  d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                                       </svg>
-                                    </span>
-                            </td>
-                            <td>
-                                    <span>
-                                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill text-success" viewBox="0 0 16 16">
-                                          <path
-                                                  d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                                       </svg>
-                                    </span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Priority support</td>
-                            <td>
-                                    <span>
-                                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-x-circle-fill text-gary" viewBox="0 0 16 16">
-                                          <path
-                                                  d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z" />
-                                       </svg>
-                                    </span>
-                            </td>
-                            <td>
-                                    <span>
-                                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill text-success" viewBox="0 0 16 16">
-                                          <path
-                                                  d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                                       </svg>
-                                    </span>
-                            </td>
-                            <td>
-                                    <span>
-                                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill text-success" viewBox="0 0 16 16">
-                                          <path
-                                                  d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                                       </svg>
-                                    </span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Analytics</td>
-                            <td>
-                                    <span>
-                                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-x-circle-fill text-gary" viewBox="0 0 16 16">
-                                          <path
-                                                  d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z" />
-                                       </svg>
-                                    </span>
-                            </td>
-                            <td>
-                                    <span>
-                                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill text-success" viewBox="0 0 16 16">
-                                          <path
-                                                  d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                                       </svg>
-                                    </span>
-                            </td>
-                            <td>
-                                    <span>
-                                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-check-circle-fill text-success" viewBox="0 0 16 16">
-                                          <path
-                                                  d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                                       </svg>
-                                    </span>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!--Compare plan end-->
-<section class="">
+<section class="" id="booking">
     <div class="container position-relative z-1 py-xl-9 py-6">
         <div class="row justify-content-center">
             <div class="col-lg-8 col-md-12">
@@ -447,7 +55,7 @@ $this->title = 'Programs';
                             <div class="col-lg-12">
                                 <div class="mb-3">
                                     <h3 class="mb-0 text-center">Get Now Travel Insurance</h3>
-                                    <?= $form->field($model, 'type')->hiddenInput(['value'=>1])->label(false) ?>
+                                    <?= $form->field($model, 'type')->hiddenInput(['value'=>$insurance->id])->label(false) ?>
                                 </div>
                             </div>
                             <div class="col-md-6 col-12">
@@ -457,7 +65,7 @@ $this->title = 'Programs';
                                 </label>
                                 <?php $model->from_country = "JO"; ?>
                                 <?= $form->field($model, 'from_country')->dropDownList(\yii\helpers\ArrayHelper::map(
-                                    Countries::find()->cache(27000)->all(), 'code', 'country'
+                                    Countries::find()->all(), 'code', 'country'
                                 ), ['prompt' => 'Departure'])->label(false) ?>
                             </div>
                             <div class="col-md-6 col-12">
@@ -466,7 +74,7 @@ $this->title = 'Programs';
                                     <span class="text-danger">*</span>
                                 </label>
                                 <?= $form->field($model, 'to_country')->dropDownList(\yii\helpers\ArrayHelper::map(
-                                    Countries::find()->cache(27000)->all(), 'code', 'country'
+                                    Countries::find()->all(), 'code', 'country'
                                 ), ['prompt' => 'Arrival'])->label(false) ?>
                             </div>
                             <div class="col-md-6">
@@ -474,48 +82,26 @@ $this->title = 'Programs';
                                     Departure Date
                                     <span class="text-danger">*</span>
                                 </label>
-                                <?= $form->field($model, 'date')->textInput(['type'=>'date'])->label(false) ?>
-                            </div>
+                                <?= $form->field($model, 'date')->textInput(['type' => 'date', 'min' => date('Y-m-d'), 'onclick' => '$(this).focus();'])->label(false) ?>
+                                </div>
                             <div class="col-md-6">
                                 <label for="scheduleEmailInput" class="form-label">
                                     Days (Duration)
                                     <span class="text-danger">*</span>
                                 </label>
                                 <?= $form->field($model, 'duration')->dropDownList([
-                                    3=>'3 Days',
-                                    4=>'4 Days',
-                                    5=>'5 Days',
-                                    6=>'6 Days',
-                                    7=>'7 Days',
-                                    8=>'8 Days',
-                                    9=>'9 Days',
-                                    10=>'10 Days',
-                                    11=>'11 Days',
-                                    12=>'12 Days',
-                                    13=>'13 Days',
-                                    14=>'14 Days',
-                                    15=>'15 Days',
-                                    17=>'17 Days',
-                                    18=>'18 Days',
-                                    19=>'19 Days',
-                                    20=>'20 Days',
-                                    21=>'21 Days',
-                                    22=>'22 Days',
-                                    23=>'23 Days',
-                                    24=>'24 Days',
-                                    25=>'25 Days',
-                                    26=>'26 Days',
-                                    27=>'27 Days',
-                                    28=>'28 Days',
-                                    29=>'29 Days',
-                                    30=>'30 Days',
-                                    60=>'60 Days',
-                                    90=>'90 Days',
-                                    180=>'180 Days',
-                                    365=>'1 Year',
-                                    730=>'2 Years',
-                                    1095=>'3 Years',
-                                ], ['class'=>'form-control'])->label(false) ?>
+                                     '7' => '7 days',
+                                     '10' => '10 days',
+                                     '15' => '15 days',
+                                     '21' => '21 days',
+                                     '30' => '1 month',
+                                     '60' => '2 months',
+                                     '90' => '3 months',
+                                     '180' => '6 months',
+                                     '365' => '1 year',
+                                     '730' => '2 years',
+                                     '1095' => '3 years',
+                                ], ['class'=>'form-control','prompt' => 'Duration'])->label(false) ?>
 
                             </div>
                             <div id="adult" class="col">
@@ -621,35 +207,7 @@ $this->title = 'Programs';
         </div>
     </div>
 </section>
-<section class="my-xl-9 my-5">
-    <div class="container" data-cue="fadeIn">
-        <div class="row">
-            <?php foreach (\common\models\Insurances::find()->all() as $insurance): ?>
-            <div class="col-md-4 mt-5">
-                <!--Image overlay-->
-                <a href="#" class="card text-bg-light shadow"  data-cue="fadeUp">
-                    <img src="<?= $insurance->photo ?>" class="card-img" alt="img">
-                    <div class="card-img-overlay text-white d-inline-flex justify-content-start align-items-end overlay-dark">
-                        <div class="text-capitalize">
-                            <h2 class="card-title"><?= $insurance->name ?></h2>
-                            <div class="mb-4 justify-content-center">
-                                <div class="price-text">
-                                    <span class="small">starts from </span>
-                                    <div class="price price-show h1 text-warning">
-                                        <span>$</span>
-                                        <span><?= $insurance->price ?></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
 
-                    </div>
-                </a>
-            </div>
-            <?php endforeach; ?>
-        </div>
-    </div>
-</section>
 <!--Testimonial start-->
 <section class="py-xl-9 py-5">
     <div class="container">
@@ -664,13 +222,15 @@ $this->title = 'Programs';
                     </div>
                 </div>
             </div>
+            <!-- //display just the insuranceCountries -->
             <div class="col-lg-6 col-12" data-cue="fadeIn">
                 <div class="row g-4">
-                    <?php foreach(\common\models\InsuranceCountries::find()->all() as $company): ?>
+                <?php foreach(\common\models\InsuranceCountries::find()->where(['insurance_id' => $insurance->id])->all() as $company): ?>
+
                     <div class="col-xl-4 col-6 col-md-4" data-cue="zoomIn">
                         <div class="card card-lift text-center py-3">
                             <div class="d-flex justify-content-center align-items-center">
-                                <img src="<?= $company->company_logo ?>" alt="company" style="max-width: 150px;height: 80px;" />
+                                <img src="<?= Yii::$app->request->baseUrl ?>/dashboard/images/<?= $company->company_logo ?>" alt="company" style="max-width: 150px;height: 80px;" />
                             </div>
                         </div>
                     </div>
@@ -683,7 +243,7 @@ $this->title = 'Programs';
 <!--Testimonial end-->
 
 <!--5m member start-->
-<section class="pt-xl-9 py-5 bg-primary-dark">
+<!-- <section class="pt-xl-9 py-5 bg-primary-dark">
     <div class="container" data-cue="fadeIn">
         <div class="row">
             <div class="col-xl-8 offset-xl-2 col-12">
@@ -727,6 +287,27 @@ $this->title = 'Programs';
                 </ul>
             </div>
         </div>
+    </div>
+</section> -->
+<!--5m member end-->
+
+
+
+
+
+<!--5m member start-->
+<section class="pt-xl-9 py-5 bg-primary-dark">
+    <div class="container" data-cue="fadeIn">
+        <div class="row">
+            <div class="col-xl-8 offset-xl-2 col-12">
+                <div class="text-center mb-xl-7 mb-5">
+                    <h2 class="text-white-stable mb-3">Protect with Confidence: <span class="text-warning"><?= $insurance->name ?></span></h2>
+                    <p class="mb-0 text-white-50">
+<?= $insurance->description ?>                    </p>
+                </div>
+            </div>
+        </div>
+
     </div>
 </section>
 <!--5m member end-->

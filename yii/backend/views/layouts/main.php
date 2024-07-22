@@ -23,7 +23,8 @@ AppAsset::register($this);
   <?php $this->registerCsrfMetaTags() ?>
   <title><?= Html::encode($this->title) ?></title>
 
-  <link rel="shortcut icon" href="<?= Url::to('@web/favicon.ico') ?>">
+  <link rel="shortcut icon" href="<?= Url::to('@web/logo-dark.png') ?>">
+
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <!-- Add SweetAlert2 CSS from CDN -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.6/dist/sweetalert2.min.css">
@@ -210,12 +211,12 @@ AppAsset::register($this);
     <div class="navbar-nav-wrap">
       <!-- Logo -->
       <a class="navbar-brand" href="<?= Url::to(['/site/index']) ?>" aria-label="Front">
-        <img class="navbar-brand-logo" src="<?= Url::to('@web/svg/logos/logo.svg') ?>" alt="Logo" data-hs-theme-appearance="default">
+        <img class="navbar-brand-logo" src="<?= Url::to('@web/svg/logos/logo-dark.png') ?>" alt="Logo" data-hs-theme-appearance="default">
         <!-- <span style="background: linear-gradient(to right, blue, yellow); -webkit-background-clip: text; color: transparent;">360</span> -->
 
-        <img class="navbar-brand-logo" src="<?= Url::to('@web/svg/logos-light/logo.svg') ?>" alt="Logo" data-hs-theme-appearance="dark">
-        <img class="navbar-brand-logo-mini" src="<?= Url::to('@web/svg/logos/logo-short.svg') ?>" alt="Logo" data-hs-theme-appearance="default">
-        <img class="navbar-brand-logo-mini" src="<?= Url::to('@web/svg/logos-light/logo-short.svg') ?>" alt="Logo" data-hs-theme-appearance="dark">
+        <img class="navbar-brand-logo" src="<?= Url::to('@web/svg/logos/logo-dark.png') ?>" alt="Logo" data-hs-theme-appearance="dark">
+        <img class="navbar-brand-logo-mini" src="<?= Url::to('@web/svg/logos/logo-dark.png') ?>" alt="Logo" data-hs-theme-appearance="default">
+        <img class="navbar-brand-logo-mini" src="<?= Url::to('@web/svg/logos/logo-dark.png') ?>" alt="Logo" data-hs-theme-appearance="dark">
       </a>
 
 
