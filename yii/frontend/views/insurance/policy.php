@@ -9,12 +9,24 @@ use yii\bootstrap5\ActiveForm;
 use himiklab\yii2\recaptcha\ReCaptcha;
 use borales\extensions\phoneInput\PhoneInput;
 
+$this->registerJs("
+  $(document).ready(function() {
+    $('.clickable-row').on('click', function() {
+      var index = $(this).data('index');
+      $('.details-row-' + index).toggle();
+      var icon = $(this).find('i');
+
+      icon.toggleClass('bi-caret-down-fill bi-caret-up-fill');
+    });
+  });
+");
+
 if (isset($apiResponse)) {
     echo $this->render('_api-response', ['apiResponse' => $apiResponse]);
 }
 $this->title = 'Contact';
 ?>
-
+ <script src="https://www.google.com/recaptcha/api.js"></script>
 
 
 <div class="pattern-square"></div>
@@ -40,9 +52,9 @@ $this->title = 'Contact';
                 <div class="card shadow-sm">
                     <div class="card-body">
 
-                        <div class="policy-form ">
+                        <div class="policy-form">
                             <div class="policy-form">
-                                <?php $form = ActiveForm::begin(); ?>
+                                <?php $form = ActiveForm::begin(['id'=>'demo-form']); ?>
                                 <!-- <p class="text-bold text-black">Review your policy details to ensure all insurance specifics are accurate and meet your needs:</p> -->
 
 
@@ -62,7 +74,14 @@ $this->title = 'Contact';
                                 </div>
                                 <div class="d-flex mt-2 justify-content-center">
                                     <div>
-                                        <?= Html::submitButton('Send OTP', ['class' => 'btn btn-primary p-2', 'style' => 'width: 150px']) ?>
+                                        <?= Html::submitButton('Send OTP', 
+                                        [
+                                            'class' => 'btn btn-primary p-2 g-recaptcha',
+                                            'style' => 'width: 150px',
+                                            'data-sitekey'=>'6LfeOw8qAAAAAAMfV9GShxK0ZwZEnw-JWIMgnyR5',
+                                            'data-callback'=>'onSubmit',
+                                            'data-action'=>'submit',
+                                            ]) ?>
                                     </div>
                                 </div>
 
@@ -70,8 +89,14 @@ $this->title = 'Contact';
                                         <?= $form->field($model, 'reCaptcha')->widget(
                                             \himiklab\yii2\recaptcha\ReCaptcha3::class,
                                             ['siteKey' => '6LfeOw8qAAAAAAMfV9GShxK0ZwZEnw-JWIMgnyR5']
-                                        )->label(false) ?>
+                                        )->label(false)
+                                        
+                                        
+                                        ?>
                                     </div>
+
+
+                                    
                     
                                 <?php ActiveForm::end(); ?>
                             </div>
@@ -90,7 +115,11 @@ $this->title = 'Contact';
 
 
 
-
+<script>
+   function onSubmit(token) {
+     document.getElementById("demo-form").submit();
+   }
+ </script>
 
 
 

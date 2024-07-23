@@ -69,7 +69,7 @@ $this->title = 'About';
                                             'country'
                                         );
 
-                                        $sourceCountryCode = $sourceCountry; // Assuming 'jo' is the code for Jordan
+                                        $sourceCountryCode = $sourceCountry; 
                                         if (isset($allCountries[$sourceCountryCode])) {
                                             $sourceCountryName = $allCountries[$sourceCountryCode];
                                             unset($allCountries[$sourceCountryCode]);
@@ -186,14 +186,14 @@ $this->title = 'About';
         <div class="row">
             <div class="col-lg-10 offset-lg-1 col-12" data-cue="fadeIn">
                 <ul class="list-inline text-center">
-                    <?php foreach (\common\models\Countries::find()->all() as $country) : ?>
+                    <?php foreach (\common\models\InsuranceCountries::find()->all() as $country) : ?>
                         <li class="list-inline-item d-inline-flex align-items-center me-3 mb-2 mb-lg-0">
                             <?php if (!empty($country->code)) : ?>
-                                <img src="/assets/flags/<?= $country->code ?>.png" class="rounded-circle" width="24" height="24" alt="<?= $country->country ?>" />
+                                <img src="/flags/<?= $country->country_code ?>.png" class="rounded-circle" width="24" height="24" alt="<?= $country->country ?>" />
                             <?php else : ?>
                                 <div class="flag-placeholder rounded-circle"></div>
                             <?php endif; ?>
-                            <h6 class="my-2 ms-2"><?= $country->country ?></h6>
+                            <h6 class="my-2 ms-2"><?= $country->source_country ?></h6>
                         </li>
                     <?php endforeach; ?>
                 </ul>
