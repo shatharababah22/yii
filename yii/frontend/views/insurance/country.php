@@ -247,7 +247,7 @@ $this->title = 'About';
         <div class="row">
        
 
-        <?php if ($country !== null) : ?>
+ 
     <?php foreach ($insurances as $insurance) : ?>
         <div class="col-md-4 mt-5">
             <a href="<?= Url::to(['/insurance/programs', 'slug' => $insurance->slug]) ?>" class="card text-bg-light shadow" data-cue="fadeUp">
@@ -269,7 +269,7 @@ $this->title = 'About';
             </a>
         </div>
     <?php endforeach; ?>
-    <?php endif; ?>
+
 
   
 
