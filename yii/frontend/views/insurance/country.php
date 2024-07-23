@@ -188,8 +188,9 @@ $this->title = 'About';
                 <ul class="list-inline text-center">
                     <?php foreach (\common\models\InsuranceCountries::find()->all() as $country) : ?>
                         <li class="list-inline-item d-inline-flex align-items-center me-3 mb-2 mb-lg-0">
-                            <?php if (!empty($country->code)) : ?>
-                                <img src="/flags/<?= $country->country_code ?>.png" class="rounded-circle" width="24" height="24" alt="<?= $country->country ?>" />
+                            <?php if (!empty($country->country_code)) : ?>
+                         
+                                <img src="/flags/<?= $country->country_code ?>.png" class="rounded-circle" width="24" height="24" alt="<?= $country->source_country ?>" />
                             <?php else : ?>
                                 <div class="flag-placeholder rounded-circle"></div>
                             <?php endif; ?>
