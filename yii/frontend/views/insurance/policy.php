@@ -65,10 +65,13 @@ $this->title = 'Contact';
                                 <div class="row">
                                     <div class="col-sm-6 mt-2 mx-auto text-center">
                                         <?= $form->field($model, 'mobile')->widget(PhoneInput::class, [
-                                            'jsOptions' => [
-                                                'preferredCountries' => ['jo'],
-                                                'class' => 'w-100',
-                                            ]
+                                        
+                                                
+
+'jsOptions' => ['nationalMode' => false,'preferredCountries' => ['jo']]
+                                            
+
+                                            
                                         ])->label(false); ?>
                                     </div>
                                 </div>

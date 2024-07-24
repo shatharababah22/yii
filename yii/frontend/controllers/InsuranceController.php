@@ -359,8 +359,9 @@ class InsuranceController extends \yii\web\Controller
     {
         $model = new \yii\base\DynamicModel(['mobile', 'reCaptcha']);
         $model->addRule(['mobile'], 'required');
-
+// 
         if ($model->load(Yii::$app->request->post())) {
+            // dd(  $model);
             // $otpAttempts = Yii::$app->session->get('otp_attempts', 0);
 
             // if ($otpAttempts >= 3 && !$model->validate(['reCaptcha'])) {
@@ -372,6 +373,7 @@ class InsuranceController extends \yii\web\Controller
 
             $mobile = $model->mobile;
             // dd( $mobile);
+           
             $customer = Customers::findOne(['mobile' => $mobile]);
 
             if ($customer) {
@@ -609,10 +611,10 @@ class InsuranceController extends \yii\web\Controller
                 // dd($days);
                 // dd(date('Y-m-d', strtotime($policyDraft->departure_date)));
                 // $apiPayload = [
-                //     "source" => $fromCountryName,
-                //     "from_country" => $fromCountryName,
-                //     "from_airport" => $policyDraft->from_airport,
-                //     "to_country" => $toCountryName,
+                //           "source" => "Jordan",
+                //     "from_country" => "Jordan",
+                //     "from_airport" => "AMM",
+                //     "to_country" => "Lebanon",
                 //     "to_airport" => $policyDraft->going_to,
                 //     "departure_date" => $policyDraft->departure_date,
                 //     "days" =>  $days,
@@ -641,7 +643,7 @@ class InsuranceController extends \yii\web\Controller
                 //         ]
                 //     ]
                 // ];
-
+// dd( $apiPayload);
                 // dd($apiPayload);
 
                 $apiPayload = [
@@ -691,6 +693,8 @@ class InsuranceController extends \yii\web\Controller
                 // curl_close($ch);
 
                 $apiResponseData = json_decode($apiResponse, true);
+
+                // dd($apiResponseData);
                 // dd( $apiResponseData);
                 if (isset($apiResponseData['id']) && !empty($apiResponseData['id'])) {
 
@@ -846,6 +850,7 @@ class InsuranceController extends \yii\web\Controller
 
         $response = curl_exec($ch);
         curl_close($ch);
+// dd()
 
         return json_decode($response, true);
     }
