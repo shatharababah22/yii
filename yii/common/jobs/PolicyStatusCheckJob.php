@@ -75,11 +75,12 @@ class PolicyStatusCheckJob extends BaseObject implements JobInterface
     }
 
     private function sendMessage($mobile, $policyURLLink)
-    { $messageContent = "Dear Customer, \n\n" .
-        "We would like to inform you that you can review the details of your policy by visiting the following link: $policyURLLink.\n\n" .
-     
+    {
+        $messageContent = "Dear Customer, \n\n" .
+            "We would like to inform you that you can review the details of your policy by visiting the following link: $policyURLLink.\n\n";
+    
         $curl = curl_init();
-
+    
         curl_setopt_array($curl, array(
             CURLOPT_URL => "https://api.releans.com/v2/message",
             CURLOPT_RETURNTRANSFER => true,
@@ -91,16 +92,30 @@ class PolicyStatusCheckJob extends BaseObject implements JobInterface
             CURLOPT_CUSTOMREQUEST => "POST",
             CURLOPT_POSTFIELDS => "sender=360Protect&mobile=$mobile&content=" . urlencode($messageContent),
             CURLOPT_HTTPHEADER => array(
-                "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6ImZiYTFkZGFlLTY4M2UtNGQ3OS1iZjFiLWJlZDRhODM2YTg5MiIsImlhdCI6MTcyMTU2OTQyMSwiaXNzIjoxOTQ3OH0.p_B-G3fAeorMR8WsC3GjUV2fM9PdheiVHLLWaC4WqNE" 
+                "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6ImZiYTFkZGFlLTY4M2UtNGQ3OS1iZjFiLWJlZDRhODM2YTg5MiIsImlhdCI6MTcyMTU2OTQyMSwiaXNzIjoxOTQ3OH0.p_B-G3fAeorMR8WsC3GjUV2fM9PdheiVHLLWaC4WqNE"
             ),
         ));
-
+    
         $response = curl_exec($curl);
+        $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        $error = curl_error($curl);
+    
 
+        echo "cURL Response: ";
+        var_dump($response);
+    
+        echo "HTTP Response Code: ";
+        var_dump($httpCode);
+    
+   
         if ($response === false) {
-            Yii::error('cURL Error: ' . curl_error($curl), __METHOD__);
+            echo "cURL Error: ";
+            var_dump($error);
         }
-
+    
         curl_close($curl);
+    
+     
     }
+    
 }

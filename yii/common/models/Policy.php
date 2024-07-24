@@ -61,11 +61,11 @@ class Policy extends \yii\db\ActiveRecord
             [['DepartCountryCode', 'ArrivalCountryCode'], 'string', 'max' => 11],
             [['ItineraryID'], 'string', 'max' => 255],
             [['PNR', 'PolicyNo', 'PolicyPurchasedDateTime'], 'string', 'max' => 200],
-            [['reCaptcha'], \himiklab\yii2\recaptcha\ReCaptchaValidator3::class,
-            'secret' => '6LfeOw8qAAAAAAMfV9GShxK0ZwZEnw-JWIMgnyR5', 
-            'threshold' =>3,
-            'action' => '/',
-          ],
+        //     [['reCaptcha'], \himiklab\yii2\recaptcha\ReCaptchaValidator3::class,
+        //     'secret' => '6LfeOw8qAAAAAAMfV9GShxK0ZwZEnw-JWIMgnyR5', 
+        //     'threshold' =>3,
+        //     'action' => '/',
+        //   ],
         ];
     }
 
