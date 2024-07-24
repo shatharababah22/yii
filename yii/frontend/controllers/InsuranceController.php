@@ -215,20 +215,20 @@ class InsuranceController extends \yii\web\Controller
         $model->setAttributeLabels($labels);
         $model->addRule($attr, 'required');
 
-     
+
 
 
         if ($model->load(Yii::$app->request->post()) && $policy->load(Yii::$app->request->post())) {
             $policy->save();
-        
+
             foreach ($attr as $item) {
                 $model->$item = UploadedFile::getInstance($model, $item);
-        
+
                 $file = $model->$item;
                 if ($file !== null) {
                     $fileName = rand() . '-' . strtotime(date('Y-m-d H:i:s')) . '.' . $file->extension;
                     $path = Yii::getAlias('@webroot/uploads/') . $fileName;
-        
+
                     if ($file->saveAs($path)) {
                         $post = [
                             'file_base64' => base64_encode(file_get_contents($path)),
@@ -238,16 +238,16 @@ class InsuranceController extends \yii\web\Controller
                             'verify_expiry' => true,
                             'type' => "IPD"
                         ];
-        
+
                         $ch = curl_init();
                         curl_setopt($ch, CURLOPT_URL, 'https://api.idanalyzer.com');
                         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                         curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($post));
                         $response = curl_exec($ch);
                         curl_close($ch);
-        
+
                         $json_request = json_decode($response, true);
-        
+
                         if (isset($json_request['error'])) {
                             Yii::$app->session->setFlash('error', $json_request['error']['message']);
                         } elseif ($json_request['verification']['passed']) {
@@ -266,16 +266,15 @@ class InsuranceController extends \yii\web\Controller
                             $PolicyDraftPassengers->warning = isset($json_request['authentication']['warning']) ? implode(',', $json_request['authentication']['warning']) : "null";
                             $PolicyDraftPassengers->document_link = '/uploads/' . $fileName;
                             $PolicyDraftPassengers->save();
+                            return $this->redirect(['review', 'draft' => $policy->id]);
                         } else {
                             Yii::$app->session->setFlash('error', join(" and ", $json_request['authentication']['warning']));
                         }
                     }
                 }
             }
-        
-            return $this->redirect(['review', 'draft' => $policy->id]);
         }
-        
+
 
         return $this->render('passengers', [
             'model' => $model,
@@ -359,7 +358,7 @@ class InsuranceController extends \yii\web\Controller
     {
         $model = new \yii\base\DynamicModel(['mobile', 'reCaptcha']);
         $model->addRule(['mobile'], 'required');
-// 
+        // 
         if ($model->load(Yii::$app->request->post())) {
             // dd(  $model);
             // $otpAttempts = Yii::$app->session->get('otp_attempts', 0);
@@ -373,7 +372,7 @@ class InsuranceController extends \yii\web\Controller
 
             $mobile = $model->mobile;
             // dd( $mobile);
-           
+
             $customer = Customers::findOne(['mobile' => $mobile]);
 
             if ($customer) {
@@ -643,7 +642,7 @@ class InsuranceController extends \yii\web\Controller
                 //         ]
                 //     ]
                 // ];
-// dd( $apiPayload);
+                // dd( $apiPayload);
                 // dd($apiPayload);
 
                 $apiPayload = [
@@ -850,7 +849,7 @@ class InsuranceController extends \yii\web\Controller
 
         $response = curl_exec($ch);
         curl_close($ch);
-// dd()
+        // dd()
 
         return json_decode($response, true);
     }
