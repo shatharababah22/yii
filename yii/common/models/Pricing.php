@@ -42,7 +42,7 @@ class Pricing extends \yii\db\ActiveRecord
             [['passenger'], 'string', 'max' => 255],
             [['status'], 'in', 'range' => [0, 1]], 
             [['plan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Plans::class, 'targetAttribute' => ['plan_id' => 'id']],
-            // [['discount_price'], 'compare', 'compareAttribute' => 'price', 'operator' => '<', 'type' => 'number', 'message' => 'Price must be greater than to Discount Price.'],
+            [['discount_price'], 'compare', 'compareAttribute' => 'price', 'operator' => '<', 'type' => 'number', 'message' => 'Price must be greater than to Discount Price.'],
 
         ];
     }
