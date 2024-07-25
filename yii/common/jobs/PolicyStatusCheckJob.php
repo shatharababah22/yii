@@ -40,34 +40,30 @@ class PolicyStatusCheckJob extends BaseObject implements JobInterface
             $policy->status = $response['status'] ?? 1;
             $policy->status_description = $response['status_description'] ?? 'Status Description';
             if ($policy->save()) {
-              $send=  $this->sendMessage($policy->customer->mobile, $policy->PolicyURLLink);
+                $send =  $this->sendMessage($policy->customer->mobile, $policy->PolicyURLLink);
 
-// exit;
-if($send['status']==201){
-    var_dump($send['status']);
-    // Yii::$app->db->createCommand()->delete('policy_draft')->execute();
-         PolicyDraft::deleteAll();
-         PolicyDraftPassengers::deleteAll();   
+                // exit;
+                if ($send['status'] == 201) {
+                    var_dump($send['status']);
+                    // Yii::$app->db->createCommand()->delete('policy_draft')->execute();
+                    PolicyDraft::deleteAll();
+                    PolicyDraftPassengers::deleteAll();
 
-    // Yii::$app->db->createCommand()->delete('draft_draft_passengers')->execute();
-    
- 
-    // $transaction->commit();
-}
-             
+                    // Yii::$app->db->createCommand()->delete('draft_draft_passengers')->execute();
 
+
+                    // $transaction->commit();
+                }
             } else {
                 Yii::error("Customer not found for policy ID: {$this->policyId}", __METHOD__);
             }
         }
-    
-
     }
 
     private function viewPolicy($id)
     {
         $apiEndpoint = "https://tuneprotectjo.com/api/policies/$id";
-        $apiKey = 'eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjJlMzM3YmM2LWFmMzMtNDFjNS04ZTM2LWQ2NzJjMWRjNDYyNSIsImlhdCI6IjIwMjQtMDctMDQiLCJpc3MiOjE4M30.jdsWqHcU0cL4ZHKr0oZYBvamRrpYwvfCARitiBTVzqU'; 
+        $apiKey = 'eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjJlMzM3YmM2LWFmMzMtNDFjNS04ZTM2LWQ2NzJjMWRjNDYyNSIsImlhdCI6IjIwMjQtMDctMDQiLCJpc3MiOjE4M30.jdsWqHcU0cL4ZHKr0oZYBvamRrpYwvfCARitiBTVzqU';
 
         $ch = curl_init($apiEndpoint);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
@@ -95,9 +91,9 @@ if($send['status']==201){
     {
         $messageContent = "Dear Customer, \n\n" .
             "We would like to inform you that you can review the details of your policy by visiting the following link: $policyURLLink.\n\n";
-    
+
         $curl = curl_init();
-    
+
         curl_setopt_array($curl, array(
             CURLOPT_URL => "https://api.releans.com/v2/message",
             CURLOPT_RETURNTRANSFER => true,
@@ -112,28 +108,26 @@ if($send['status']==201){
                 "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6ImZiYTFkZGFlLTY4M2UtNGQ3OS1iZjFiLWJlZDRhODM2YTg5MiIsImlhdCI6MTcyMTU2OTQyMSwiaXNzIjoxOTQ3OH0.p_B-G3fAeorMR8WsC3GjUV2fM9PdheiVHLLWaC4WqNE"
             ),
         ));
-    
+
         $response = curl_exec($curl);
         $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         $error = curl_error($curl);
-    
+
 
         // echo "cURL Response: ";
         // var_dump($response);
-    
+
         // echo "HTTP Response Code: ";
         // var_dump($httpCode);
-    
-   
+
+
         if ($response === false) {
             echo "cURL Error: ";
             var_dump($error);
         }
-    
+
         curl_close($curl);
 
         return ['status' => $httpCode, 'response' => $response];
-     
     }
-    
 }

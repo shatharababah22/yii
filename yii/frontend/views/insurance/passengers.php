@@ -42,7 +42,7 @@ $this->title = 'Contact';
                                             \common\models\Airports::find()
                                                 ->leftJoin('countries', 'countries.id = airports.country_id')
                                                 ->where(['countries.code' => $policy->DepartCountryCode])
-                                                ->cache(27000)
+                                                
                                                 ->all(),
                                             'code',
                                             'name'
@@ -55,7 +55,7 @@ $this->title = 'Contact';
                                             \common\models\Airports::find()
                                                 ->leftJoin('countries', 'countries.id = airports.country_id')
                                                 ->where(['countries.code' => $policy->ArrivalCountryCode])
-                                                ->cache(27000)
+                                             
                                                 ->all(),
                                             'code',
                                             'name'

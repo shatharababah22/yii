@@ -64,7 +64,7 @@ $this->title = 'About';
                                     <?php if ($country !== null) : ?>
                                         <?php
                                         $allCountries = \yii\helpers\ArrayHelper::map(
-                                            Countries::find()->cache(27000)->orderBy('country')->all(),
+                                            Countries::find()->orderBy('country')->all(),
                                             'code',
                                             'country'
                                         );
@@ -93,7 +93,7 @@ $this->title = 'About';
 
                                         <?= $form->field($model, 'from_country')->dropDownList(
                                             \yii\helpers\ArrayHelper::map(
-                                                Countries::find()->cache(27000)->all(),
+                                                Countries::find()->all(),
                                                 'code',
                                                 'country'
                                             ),

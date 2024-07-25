@@ -73,7 +73,8 @@ use yii\helpers\Url;
                     <div class="col">
                         <!-- <span class="d-block small">Select quantity</span> -->
 
-                        <?= $form->field($model, 'price', ['options' => ['class' => 'mt-1']])->textInput(['class' => 'js-result form-control form-control-quantity-counter', 'value' => '1'])->label(false) ?>
+                        <?= $form->field($model, 'price', ['options' => ['class' => 'mt-1']])->textInput(['class' => 'js-result form-control form-control-quantity-counter', 'value' => '1'])->label(false)->error(false) ?>
+
 
                     </div>
                     <!-- End Col -->
@@ -98,7 +99,7 @@ use yii\helpers\Url;
         </div>
         <!-- End Form -->
     </div>
-       
+
     <?= $form->field($model, 'duration', ['options' => ['class' => 'col-sm-6']])->dropDownList(
         [
             '' => 'Please select duration',
@@ -154,6 +155,7 @@ use yii\helpers\Url;
 
                         <?= $form->field($model, 'discount_price', ['options' => ['class' => 'mt-1']])->textInput(['class' => 'js-result form-control form-control-quantity-counter', 'value' => '0'])->label(false)->error(false) ?>
 
+
                     </div>
                     <!-- End Col -->
 
@@ -183,14 +185,15 @@ use yii\helpers\Url;
 
     <div class="col-sm-6">
         <?= $form->field($model, 'status')->dropDownList(
-            [ ''=>'Please select',
+            [
+                '' => 'Please select',
                 '0' => 'Inactive',
                 '1' => 'Active',
             ],
             [
                 'class' => 'form-select',
-             
-            
+
+
             ]
         ) ?>
 
