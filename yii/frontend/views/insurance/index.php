@@ -101,12 +101,12 @@ $this->title = 'About';
 
                                             if ($label['discount_price'] && $label['status']) {
                                                 $return .= '<div class="price has_subscript">';
-                                                $return .= '<h5><span style="font-size:15px;">JOD $' . $label['discount_price'] . '</span><br><strike style="font-size:13px">JOD $' . $label['price'] . '</strike></h5>';
+                                                $return .= '<h5><span style="font-size:15px;">$' . $label['discount_price'] . '</span><br><strike style="font-size:13px">$' . $label['price'] . '</strike></h5>';
                                                 $return .= '<div class="subscript">per person</div>';
                                                 $return .= '</div>';
                                             } else {
                                                 $return .= '<div class="price has_subscript">';
-                                                $return .= '<h5 >JOD $' . $label['price'] . '</h5>';
+                                                $return .= '<h5 >$' . $label['price'] . '</h5>';
                                                 $return .= '<div class="subscript">per person</div>';
                                                 $return .= '</div>';
                                             }
