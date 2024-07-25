@@ -3,7 +3,7 @@
 use common\models\Countries;
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\widgets\LinkPager;
+use yii\bootstrap5\LinkPager;
 use yii\widgets\ActiveForm;
 
 
@@ -186,15 +186,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <div class="col-sm-auto">
         <div class="d-flex justify-content-center justify-content-sm-end">
+
+       
     <?= LinkPager::widget([
         'pagination' => $dataProvider->pagination,
-        'options' => ['class' => 'pagination'],
-        'linkContainerOptions' => ['class' => 'page-item'], // Individual page container class
-        'linkOptions' => ['class' => 'page-link'], // Link class
-        'prevPageCssClass' => 'page-item', // Class for the previous page button
-        'nextPageCssClass' => 'page-item', // Class for the next page button
-        'prevPageLabel' => '&laquo;', // Custom label for the previous page button
-        'nextPageLabel' => '&raquo;', // Custom label for the next page button
+      
     ]) ?>
     <nav id="datatablePagination" aria-label="Activity pagination"></nav>
 </div>
