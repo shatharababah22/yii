@@ -45,6 +45,9 @@ return [
                 ],
             ],
         ],
+        // 'cache' => [
+        //     'class' => 'yii\caching\Cache',
+        // ],
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],

@@ -68,11 +68,12 @@ class PolicyDraft extends \yii\db\ActiveRecord
        
             return [
                 [['insurance_id', 'plan_id', 'departure_date', 'return_date', 'adult', 'children', 'infant'], 'required'],
-                [['insurance_id', 'plan_id',  'created_at', 'updated_at', 'source', 'adult', 'children', 'infant'], 'integer'],
+                [['insurance_id', 'plan_id',  'created_at', 'updated_at',  'adult', 'children', 'infant'], 'integer'],
                 [['price'], 'number'],
                 [['email', 'mobile'], 'string', 'max' => 255],
                 [['from_airport', 'going_to'], 'string', 'max' => 100],
                 [['DepartCountryCode', 'ArrivalCountryCode'], 'string', 'max' => 11],
+                [['email', 'mobile', 'from_airport', 'going_to'], 'required', 'on' => self::SCENARIO_UPDATE],
                 [['insurance_id'], 'exist', 'skipOnError' => true, 'targetClass' => Insurances::class, 'targetAttribute' => ['insurance_id' => 'id']],
                 [['plan_id'], 'exist', 'skipOnError' => true, 'targetClass' => Plans::class, 'targetAttribute' => ['plan_id' => 'id']],
             ];}

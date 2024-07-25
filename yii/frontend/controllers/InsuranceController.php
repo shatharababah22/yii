@@ -65,6 +65,7 @@ class InsuranceController extends \yii\web\Controller
             $draft->DepartCountryCode = $model->from_country;
             $draft->ArrivalCountryCode = $model->to_country;
             $draft->departure_date = $model->date;
+            $draft->source = $model->from_country;
             // dd($draft->departure_date);
             $duration = '+' . ($model->duration - 1) . ' day';
 
@@ -173,11 +174,35 @@ class InsuranceController extends \yii\web\Controller
     }
 
 
+    // protected function getCountryName($countryCode)
+    // {
+    //     $country = Countries::findOne(['code' => $countryCode]->cache(27000));
+    //     return $country ? $country->country : null;
+    // }
+
+
+
     protected function getCountryName($countryCode)
     {
-        $country = Countries::findOne(['code' => $countryCode]);
-        return $country ? $country->country : null;
+  
+        $cacheKey = 'country_name_' . $countryCode;
+    
+   
+        $countryName = Yii::$app->cache->get($cacheKey);
+    
+        if ($countryName === false) {
+      
+            $country = Countries::findOne(['code' => $countryCode]);
+    
+            $countryName = $country ? $country->country : null;
+    
+  
+            Yii::$app->cache->set($cacheKey, $countryName, 27000);
+        }
+    
+        return $countryName;
     }
+    
 
 
     public function actionPassengers($draft)
@@ -591,9 +616,10 @@ class InsuranceController extends \yii\web\Controller
             ];
 
             $response = $this->processPayment($paymentData);
-            $fromCountryName = \common\models\Airports::getCountryCodeByAirportCode($policyDraft->from_airport);
-            $toCountryName = \common\models\Airports::getCountryCodeByAirportCode($policyDraft->going_to);
+            $fromCountryName = $this->getCountryName($policyDraft->DepartCountryCode);
+            $toCountryName = $this->getCountryName($policyDraft->ArrivalCountryCode);
             // dd($policyDraft->source);
+
             if (isset($response['tran_ref']) && !empty($response['tran_ref'])) {
                 $apiEndpoint = 'https://tuneprotectjo.com/api/policies';
                 $apiKey = 'eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjJlMzM3YmM2LWFmMzMtNDFjNS04ZTM2LWQ2NzJjMWRjNDYyNSIsImlhdCI6IjIwMjQtMDctMDQiLCJpc3MiOjE4M30.jdsWqHcU0cL4ZHKr0oZYBvamRrpYwvfCARitiBTVzqU';
@@ -610,35 +636,35 @@ class InsuranceController extends \yii\web\Controller
                 // dd($days);
                 // dd(date('Y-m-d', strtotime($policyDraft->departure_date)));
                 // $apiPayload = [
-                //           "source" => "Jordan",
-                //     "from_country" => "Jordan",
-                //     "from_airport" => "AMM",
-                //     "to_country" => "Lebanon",
-                //     "to_airport" => $policyDraft->going_to,
-                //     "departure_date" => $policyDraft->departure_date,
-                //     "days" =>  $days,
-                //     "adult" => $policyDraft->adult,
-                //     "child" => $policyDraft->children,
-                //     "infant" => $policyDraft->infant,
-                //     "planCode" => $policyDraft->plan->plan_code,
-                //     "contactDetails" => [
-                //         "name" => "Test Test",
-                //         "email" => $policyDraft->email,
-                //         "mobile" => $policyDraft->mobile
+                //           "source" =>$policyDraft->source,
+                //     "from_country" =>$fromCountryName,
+                //     "from_airport" =>$policyDraft->from_airport,
+                //     "to_country" =>$toCountryName,
+                //     "to_airport" =>$policyDraft->going_to,
+                //     "departure_date" =>$policyDraft->departure_date,
+                //     "days" =>$days,
+                //     "adult" =>$policyDraft->adult,
+                //     "child" =>$policyDraft->children,
+                //     "infant" =>$policyDraft->infant,
+                //     "planCode" =>$policyDraft->plan->plan_code,
+                //     "contactDetails" =>[
+                //         "name" =>"Test Test",
+                //         "email" =>$policyDraft->email,
+                //         "mobile" =>$policyDraft->mobile
                 //     ],
                 //     "passengers" => [
                 //         [
                 //             "IsInfant" => 0,
                 //             "FirstName" => "Test",
                 //             "LastName" => "Test",
-                //             "Gender" => $passenger->gender,
-                //             "DOB" =>   $passenger->dob,
-                //             "Age" =>   $age,
-                //             "IdentityType" => $passenger->id_type,
-                //             "IdentityNo" => $passenger->id_number,
+                //             "Gender" => "Male",
+                //             "DOB" =>$passenger->dob,
+                //             "Age" =>$age,
+                //             "IdentityType" =>$passenger->id_type,
+                //             "IdentityNo" =>$passenger->id_number,
                 //             "IsQualified" => true,
-                //             "Nationality" => $passenger->nationality,
-                //             "CountryOfResidence" => $passenger->country
+                //             "Nationality" =>"JO",
+                //             "CountryOfResidence" => "JO"
                 //         ]
                 //     ]
                 // ];

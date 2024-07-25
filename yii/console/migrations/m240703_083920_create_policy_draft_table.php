@@ -26,7 +26,7 @@ class m240703_083920_create_policy_draft_table extends Migration
             'return_date' => $this->date()->notNull(),
             'created_at' => $this->integer(),
             'updated_at' => $this->integer(),
-            'source' => $this->integer(),
+            'source' => $this->string(100),
             'price' => $this->decimal(10, 2),
             'adult' => $this->integer(),
             'children' => $this->integer(),

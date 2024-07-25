@@ -3,6 +3,9 @@
 use yii\bootstrap5\ActiveForm;
 use yii\bootstrap5\Html;
 use borales\extensions\phoneInput\PhoneInput;
+use common\widgets\Alert;
+
+
 /** @var \common\models\PolicyDraft $policy */
 
 $this->title = 'Contact';
@@ -19,11 +22,15 @@ $this->title = 'Contact';
     </div>
 </section>
 <!--Pageheader end-->
+
+
 <!--Contact us start-->
 <section class="mb-xl-9 my-5">
-    <div class="container">
+
+    <div class="container mt-1">
         <div class="row">
             <div class="col-lg-10 offset-lg-1 col-md-12 col-12">
+            <?= Alert::widget() ?>
                 <div class="row g-xl-7 gy-5">
                     <div class="col-md-7 col-12">
                         <div class="card shadow-sm">
@@ -35,6 +42,7 @@ $this->title = 'Contact';
                                             \common\models\Airports::find()
                                                 ->leftJoin('countries', 'countries.id = airports.country_id')
                                                 ->where(['countries.code' => $policy->DepartCountryCode])
+                                                ->cache(27000)
                                                 ->all(),
                                             'code',
                                             'name'
@@ -47,6 +55,7 @@ $this->title = 'Contact';
                                             \common\models\Airports::find()
                                                 ->leftJoin('countries', 'countries.id = airports.country_id')
                                                 ->where(['countries.code' => $policy->ArrivalCountryCode])
+                                                ->cache(27000)
                                                 ->all(),
                                             'code',
                                             'name'

@@ -57,7 +57,7 @@ class CountriesSearch extends Countries
             ]);
         }
     
-        // Apply filtering conditions
+     
         $query->andFilterWhere([
             'id' => $this->id,
             'callCode' => $this->callCode,
@@ -69,10 +69,10 @@ class CountriesSearch extends Countries
             ->andFilterWhere(['like', 'zone', $this->zone])
             ->andFilterWhere(['like', 'currency', $this->currency]);
     
-        // Calculate the total count of records after applying filters
+    
         $totalCount = $query->count();
     
-        // Create and return the ActiveDataProvider with the filtered query and total count
+  
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
