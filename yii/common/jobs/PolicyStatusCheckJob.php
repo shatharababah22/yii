@@ -6,7 +6,9 @@ use Yii;
 use yii\base\BaseObject;
 use yii\queue\JobInterface;
 use common\models\Policy;
-
+use common\models\PolicyDraft;
+use common\models\PolicyDraftPassengers;
+// use yii\db\Transaction;
 class PolicyStatusCheckJob extends BaseObject implements JobInterface
 {
     public $id;
@@ -38,7 +40,22 @@ class PolicyStatusCheckJob extends BaseObject implements JobInterface
             $policy->status = $response['status'] ?? 1;
             $policy->status_description = $response['status_description'] ?? 'Status Description';
             if ($policy->save()) {
-                $this->sendMessage($policy->customer->mobile, $policy->PolicyURLLink);
+              $send=  $this->sendMessage($policy->customer->mobile, $policy->PolicyURLLink);
+
+// exit;
+if($send['status']==201){
+    var_dump($send['status']);
+    // Yii::$app->db->createCommand()->delete('policy_draft')->execute();
+         PolicyDraft::deleteAll();
+         PolicyDraftPassengers::deleteAll();   
+
+    // Yii::$app->db->createCommand()->delete('draft_draft_passengers')->execute();
+    
+ 
+    // $transaction->commit();
+}
+             
+
             } else {
                 Yii::error("Customer not found for policy ID: {$this->policyId}", __METHOD__);
             }
@@ -101,11 +118,11 @@ class PolicyStatusCheckJob extends BaseObject implements JobInterface
         $error = curl_error($curl);
     
 
-        echo "cURL Response: ";
-        var_dump($response);
+        // echo "cURL Response: ";
+        // var_dump($response);
     
-        echo "HTTP Response Code: ";
-        var_dump($httpCode);
+        // echo "HTTP Response Code: ";
+        // var_dump($httpCode);
     
    
         if ($response === false) {
@@ -114,7 +131,8 @@ class PolicyStatusCheckJob extends BaseObject implements JobInterface
         }
     
         curl_close($curl);
-    
+
+        return ['status' => $httpCode, 'response' => $response];
      
     }
     

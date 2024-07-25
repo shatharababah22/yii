@@ -48,10 +48,12 @@ class InsuranceController extends \yii\web\Controller
         if ($model->load(Yii::$app->request->post())) {
 
             $passengers = $model->adult + $model->children;
-            $price = Pricing::find()
+            $pricing = Pricing::find()
                 ->where(['plan_id' => $model->plan])
                 ->andWhere(['duration' => $model->duration])
                 ->one();
+
+                $price = $pricing->discount_price  && $pricing->status ==1  ? $pricing->discount_price : $pricing->price;
 
             // dd($price);
             // if (!$price) {
@@ -68,8 +70,6 @@ class InsuranceController extends \yii\web\Controller
             $draft->source = $model->from_country;
             // dd($draft->departure_date);
             $duration = '+' . ($model->duration - 1) . ' day';
-
-
             $departureDate = new DateTime($draft->departure_date);
 
             $timestamp = (int) $departureDate->getTimestamp();
@@ -78,8 +78,7 @@ class InsuranceController extends \yii\web\Controller
             $draft->adult = $model->adult;
             $draft->children = $model->children;
             $draft->infant = $model->infants;
-            $draft->price = ($price->price * $passengers);
-
+            $draft->price = $price * $passengers;
 
             if ($draft->save()) {
                 return $this->redirect(['insurance/passengers', 'draft' => $draft->id]);
