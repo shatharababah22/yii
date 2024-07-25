@@ -676,8 +676,8 @@ class InsuranceController extends \yii\web\Controller
                             "IdentityType" => $passenger->id_type,
                             "IdentityNo" => $passenger->id_number,
                             "IsQualified" => true,
-                            "Nationality" => "JO",
-                            "CountryOfResidence" => "JO"
+                            "Nationality" => $passenger->nationality,
+                            "CountryOfResidence" => $passenger->country
                         ]
                     ]
                 ];
