@@ -152,7 +152,7 @@ use yii\helpers\Url;
                     <div class="col">
 
 
-                        <?= $form->field($model, 'discount_price', ['options' => ['class' => 'mt-1']])->textInput(['class' => 'js-result form-control form-control-quantity-counter', 'value' => '0'])->label(false) ?>
+                        <?= $form->field($model, 'discount_price', ['options' => ['class' => 'mt-1']])->textInput(['class' => 'js-result form-control form-control-quantity-counter', 'value' => '0'])->label(false)->error(false) ?>
 
                     </div>
                     <!-- End Col -->

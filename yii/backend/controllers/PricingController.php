@@ -291,8 +291,21 @@ class PricingController extends Controller
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            // dd($model);
-            return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->load($this->request->post())) {
+                if ($model->price > $model->discount_price) {
+                    if ($model->discount_price == 0 && $model->status == 1) {
+                        Yii::$app->session->setFlash('error', 'Cannot activate when Discount Price is zero.');
+                    } else {
+                        if ($model->save()) {
+                            return $this->redirect(['view', 'id' => $model->id]);
+                        }
+                    }
+                } else {
+                    Yii::$app->session->setFlash('error', 'Price must be greater than Discount Price.');
+                }
+            }
+        } else {
+            $model->loadDefaultValues();
         }
 
         return $this->render('update', [
