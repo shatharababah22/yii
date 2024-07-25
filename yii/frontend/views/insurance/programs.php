@@ -65,7 +65,7 @@ $this->title = 'Programs';
                                 </label>
                                 <!-- <?php $model->from_country; ?> -->
                                 <?= $form->field($model, 'from_country')->dropDownList(\yii\helpers\ArrayHelper::map(
-                                    Countries::find()->cache(27000)->all(),
+                                    Countries::find()->all(),
                                     'code',
                                     'country'
                                 ), ['prompt' => 'Departure'])->label(false) ?>
@@ -76,7 +76,7 @@ $this->title = 'Programs';
                                     <span class="text-danger">*</span>
                                 </label>
                                 <?= $form->field($model, 'to_country')->dropDownList(\yii\helpers\ArrayHelper::map(
-                                    Countries::find()->cache(27000)->all(),
+                                    Countries::find()->all(),
                                     'code',
                                     'country'
                                 ), ['prompt' => 'Arrival'])->label(false) ?>

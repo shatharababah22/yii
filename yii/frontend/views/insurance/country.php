@@ -110,7 +110,7 @@ $this->title = 'About';
                                         <span class="text-danger">*</span>
                                     </label>
                                     <?= $form->field($model, 'to_country')->dropDownList(\yii\helpers\ArrayHelper::map(
-                                        Countries::find()->cache(27000)->all(),
+                                        Countries::find()->all(),
                                         'code',
                                         'country'
                                     ), ['prompt' => 'Arrival'])->label(false) ?>
