@@ -63,13 +63,16 @@ $this->title = 'About';
                                     </label>
                                     <?php if ($country !== null) : ?>
                                         <?php
-                                        $allCountries = \yii\helpers\ArrayHelper::map(
-                                            Countries::find()->orderBy('country')->all(),
-                                            'code',
-                                            'country'
-                                        );
+                                        $countries = Countries::find()->orderBy('country')->all();
 
-                                        $sourceCountryCode = $sourceCountry; 
+                                        $allCountries = [];
+                                        foreach ($countries as $country) {
+                                            $code = strtoupper($country->code);
+                                            $allCountries[$code] = $country->country;
+                                        }
+
+                                        $sourceCountryCode =  strtoupper($sourceCountry);
+
                                         if (isset($allCountries[$sourceCountryCode])) {
                                             $sourceCountryName = $allCountries[$sourceCountryCode];
                                             unset($allCountries[$sourceCountryCode]);
@@ -189,7 +192,7 @@ $this->title = 'About';
                     <?php foreach (\common\models\InsuranceCountries::find()->all() as $country) : ?>
                         <li class="list-inline-item d-inline-flex align-items-center me-3 mb-2 mb-lg-0">
                             <?php if (!empty($country->country_code)) : ?>
-                         
+
                                 <img src="/assets/flags/<?= strtolower($country->country_code) ?>.png" class="rounded-circle" width="24" height="24" alt="<?= $country->source_country ?>" />
                             <?php else : ?>
                                 <div class="flag-placeholder rounded-circle"></div>
@@ -228,7 +231,7 @@ $this->title = 'About';
                             </div>
 
                         <?php endforeach; ?>
-                        
+
 
 
 
@@ -245,35 +248,35 @@ $this->title = 'About';
 <section class="my-xl-9 my-5">
     <div class="container" data-cue="fadeIn">
         <div class="row">
-       
 
- 
-    <?php foreach ($insurances as $insurance) : ?>
-        <div class="col-md-4 mt-5">
-            <a href="<?= Url::to(['/insurance/programs', 'slug' => $insurance->slug]) ?>" class="card text-bg-light shadow" data-cue="fadeUp">
-                <img src="<?= Yii::$app->request->baseUrl ?>/dashboard/images/<?= $insurance->photo ?>" class="card-img" alt="img">
-                <div class="card-img-overlay text-white d-inline-flex justify-content-start align-items-end overlay-dark">
-                    <div class="text-capitalize">
-                        <h2 class="card-title"><?= $insurance->name ?></h2>
-                        <div class="mb-4 justify-content-center">
-                            <div class="price-text">
-                                <span class="small">starts from </span>
-                                <div class="price price-show h1 text-warning">
-                                    <span>$</span>
-                                    <span><?= $insurance->price ?></span>
+
+
+            <?php foreach ($insurances as $insurance) : ?>
+                <div class="col-md-4 mt-5">
+                    <a href="<?= Url::to(['/insurance/programs', 'slug' => $insurance->slug]) ?>" class="card text-bg-light shadow" data-cue="fadeUp">
+                        <img src="<?= Yii::$app->request->baseUrl ?>/dashboard/images/<?= $insurance->photo ?>" class="card-img" alt="img">
+                        <div class="card-img-overlay text-white d-inline-flex justify-content-start align-items-end overlay-dark">
+                            <div class="text-capitalize">
+                                <h2 class="card-title"><?= $insurance->name ?></h2>
+                                <div class="mb-4 justify-content-center">
+                                    <div class="price-text">
+                                        <span class="small">starts from </span>
+                                        <div class="price price-show h1 text-warning">
+                                            <span>$</span>
+                                            <span><?= $insurance->price ?></span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
-            </a>
-        </div>
-    <?php endforeach; ?>
+            <?php endforeach; ?>
 
 
-  
 
-     
+
+
 
 
 

@@ -69,7 +69,7 @@ $this->title = 'About';
                     </div>
                     <?php if (isset($insuranceCountry->id)) : ?>
                         <div data-cues="slideInDown">
-                            <img src="<?= $insuranceCountry->company_logo ?>" class="img-thumbnail" alt="logo" height="160" width="140">
+                            <img src="<?= Yii::$app->request->baseUrl ?>/dashboard/images/<?= $insuranceCountry->company_logo ?>"  class="img-thumbnail" alt="logo" height="160" width="140">
                         </div>
                     <?php endif; ?>
                 </div>

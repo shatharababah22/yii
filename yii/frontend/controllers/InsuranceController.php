@@ -7,8 +7,8 @@ use common\models\Customers;
 use common\models\InsuranceCountries;
 use common\models\Insurances;
 use common\models\Plans;
-use common\models\JobResult;
-use console\jobs\PolicyStatusCheckJob as JobsPolicyStatusCheckJob;
+// use common\models\JobResult;
+// use console\jobs\PolicyStatusCheckJob as JobsPolicyStatusCheckJob;
 // use common\models\PlansCoverage;
 // use common\models\PlansItems;
 // use frontend\jobs\PolicyStatusCheckJob;
@@ -21,7 +21,7 @@ use frontend\models\InquiryForm;
 // use GuzzleHttp\Psr7\Request;
 // use PhpOffice\PhpSpreadsheet\Chart\Title;
 use Yii;
-use yii\queue\file\Queue;
+// use yii\queue\file\Queue;
 
 use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
@@ -136,12 +136,17 @@ class InsuranceController extends \yii\web\Controller
         //         }
         //     }
         // }
-
+        // $model->from_country='JO';
+        // dd($model->from_country);
+        $CountryCode = strtoupper($model->from_country);
+        // dd($CountryCode);
         $insuranceCountry = InsuranceCountries::find()
             ->where(['insurance_id' => $model->type])
-            ->andWhere(['country_code' => $model->from_country])
+            ->andWhere(['UPPER(country_code)' => $CountryCode])
             ->one();
 
+
+        // dd( $insuranceCountry);
         $options = [];
         foreach ($plans as $plan) {
             $insuranceTitle = $plan->insurance->name;
