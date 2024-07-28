@@ -1,6 +1,6 @@
 <?php
 return [
-    'adminEmail' => 'admin@example.com',
+    'adminEmail' => 'shatha.rababah@releans.com',
     'bsVersion' => '4.x',
 
 'googleRecaptcha' => [

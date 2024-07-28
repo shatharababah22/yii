@@ -8,7 +8,7 @@ use yii\bootstrap5\Html;
 use yii\bootstrap5\ActiveForm;
 use yii\captcha\Captcha;
 
-$this->title = 'Contact';
+$this->title = 'Review Your Insurance Details';
 ?>
 <div class="pattern-square"></div>
 <!--Pageheader start-->

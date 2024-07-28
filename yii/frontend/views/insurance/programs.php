@@ -7,7 +7,7 @@ use common\models\Countries;
 use yii\bootstrap5\ActiveForm;
 use yii\helpers\Html;
 
-$this->title = 'Programs';
+$this->title = $insurance->name;
 ?>
 <!--hero start-->
 <section class="bg-primary-dark pt-9 right-slant-shape" data-cue="fadeIn">
@@ -86,8 +86,11 @@ $this->title = 'Programs';
                                     Departure Date
                                     <span class="text-danger">*</span>
                                 </label>
-                                <?= $form->field($model, 'date')->textInput(['type' => 'date', 'min' => date('Y-m-d'), 'onclick' => '$(this).focus();'])->label(false) ?>
-                            </div>
+                                <?= $form->field($model, 'date')->textInput([
+            'type' => 'date',
+            'class' => 'js-flatpickr form-control',
+            'placeholder' => 'Select date'
+        ])->label(false) ?>                            </div>
                             <div class="col-md-6">
                                 <label for="scheduleEmailInput" class="form-label">
                                     Days (Duration)
@@ -315,3 +318,15 @@ $this->title = 'Programs';
     </div>
 </section>
 <!--5m member end-->
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  flatpickr('.js-flatpickr', {
+    dateFormat: "d/m/Y",
+     minDate: 'today'
+  });
+});
+
+</script>

@@ -73,8 +73,7 @@ $this->title = 'Your Policy';
               <tr>
                 <td class="table-column-pe-0">
                   <div class="form-check">
-                    <!-- <input class="form-check-input" type="checkbox" value="" id="productsCheck<?= $policy->id ?>">
-                    <label class="form-check-label" for="productsCheck<?= $policy->id ?>"></label> -->
+                  
                   </div>
                 </td>
 
@@ -82,10 +81,10 @@ $this->title = 'Your Policy';
                 <td><?= Html::encode($policy->customer->mobile) ?></td>
                 <td><?= Html::encode($policy->from_airport) ?></td>
                 <td><?= Html::encode($policy->going_to) ?></td>
-                <td><?= Html::encode(Yii::$app->formatter->asDate($policy->departure_date)) ?></td>
-                <td><?= Html::encode(Yii::$app->formatter->asDate($policy->return_date)) ?></td>
+                <td><?= Html::encode($policy->departure_date) ?></td>
+                <td><?= Html::encode($policy->return_date) ?></td>
                 <td><?= $policy->price ?> JD</td>
-                <td><?= Html::encode($policy->status == 0 ? "Inactive" : "Active") ?></td>
+                <td><?= Html::encode($policy->status == 0 ? "Waiting activation" : "Active") ?></td>
     
 
               </tr>

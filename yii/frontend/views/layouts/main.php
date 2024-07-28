@@ -26,6 +26,16 @@ AppAsset::register($this);
     <meta name="msapplication-config" content="/images/logo/logo-dark.png" />
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
 
+    <link rel="shortcut icon" href="favicon.ico" />
+
+<link rel="icon" type="image/x-icon" href="favicon.ico" />
+
+
+
+<link rel="shortcut icon" href="favicon.ico" />
+
+<link rel="icon" type="image/x-icon" href="favicon.ico" /> 
+
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
@@ -70,7 +80,7 @@ AppAsset::register($this);
                                 </ul>
                             </li>
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Insurances</a>
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Assurances</a>
                                 <ul class="dropdown-menu">
 
                                     <?php foreach (\common\models\Insurances::find()->all() as $insurance) : ?>
@@ -83,6 +93,10 @@ AppAsset::register($this);
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="/insurance/check" role="button" aria-expanded="false"><?= Yii::t('app', 'Check Policy') ?></a>
+                            </li>
+                            <li class="nav-item">
+                            <?= Html::a(Yii::t('app', 'Contact us'), ['/insurance/contact'], ['class' => 'nav-link', 'data-cue' => 'fadeUp']) ?>
+
                             </li>
                         </ul>
                         <div class="mt-3 mt-lg-0 d-flex align-items-center">
@@ -116,9 +130,9 @@ AppAsset::register($this);
                                 <img src="/images/logo/logo-dark.png" width="60" alt="logo" class="text-white-50" />
                             </a>
                         </div>
-                        <p class="mb-5 mt-2">Secure your future with our comprehensive insurance plans. Whether it's health, life, auto, or home insurance, we provide the coverage you need to protect what matters most.</p>
+                        <p class="mb-5 mt-2">Secure your future with our comprehensive assurance plans. Whether it's health, life, auto, or home insurance, we provide the coverage you need to protect what matters most.</p>
                         <div class="text-md-end d-flex align-items-center justify-content-md-start">
-                            <div class="dropdown">
+                            <!-- <div class="dropdown">
                                 <button class="btn btn-light btn-icon rounded-circle d-flex align-items-center" type="button" aria-expanded="false" data-bs-toggle="dropdown" aria-label="Toggle theme (auto)">
                                     <i class="bi theme-icon-active"></i>
                                     <span class="visually-hidden bs-theme-text">Toggle theme</span>
@@ -143,7 +157,7 @@ AppAsset::register($this);
                                         </button>
                                     </li>
                                 </ul>
-                            </div>
+                            </div> -->
                             <div class="ms-3 d-flex gap-2">
                                 <a href="#!" class="text-reset btn btn-instagram btn-icon">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-instagram" viewBox="0 0 16 16">
@@ -169,7 +183,7 @@ AppAsset::register($this);
                         <div class="col-lg-4 col-12">
                             <div class="position-relative">
                                 <div class="mb-3 pb-2 d-flex justify-content-between border-bottom border-bottom-lg-0">
-                                    <h5>Insurance</h5>
+                                    <h5>Assurances</h5>
                                     <a class="d-block d-lg-none stretched-link text-inherit" data-bs-toggle="collapse" href="#collapseLanding" role="button" aria-expanded="false" aria-controls="collapseLanding">
                                         <i class="bi bi-chevron-down"></i>
                                     </a>
@@ -190,7 +204,7 @@ AppAsset::register($this);
 
                         <div class="col-lg-4 col-12">
                             <div class="mb-3 pb-2 d-flex justify-content-between border-bottom border-bottom-lg-0">
-                                <h5>Insurance Countries</h5>
+                                <h5>Assurance Countries</h5>
                                 <a class="d-block d-lg-none stretched-link text-inherit" data-bs-toggle="collapse" href="#collapseResources" role="button" aria-expanded="false" aria-controls="collapseResources">
                                     <i class="bi bi-chevron-down"></i>
                                 </a>
@@ -227,6 +241,17 @@ AppAsset::register($this);
                                     <li class="mb-2">
 
                                         <?= Html::a(Yii::t('app', 'Check Policy'), ['/insurance/check'], ['class' => 'text-decoration-none ', 'style' => 'color:#64748B;']) ?>
+
+                                    </li>
+
+
+                                </ul>
+                            </div>
+                            <div class="collapse d-lg-block" id="collapseAccounts" data-bs-parent="#ft-links">
+                                <ul class="list-unstyled mb-0 py-3 py-lg-0">
+                                    <li class="mb-2">
+
+                                        <?= Html::a(Yii::t('app', 'Contact us'), ['/insurance/contact'], ['class' => 'text-decoration-none ', 'style' => 'color:#64748B;']) ?>
 
                                     </li>
 
@@ -306,6 +331,9 @@ AppAsset::register($this);
         </svg>
     </div>
     <?php $this->endBody() ?>
+
+
+
 </body>
 
 </html>

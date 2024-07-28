@@ -73,7 +73,7 @@ use yii\helpers\Url;
                     <div class="col">
                         <!-- <span class="d-block small">Select quantity</span> -->
 
-                        <?= $form->field($model, 'price', ['options' => ['class' => 'mt-1']])->textInput(['class' => 'js-result form-control form-control-quantity-counter',    'placeholder' => '1.00' ])->label(false)->error(false) ?>
+                        <?= $form->field($model, 'price', ['options' => ['class' => 'mt-1']])->textInput(['class' => 'js-result form-control form-control-quantity-counter', 'placeholder' => '1.00' ])->label(false)->error(false) ?>
 
 
                     </div>

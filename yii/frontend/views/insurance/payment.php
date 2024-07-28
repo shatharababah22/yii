@@ -5,9 +5,11 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\widgets\ActiveForm;
 
-$this->title = 'Payment';
+use yii\bootstrap5\ActiveForm;
+
+
+$this->title = 'Payment Details';
 
 $this->registerJsFile('https://secure-jordan.paytabs.com/payment/js/paylib.js');
 $clientKey = 'CRKMVQ-TTBM6T-DKDG2B-MPGMDH';
@@ -42,7 +44,7 @@ $this->registerJs($js);
     <div class="container mt-5">
         <div class="row">
             <div class="col-md-12 col-12">
-                <h1 class="mb-3 text-white-stable"><span class="text-warning">Payment</span> Details - New Order</h1>
+                <h1 class="mb-2 text-white-stable"><span class="text-warning">Payment</span> Details - New Order</h1>
             </div>
         </div>
     </div>
@@ -58,7 +60,7 @@ $this->registerJs($js);
                         <p class="text mb-1">Person Name</p>
                                                             <?= $form->field($model, 'number')->textInput(['placeholder' => 'Valid card number',  'autocomplete' => 'off', 'class' => 'form-control', 'required' => true])->label(false) ?>
 
-                        <input class="form-control mb-3" type="text" placeholder="Name" value="Barry Allen">
+                        <input class="form-control mb-2" type="text" placeholder="Name" value="Barry Allen">
                     </div>
                 </div> -->
             <div class="col-12">
@@ -67,7 +69,7 @@ $this->registerJs($js);
                     <?= $form->field($model, 'number')->textInput([
                         'placeholder' => '1234 5678 4356 7878',
                         'autocomplete' => 'off',
-                        'class' => 'form-control mb-3',
+                        'class' => 'form-control mb-2',
                         'required' => true
                     ])->label(false) ?>
 
@@ -84,7 +86,7 @@ $this->registerJs($js);
                                 '05' => 'May', '06' => 'June', '07' => 'July', '08' => 'August',
                                 '09' => 'September', '10' => 'October', '11' => 'November', '12' => 'December'
                             ],
-                            ['prompt' => 'Select Month', 'class' => 'form-control mb-3', 'required' => true]
+                            ['prompt' => 'Select Month', 'class' => 'form-control mb-2', 'required' => true]
                         )->label(false) ?>
                     </div>
                 </div>
@@ -94,7 +96,7 @@ $this->registerJs($js);
                         <p class="text mb-1">Expiry Year</p>
                         <?= $form->field($model, 'expyear')->dropDownList(
                             array_combine(range(date('Y'), date('Y') + 20), range(date('Y'), date('Y') + 20)),
-                            ['prompt' => 'Select Year', 'class' => 'form-control mb-3', 'required' => true]
+                            ['prompt' => 'Select Year', 'class' => 'form-control mb-2', 'required' => true]
                         )->label(false) ?>
                     </div>
                 </div>
@@ -105,7 +107,7 @@ $this->registerJs($js);
                         <?= $form->field($model, 'cvv')->textInput([
                             'placeholder' => 'CVV',
                             'autocomplete' => 'off',
-                            'class' => 'form-control mb-3 pt-2',
+                            'class' => 'form-control mb-2 pt-2',
                             'required' => true
                         ])->label(false) ?>
                     </div>
@@ -113,7 +115,7 @@ $this->registerJs($js);
 
                 <div class="col-12">
                     <?= Html::hiddenInput('payment-token', '', ['id' => 'payment-token']) ?>
-                    <div class=" mb-3 ">
+                    <div class=" mb-2 ">
                         <?= Html::submitButton('Confirm Payment', ['class' => ' subscribe btn btn-primary btn-block shadow-sm d-flex justify-content-center align-items-center']) ?>
                         <span class="fas fa-arrow-right "></span>
                     </div>

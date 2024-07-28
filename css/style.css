@@ -1750,5 +1750,10 @@ body.--with-sticky-footer .intercom-mock {
 }
 
 
+.iti--allow-dropdown input, .iti--allow-dropdown input[type=text], .iti--allow-dropdown input[type=tel], .iti--separate-dial-code input, .iti--separate-dial-code input[type=text], .iti--separate-dial-code input[type=tel] 
+{
 
+padding-bottom: 4.5%;
+padding-top: 5%;
+}
 

@@ -100,7 +100,7 @@ use yii\helpers\Url;
     <div>
         <?= $form->field($model, 'overview')->textarea([
             'class' => 'form-control',
-            'rows' => '7', // Set the number of visible rows
+            'rows' => '7',
         ])->label(false) ?>
     </div>
 </div>

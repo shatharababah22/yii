@@ -9,17 +9,33 @@ $params = array_merge(
 return [
     'id' => 'app-frontend',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log','queue'],
+    'bootstrap' => ['log', 'queue'],
     'controllerNamespace' => 'frontend\controllers',
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-frontend',
         ],
-        'reCaptcha' => [
-                'class' => 'himiklab\yii2\recaptcha\ReCaptchaConfig',
-                'siteKey' => '6LfutA8qAAAAAEbLnOcFLoc_K_sxlTxwTfoEr1Yp',
-                'secretV3' => '6LfutA8qAAAAAE-Vh475F2Jf60KM8Wgrkqtmu-z9',
+   'mailer' => [
+            'class' => 'yii\swiftmailer\Mailer',
+            'viewPath' => '@common/mail',
+            'useFileTransport' => false, // Set to false to send real emails
+            'transport' => [
+                'class' => 'Swift_SmtpTransport',
+                'host' => 'smtp.gmail.com', // Your SMTP server
+                'username' => 'shatha.rababah@releans.com',
+                'password' => 'pypgbaxtfgguzyze',
+               
+                'port' => '587', // 465 for SSL, 587 for TLS
+                'encryption' => 'tls', // ssl or tls
             ],
+ 
+ 
+        ],
+        'reCaptcha' => [
+            'class' => 'himiklab\yii2\recaptcha\ReCaptchaConfig',
+            'siteKey' => '6LfutA8qAAAAAEbLnOcFLoc_K_sxlTxwTfoEr1Yp',
+            'secretV3' => '6LfutA8qAAAAAE-Vh475F2Jf60KM8Wgrkqtmu-z9',
+        ],
         'user' => [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => true,
@@ -27,11 +43,11 @@ return [
         ],
 
         'queue' => [
-            'class' => 'yii\queue\db\Queue', 
-            'db' => 'db', 
-            'tableName' => '{{%queue}}', 
-            'channel' => 'default', 
-            'mutex' => 'yii\mutex\MysqlMutex', 
+            'class' => 'yii\queue\db\Queue',
+            'db' => 'db',
+            'tableName' => '{{%queue}}',
+            'channel' => 'default',
+            'mutex' => 'yii\mutex\MysqlMutex',
         ],
         'session' => [
             'name' => 'advanced-frontend',
@@ -51,7 +67,7 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-  
+
         'urlManager' => [
             'class' => 'yii\web\UrlManager',
             'enablePrettyUrl' => true,

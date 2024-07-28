@@ -35,9 +35,16 @@ function addListener(input) {
     });
 }
 ");
+$lastResendTimestamp = Yii::$app->session->get('last_resend_timestamp');
+$currentTimestamp = time();
 
 
-$lastFourDigits = substr($mobile, -4);
+$interval = 5 * 60; 
+
+
+$remainingTime = ($lastResendTimestamp ? max(0, $interval - ($currentTimestamp - $lastResendTimestamp)) : 0);
+
+// $lastFourDigits = substr($mobile, -4);
 ?>
 <div class="pattern-square"></div>
 <section class="pt-10 pb-10 bg-dark text-center ">
@@ -69,7 +76,7 @@ $lastFourDigits = substr($mobile, -4);
                 Enter the verification code we sent to
             </div>
 
-            <div class="d-flex align-items-center justify-content-center fw-bold mb-4">
+            <!-- <div class="d-flex align-items-center justify-content-center fw-bold mb-4">
                 <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-asterisk" viewBox="0 0 16 16">
                     <path d="M8 0a1 1 0 0 1 1 1v5.268l4.562-2.634a1 1 0 1 1 1 1.732L10 8l4.562 2.634a1 1 0 1 1-1 1.732L9 9.732V15a1 1 0 1 1-2 0V9.732l-4.562 2.634a1 1 0 1 1-1-1.732L6 8 1.438 5.366a1 1 0 0 1 1-1.732L7 6.268V1a1 1 0 0 1 1-1z" />
                 </svg>
@@ -88,8 +95,7 @@ $lastFourDigits = substr($mobile, -4);
                 <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-asterisk" viewBox="0 0 16 16">
                     <path d="M8 0a1 1 0 0 1 1 1v5.268l4.562-2.634a1 1 0 1 1 1 1.732L10 8l4.562 2.634a1 1 0 1 1-1 1.732L9 9.732V15a1 1 0 1 1-2 0V9.732l-4.562 2.634a1 1 0 1 1-1-1.732L6 8 1.438 5.366a1 1 0 0 1 1-1.732L7 6.268V1a1 1 0 0 1 1-1z" />
                 </svg>
-                <span><?= $lastFourDigits ?></span>
-            </div>
+            </div> -->
 
 
             <!-- <label for="digit">Type your 4 digit security code</label> -->
@@ -112,9 +118,43 @@ $lastFourDigits = substr($mobile, -4);
             <div class="col-md-12 d-flex justify-content-center">
                 <?= Html::submitButton('Verify', ['class' => 'btn btn-primary submit_btn my-4']) ?>
             </div>
-            <div class="fw-normal text-muted mb-2">
-                Didn’t get the code ? <a href="<?= Url::to(['/insurance/resend', 'mobile' => $mobile,]) ?>" class=" fw-bold text-decoration-none" style="color:#0F172A">Resend</a>
-            </div>
+       
+<div class="fw-normal text-muted mb-2">
+    Didn’t get the code? 
+    <?php if ($remainingTime > 0): ?>
+        <span class="fw-bold text-decoration-none" style="color:#0F172A">
+          Please wait <?= intval($remainingTime / 60) ?>m <?= $remainingTime % 60 ?>s
+        </span>
+    <?php else: ?>
+        <a href="<?= Url::to(['/insurance/resend', 'mobile' => $mobile]) ?>" class="fw-bold text-decoration-none" style="color:#0F172A">Resend</a>
+    <?php endif; ?>
+</div>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    let remainingTime = <?= $remainingTime ?>;
+    const countdownElement = document.querySelector('.fw-bold.text-decoration-none');
+
+    if (remainingTime > 0 && countdownElement) {
+        const updateCountdown = () => {
+            if (remainingTime <= 0) {
+                countdownElement.innerHTML = '<a href="<?= Url::to(['/insurance/resend', 'mobile' => $mobile]) ?>" class="fw-bold text-decoration-none" style="color:#0F172A">Resend</a>';
+                clearInterval(intervalId);
+                return;
+            }
+            let minutes = Math.floor(remainingTime / 60);
+            let seconds = remainingTime % 60;
+            countdownElement.innerHTML = `Please wait ${minutes}m ${seconds}s`;
+            remainingTime--;
+        };
+
+        updateCountdown(); // Initial call
+        const intervalId = setInterval(updateCountdown, 1000);
+    }
+});
+</script>
+
             <?php ActiveForm::end() ?>
         </div>
     </div>

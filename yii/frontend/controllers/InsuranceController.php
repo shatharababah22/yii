@@ -65,20 +65,32 @@ class InsuranceController extends \yii\web\Controller
             $draft->plan_id = $model->plan;
             $draft->DepartCountryCode = $model->from_country;
             $draft->ArrivalCountryCode = $model->to_country;
-            $draft->departure_date = $model->date;
-            $draft->source = $model->from_country;
-            // dd($draft->departure_date);
-            $duration = '+' . ($model->duration - 1) . ' day';
-            $departureDate = new DateTime($draft->departure_date);
 
-            $timestamp = (int) $departureDate->getTimestamp();
+            // Check the format of $model->date
+            $departureDateFormat = 'd/m/Y'; // Change this if necessary based on the input format
+            $departureDate = DateTime::createFromFormat($departureDateFormat, $model->date);
+
+            // Check if date parsing was successful
+            if ($departureDate === false) {
+                // Handle parsing error
+                $errors = DateTime::getLastErrors();
+                var_dump($errors); // Output parsing errors
+                die('Failed to parse departure date.');
+            }
+
+            // Convert to timestamp and calculate return date
+            $timestamp = $departureDate->getTimestamp();
+            $duration = '+' . ($model->duration - 1) . ' day';
             $draft->return_date = date('Y-m-d', strtotime($duration, $timestamp));
 
+            // Set other attributes
+            $draft->departure_date = $departureDate->format('Y-m-d'); // Store in Y-m-d format
             $draft->adult = $model->adult;
             $draft->children = $model->children;
             $draft->infant = $model->infants;
             $draft->price = $price * $passengers;
 
+            // Save and redirect
             if ($draft->save()) {
                 return $this->redirect(['insurance/passengers', 'draft' => $draft->id]);
             } else {
@@ -150,7 +162,7 @@ class InsuranceController extends \yii\web\Controller
         $options = [];
         foreach ($plans as $plan) {
             $insuranceTitle = $plan->insurance->name;
-
+            // dd($insuranceTitle);
             $price = Pricing::find()
                 ->where(['plan_id' => $plan->id])
                 ->andWhere(['duration' => $model->duration])
@@ -440,24 +452,58 @@ class InsuranceController extends \yii\web\Controller
     }
 
 
+    // public function actionResend($mobile)
+    // {
+
+
+
+
+
+    //     $response = $this->actionSend($mobile);
+    //     $responseData = json_decode($response, true);
+
+    //     if ($responseData && $responseData['status'] == 201) {
+
+    //         Yii::$app->session->set('mobile', $mobile);
+    //         return $this->redirect(['verify-otp']);
+    //     } else {
+    //         Yii::$app->session->setFlash('error', 'Failed to send OTP.');
+    //     }
+    //     return $responseData;
+    // }
+
+
     public function actionResend($mobile)
     {
 
+        $lastResendTimestamp = Yii::$app->session->get('last_resend_timestamp');
+
+        $currentTimestamp = time();
 
 
+        $interval = 5 * 60;
+
+
+        if ($lastResendTimestamp && ($currentTimestamp - $lastResendTimestamp < $interval)) {
+            Yii::$app->session->setFlash('error', 'You can only resend OTP every 5 minutes.');
+            return $this->redirect(['verify-otp']);
+        }
+
+
+        Yii::$app->session->set('last_resend_timestamp', $currentTimestamp);
 
 
         $response = $this->actionSend($mobile);
         $responseData = json_decode($response, true);
 
         if ($responseData && $responseData['status'] == 201) {
-
             Yii::$app->session->set('mobile', $mobile);
             return $this->redirect(['verify-otp']);
         } else {
             Yii::$app->session->setFlash('error', 'Failed to send OTP.');
         }
-        return $responseData;
+
+        return $this->redirect(['verify-otp']);
     }
 
 
@@ -532,6 +578,8 @@ class InsuranceController extends \yii\web\Controller
 
                 if (isset($responseData['status']) && $responseData['status'] == 200) {
                     // Yii::$app->session->setFlash('success', 'OTP verified successfully.');
+                    Yii::$app->session->remove('mobile');
+
                     return $this->redirect(['display-policy']);
                 } else {
                     Yii::$app->session->setFlash('error', 'Failed to verify OTP.');
@@ -587,7 +635,55 @@ class InsuranceController extends \yii\web\Controller
     // }
 
 
-    public function actionDisplayPolicy()
+    // public function actionDisplayPolicy($policies=[] )
+    // {
+    //     $mobile = Yii::$app->session->get('mobile');
+    //     $customer = Customers::findOne(['mobile' => $mobile]);
+
+    //     if ($customer) {
+    //         $policies = Policy::find()->where(['customer_id' => $customer->id])->all();
+    //     } else {
+    //         $policies;
+    //     }
+
+    //     // Yii::$app->session->remove('mobile');
+    //     return $this->render('display-policy', [
+    //         'policies' => $policies,
+    //     ]);
+    // }
+
+
+    public function actionContact()
+    {
+        $model = new \yii\base\DynamicModel(['name', 'email', 'message', 'mobile']);
+        $model->addRule(['name', 'email', 'message','mobile'], 'required')
+            ->addRule('email', 'email');
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            // dd( $model);
+            $email = filter_var($model->email, FILTER_VALIDATE_EMAIL) ? $model->email : 'no-reply@example.com';
+            $name = !empty($model->name) ? $model->name : 'Unknown';
+$message=$model->message;
+$mobile=$model->mobile;
+            Yii::$app->mailer->compose()
+                ->setTo('shatha.rababah@releans.com')
+                ->setFrom([$email=>$name])
+                ->setSubject('Contact Form Submission')
+                ->setHtmlBody('<b>Hay</b>' .$name.'</br>'. $message.'<br>'.$mobile)
+                ->send();
+
+            // Yii::$app->session->setFlash('success', 'Thank you for contacting us. We will respond to you as soon as possible.');
+            
+            return $this->refresh();
+        }
+
+        return $this->render('contact', [
+            'model' => $model,
+        ]);
+    }
+
+
+    public function actionDisplayPolicy($policyId = null)
     {
         $mobile = Yii::$app->session->get('mobile');
         $customer = Customers::findOne(['mobile' => $mobile]);
@@ -598,11 +694,22 @@ class InsuranceController extends \yii\web\Controller
             $policies = [];
         }
 
-        // Yii::$app->session->remove('mobile');
+        if ($policyId) {
+            $policy = Policy::findOne($policyId);
+            // dd("shatha");
+            return $this->render('display-policy', [
+                'policies' => [$policy],
+            ]);
+        }
+
+
+
         return $this->render('display-policy', [
             'policies' => $policies,
         ]);
     }
+
+
 
 
     public function actionPayment($id)
@@ -640,11 +747,12 @@ class InsuranceController extends \yii\web\Controller
                 $apiEndpoint = 'https://tuneprotectjo.com/api/policies';
                 $apiKey = 'eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjJlMzM3YmM2LWFmMzMtNDFjNS04ZTM2LWQ2NzJjMWRjNDYyNSIsImlhdCI6IjIwMjQtMDctMDQiLCJpc3MiOjE4M30.jdsWqHcU0cL4ZHKr0oZYBvamRrpYwvfCARitiBTVzqU';
 
-
+                // dd($policyDraft->departure_date);
                 $departureDate = new DateTime($policyDraft->departure_date);
                 $returnDate = new DateTime($policyDraft->return_date);
 
                 $interval = $departureDate->diff($returnDate);
+                // dd($interval );
                 $days = $interval->days;
                 $dob = new DateTime($passenger->dob);
                 $now = new DateTime();
@@ -686,6 +794,7 @@ class InsuranceController extends \yii\web\Controller
                         ]
                     ]
                 ];
+
                 // dd( $apiPayload);
                 // dd($apiPayload);
 
@@ -777,11 +886,12 @@ class InsuranceController extends \yii\web\Controller
                     $policy->status_description = $response['status_description'] ?? 'Status Description';
 
                     if ($policy->save()) {
+                        // dd($policyDraft->departure_date);
                         Yii::$app->queue->delay(5)->push(new \common\jobs\PolicyStatusCheckJob([
                             'id' => $id,
                             'policyId' => $policy->id
                         ]));
-                        return $this->redirect(['check']);
+                        return $this->redirect(['display-policy', 'policyId' => $policy->id]);
                     } else {
                         var_dump($policy->errors);
                     }

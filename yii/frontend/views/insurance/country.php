@@ -11,7 +11,7 @@ use yii\helpers\Url;
 // $insurance_name = ($insurance !== null) ? htmlspecialchars($insurance->name, ENT_QUOTES, 'UTF-8') : $country->insurance->name;
 $this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js');
 
-$this->title = 'About';
+$this->title = '360Protect';
 ?>
 <!--hero start-->
 <section class="bg-primary-dark pt-9 right-slant-shape" data-cue="fadeIn">
@@ -24,7 +24,7 @@ $this->title = 'About';
 
                             Claim your <?php if ($country !== null) : ?>
                                 <?php echo $country->insurance->name; ?>
-                            <?php endif; ?> insurance
+                            <?php endif; ?> assurance
                             <span class="text-pattern-line text-warning"> within minutes</span>
                         </h1>
                         <p class="mb-0 text-white-50">
@@ -33,7 +33,7 @@ $this->title = 'About';
                     </div>
                     <div data-cues="slideInDown">
                         <a href="#" class="btn btn-primary me-2">Get Covered Now</a>
-                        <a href="#" class="btn btn-outline-warning">Explore Programs</a>
+                        <a href="#insurances_programs" class="btn btn-outline-warning">Explore Programs</a>
                     </div>
 
                 </div>
@@ -123,8 +123,17 @@ $this->title = 'About';
                                         Departure Date
                                         <span class="text-danger">*</span>
                                     </label>
-                                    <?= $form->field($model, 'date')->textInput(['type' => 'date', 'min' => date('Y-m-d'), 'onclick' => '$(this).focus();'])->label(false) ?>
+                                    <!-- <?= $form->field($model, 'date')->textInput(['type' => 'date', 'min' => date('Y-m-d'), 'onclick' => '$(this).focus();'])->label(false) ?> -->
+                                    <?= $form->field($model, 'date')->textInput([
+            'type' => 'date',
+            'class' => 'js-flatpickr form-control',
+            'placeholder' => 'Select date'
+        ])->label(false) ?>
                                 </div>
+
+
+                            
+
                                 <div class="col-md-6">
                                     <label for="scheduleEmailInput" class="form-label">
                                         Days (Duration)
@@ -144,6 +153,13 @@ $this->title = 'About';
                                         '1095' => '3 years',
                                     ], ['prompt' => 'Duration', 'class' => 'form-control'])->label(false) ?>
                                 </div>
+                                <!-- Form Group -->
+
+
+
+<!-- End Form Group -->
+
+
                                 <div id="adult" class="col">
                                     <label for="scheduleEmailInput" class="form-label">
                                         Adult
@@ -245,7 +261,7 @@ $this->title = 'About';
 </div>
 
 
-<section class="my-xl-9 my-5">
+<section class="my-xl-9 my-5" id="insurances_programs">
     <div class="container" data-cue="fadeIn">
         <div class="row">
 
@@ -419,10 +435,28 @@ $this->title = 'About';
                 </div>
                 <div class="col-lg-12">
                     <div class="text-center">
-                        <a href="/insurance/type" class="btn btn-primary">Get Started</a>
+                        <a href="/insurances" class="btn btn-primary">Get Started</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
+
+<script>
+//   (function() {
+//     // INITIALIZATION OF FLATPICKR
+//     // =======================================================
+//     HSCore.components.HSFlatpickr.init('.js-flatpickr')
+//   })();
+// </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  flatpickr('.js-flatpickr', {
+    dateFormat: "d/m/Y",
+     minDate: 'today'
+  });
+});
+
+</script>

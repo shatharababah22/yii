@@ -8,7 +8,7 @@ use common\widgets\Alert;
 
 /** @var \common\models\PolicyDraft $policy */
 
-$this->title = 'Contact';
+$this->title = 'Trip Details Submission';
 ?>
 <div class="pattern-square"></div>
 <!--Pageheader start-->

@@ -26,7 +26,7 @@ $this->registerJs("
 if (isset($apiResponse)) {
     echo $this->render('_api-response', ['apiResponse' => $apiResponse]);
 }
-$this->title = 'Contact';
+$this->title = 'Checl Policy';
 ?>
  <script src="https://www.google.com/recaptcha/api.js"></script>
 

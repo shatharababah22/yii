@@ -55,7 +55,11 @@ class PolicyStatusCheckJob extends BaseObject implements JobInterface
                     // $transaction->commit();
                 }
             } else {
+
+
                 Yii::error("Customer not found for policy ID: {$this->policyId}", __METHOD__);
+                $try = 0;
+                Yii::$app->session->set('try', $try);
             }
         }
     }

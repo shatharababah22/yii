@@ -11,7 +11,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 
 
-$this->title = 'About';
+$this->title = 'Plan Details';
 
 // $this->registerJs("
 //   $(document).ready(function() {
@@ -30,16 +30,17 @@ $this->title = 'About';
 
 
 <!--Hero start-->
-<section class="bg-primary-dark pt-9 right-slant-shape" data-cue="fadeIn">
+<section class="bg-primary-dark pt-10 right-slant-shape" data-cue="fadeIn">
     <div class="container">
-        <div class="row align-items-center">
+        <div class="row align-items-center"><?php if (!empty($options)): ?>
             <div class="col-lg-5 col-12">
                 <div class="text-center text-lg-start mb-7 mb-lg-0" data-cues="slideInDown">
                     <div class="mb-4">
                         <h3 class="text-white-50"></h3>
                         <h1 class="mb-5 display-5 text-white-stable">
                             <span class="text-warning">New</span>
-                            <?= $insuranceTitle ?>
+                               <?= $insuranceTitle ?>
+         
                         </h1>
                         <p class="mb-0 text-white">
                             <span class="text-white-50">From</span> <?= $fromCountryName ?> <span class="text-white-50">To</span> <?= $toCountryName ?>
@@ -77,57 +78,108 @@ $this->title = 'About';
             <div class="offset-lg-1 col-lg-5 col-12">
                 <div class="position-relative z-1 pt-lg-9" data-cue="slideInRight">
                     <div class="position-relative">
-                        <?php $form = ActiveForm::begin(['options' => ['class' => 'row needs-validation g-3']]) ?>
-                        <div class="offer-box shadow-lg elevate p4 multiple-options">
-                            <div class="accordion">
-                                <div class="head">
-                                    <h4>Choose a plan</h4>
-                                    <p>Select a plan that suits you and your options</p>
-                                </div>
-                                <div class="options">
-                                    <?= $form->field($model, 'plan')->radioList($options, [
-                                        'item' => function ($index, $label, $name, $checked, $value) {
-                                            $return = '<div class="purchasing-option"><div class="border-content">';
-                                            $return .= '<label class="radio">';
-                                            $return .= '<span class="radio-input">';
+                    <?php $form = ActiveForm::begin(['options' => ['class' => 'row needs-validation g-3']]) ?>
+<div class="offer-box shadow-lg elevate p4 multiple-options">
+    <div class="accordion"> 
+        <div class="head">
+            <h4>Choose a plan</h4>
+            <p>Select a plan that suits you and your options</p>
+        </div>
+        <div class="options">
+           
+                <?= $form->field($model, 'plan')->radioList($options, [
+                    'item' => function ($index, $label, $name, $checked, $value) {
+                        $return = '<div class="purchasing-option"><div class="border-content">';
+                        $return .= '<label class="radio">';
+                        $return .= '<span class="radio-input">';
+                        $return .= '<input type="radio" name="' . $name . '" value="' . $value . '" ' . ($checked ? "checked" : "") . '>';
+                        $return .= '<span class="radio-control"></span>';
+                        $return .= '</span>';
+                        $return .= '<span class="radio-label"><h5 id="buyNowHeading">' . ucwords($label['name']) .
+                            ' <small class="subscript" style="font-size: 11px;"><a href="#benefits"><x2>Check Benefits</x2></a></small>' . '</h5>';
 
-                                            $return .= '<input type="radio" name="' . $name . '" value="' . $value . '" ' . ($checked ? "checked" : "") . '>';
+                        if ($label['discount_price'] && $label['status']) {
+                            $return .= '<div class="price has_subscript">';
+                            $return .= '<h5><span style="font-size:15px;">$' . $label['discount_price'] . '</span><br><strike style="font-size:13px">$' . $label['price'] . '</strike></h5>';
+                            $return .= '<div class="subscript">per person</div>';
+                            $return .= '</div>';
+                        } else {
+                            $return .= '<div class="price has_subscript">';
+                            $return .= '<h5>$' . $label['price'] . '</h5>';
+                            $return .= '<div class="subscript">per person</div>';
+                            $return .= '</div>';
+                        }
 
-                                            $return .= '<span class="radio-control"></span>';
-                                            $return .= '</span>';
+                        $return .= '</span></label></div></div>';
+                        return $return;
+                    },
+                ])->label(false); ?>
+                <div class="next-button">
+                    <?= Html::submitButton('Next', ['class' => 'btn w-100 btn-warning ', 'name' => 'login-button']) ?>
+                </div>
+  
+        </div>
+    </div>
+</div>
+<?php ActiveForm::end() ?>
 
-                                            $return .= '<span class="radio-label"><h5 id="buyNowHeading">' . ucwords($label['name']) .
-                                                ' <small class="subscript" style="font-size: 11px;"><a href="#benefits"><x2>Check Benefits</x2></a></small>' . '</h5>';
-
-                                            if ($label['discount_price'] && $label['status']) {
-                                                $return .= '<div class="price has_subscript">';
-                                                $return .= '<h5><span style="font-size:15px;">$' . $label['discount_price'] . '</span><br><strike style="font-size:13px">$' . $label['price'] . '</strike></h5>';
-                                                $return .= '<div class="subscript">per person</div>';
-                                                $return .= '</div>';
-                                            } else {
-                                                $return .= '<div class="price has_subscript">';
-                                                $return .= '<h5 >$' . $label['price'] . '</h5>';
-                                                $return .= '<div class="subscript">per person</div>';
-                                                $return .= '</div>';
-                                            }
-
-                                            $return .= '</span></label></div></div>';
-                                            return $return;
-                                        },
-                                    ])->label(false); ?>
-
-                                </div>
-                            </div>
-                            <div class="next-button">
-                                <?= Html::submitButton('Next', ['class' => 'btn w-100 btn-warning ', 'name' => 'login-button']) ?>
-
-                            </div>
-                        </div>
-                        <?php ActiveForm::end() ?>
                     </div>
                 </div>
             </div>
+        </div>    <?php else: ?>
+            <section class="py-5 mt-4">
+    <div class="container">
+      
+        <!-- <div class="row">
+            <div class="col-lg-6 mx-auto">
+                <header class="text-center pb-5">
+                    <h1 class="h2">Bootstrap custom quote</h1>
+                    <p>Build a nicely styled quote in Bootstrap 4.<br>Bootstrap snippet by <a href="https://bootstrapious.com/snippets" class="font-italic text-warning">Bootstrapious</a></p>
+                </header>
+            </div>
+        </div> -->
+
+
+        <div class="row">
+            <div class="col-lg-6 mx-auto">
+
+                <!-- CUSTOM BLOCKQUOTE -->
+                <blockquote class=" bg-white p-5 shadow rounded text-center">Your trip from
+    <!-- Optional: Custom icon can be added here -->
+    <!-- <div class="blockquote-custom-icon bg-info shadow-sm"><i class="fa fa-quote-left text-white"></i></div> -->
+    <p class="mb-0 mt-2 text-center">
+        <span class="text-warning"><?= $fromCountryName ?> to <?= $toCountryName ?></span><br />
+        Departure Date: <span class="text-warning"><?= $model->date ?> (<?= $model->duration ?> days)</span><br />
+        Passengers:
+        <?php if (isset($model->adult)) : ?>
+            <span class="text-warning"><?= $model->adult ?> Adult</span>
+        <?php endif; ?>
+
+        <?php if (isset($model->children)) : ?>
+            <?php if ($model->children < 1) : ?>
+                <span class="text-warning">| <?= $model->children ?> Child</span>
+            <?php else : ?>
+                <span class="text-warning">| <?= $model->children ?> Children</span>
+            <?php endif; ?>
+        <?php endif; ?>
+
+        <?php if (isset($model->infants)) : ?>
+            <span class="text-warning">| <?= $model->infants ?> Infant</span>
+        <?php endif; ?><br> is not valid
+    </p>
+    <footer class="blockquote-footer pt-4 mt-4 border-top">
+        <a href="javascript:void(0);" onclick="history.back();" class="btn btn-link text-warning px-0 me-3">
+            <i class="bi bi-pencil-square"></i> Edit
+        </a>
+        <cite title="Source Title">Try again</cite>
+    </footer>
+</blockquote>
+
+
+            </div>
         </div>
+    </div>
+</section>            <?php endif; ?>
     </div>
 </section>
 <!--Hero start-->
@@ -147,11 +199,11 @@ $this->title = 'About';
                 <!-- Striped rows -->
                 <div class="table-responsive">
                     <table class="table table-striped text-nowrap table-lg table-borderless">
-                        <thead>
+                        <thead>  <?php if (!empty($options)): ?>
                             <tr>
                                 <th scope="col">
                                     <div class="fs-5 text-dark fw-semibold">Plans</div>
-                                </th>
+                                </th>    
                                 <?php foreach (\common\models\Plans::find()->where(['insurance_id' => $model->type])->joinWith('pricings')->andWhere(['pricing.duration' => $model->duration])->andWhere([
                                     'or',
                                     ['pricing.passenger' => $adultPassenger],
@@ -217,7 +269,18 @@ $this->title = 'About';
                                         </td>
                                     <?php endforeach; ?>
                                 </tr>
-                            <?php endforeach; ?>
+                            <?php endforeach; ?>        <?php else: ?>
+                                <tr >
+              <td  colspan="14" class="dataTables_empty">
+                <div class="text-center ">
+                <img class="mb-3" src="https://static.vecteezy.com/system/resources/previews/009/007/126/non_2x/document-file-not-found-search-no-result-concept-illustration-flat-design-eps10-modern-graphic-element-for-landing-page-empty-state-ui-infographic-icon-vector.jpg" alt="Image Description" style="width: 10rem;" data-hs-theme-appearance="default">
+
+                  <!-- <img class="mb-3" src="https://as2.ftcdn.net/v2/jpg/02/34/31/27/1000_F_234312709_1CXqUZHqg62VE5VhsVEyQUmj69zZHwk9.jpg" alt="Image Description" style="width: 10rem;" data-hs-theme-appearance="default"> -->
+                  <p class="mb-0">No data to show</p>
+                </div>
+              </td>
+            </tr>
+            <?php endif; ?>
 
                         </tbody>
                     </table>
