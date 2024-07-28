@@ -303,7 +303,7 @@ $this->title = $insurance->name;
 
 
 <!--5m member start-->
-<section class="pt-xl-9 py-5 bg-primary-dark">
+<!-- <section class="pt-xl-9 py-5 bg-primary-dark">
     <div class="container" data-cue="fadeIn">
         <div class="row">
             <div class="col-xl-8 offset-xl-2 col-12">
@@ -315,6 +315,57 @@ $this->title = $insurance->name;
             </div>
         </div>
 
+    </div>
+</section> -->
+<!--5m member end-->
+
+
+<!--5m member start-->
+<section class="pt-xl-9 py-5 bg-primary-dark">
+    <div class="container" data-cue="fadeIn">
+        <div class="row">
+            <div class="col-xl-8 offset-xl-2 col-12">
+                <div class="text-center mb-xl-7 mb-5">
+                    <h2 class="text-white-stable mb-3">Protect with Confidence: <span class="text-warning">General Insurance</span></h2>
+                    <p class="mb-0 text-white-50">
+                        Ensure worry-free living with our comprehensive insurance plans. Whether you need health, life, auto, or home insurance, we've got you covered with protection against unexpected events and emergencies.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-7 pb-4 g-5 text-center text-lg-start">
+            <div class="col-md-4" data-cue="fadeIn">
+                <img src="/images/4066885_building_company_coverage_insurance_office_icon.png" width="80" />
+                <h4 class="text-white-stable">Health Insurance</h4>
+                <p class="text-white-50 mb-3">Stay protected against unforeseen medical emergencies.</p>
+                <ul class="text-white-50">
+                    <li>Medical Expenses Coverage</li>
+                    <li>Emergency Medical Evacuation</li>
+                    <li>24/7 Medical Assistance</li>
+                </ul>
+            </div>
+            <div class="col-md-4" data-cue="fadeIn">
+                <img src="/images/4066893_coverage_insurance_liability_protect_travel_icon.png" width="80" />
+                <h4 class="text-white-stable">Travel Assistance</h4>
+                <p class="text-white-50 mb-3">Ensure smooth travels with comprehensive travel assistance services.</p>
+                <ul class="text-white-50">
+                    <li>Emergency Travel Assistance</li>
+                    <li>Trip Interruption Services</li>
+                    <li>Lost Passport Assistance</li>
+                </ul>
+            </div>
+
+            <div class="col-md-4" data-cue="fadeIn">
+                <img src="/images/4066902_coverage_insurance_liability_professional_protection_icon.png" width="80" />
+                <h4 class="text-white-stable">Property Insurance</h4>
+                <p class="text-white-50 mb-3">Protect your home and belongings with comprehensive property insurance.</p>
+                <ul class="text-white-50">
+                    <li>Homeowners Insurance</li>
+                    <li>Renters Insurance</li>
+                    <li>Flood Insurance</li>
+                </ul>
+            </div>
+        </div>
     </div>
 </section>
 <!--5m member end-->

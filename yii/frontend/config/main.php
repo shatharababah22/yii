@@ -21,12 +21,12 @@ return [
             'useFileTransport' => false, // Set to false to send real emails
             'transport' => [
                 'class' => 'Swift_SmtpTransport',
-                'host' => 'smtp.gmail.com', // Your SMTP server
+                'host' => 'smtp.gmail.com', 
                 'username' => 'shatha.rababah@releans.com',
                 'password' => 'pypgbaxtfgguzyze',
                
-                'port' => '587', // 465 for SSL, 587 for TLS
-                'encryption' => 'tls', // ssl or tls
+                'port' => '587', 
+                'encryption' => 'tls', 
             ],
  
  

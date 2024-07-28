@@ -30,11 +30,11 @@ AppAsset::register($this);
 
 <link rel="icon" type="image/x-icon" href="favicon.ico" />
 
-
+<!-- 
 
 <link rel="shortcut icon" href="favicon.ico" />
 
-<link rel="icon" type="image/x-icon" href="favicon.ico" /> 
+<link rel="icon" type="image/x-icon" href="favicon.ico" />  -->
 
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
