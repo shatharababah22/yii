@@ -7,6 +7,8 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\bootstrap5\ActiveForm;
 use borales\extensions\phoneInput\PhoneInput;
+use common\widgets\Alert;
+
 
 $this->title = 'Contact us';
 ?>
@@ -42,10 +44,10 @@ $this->title = 'Contact us';
 
     <div class="container">
         <div class="row justify-content-lg-center">
-            <div class="col-12 col-lg-9">
+            <div class="col-12 col-lg-9">   <?= Alert::widget() ?>
                 <div class="bg-white border rounded shadow-sm overflow-hidden">
                     <!-- <h2 class="text-center">Contact</h2> -->
-
+                 
                     <?php $form = ActiveForm::begin(['options' => ['class' => 'rounded bg-white shadow p-3']]) ?>
 
                     <div class="row gy-3 gy-xl-5 p-4 p-xl-5">

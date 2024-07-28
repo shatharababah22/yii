@@ -671,6 +671,8 @@ $mobile=$model->mobile;
                 ->setSubject('Contact Form Submission')
                 ->setHtmlBody('<b>Hay</b>' .$name.'</br>'. $message.'<br>'.$mobile)
                 ->send();
+                    // Yii::$app->session->setFlash('Thank you for contacting us. We will respond to you as soon as possible.');
+                    Yii::$app->session->setFlash('success', 'Thank you for contacting us. We will respond to you as soon as possible.');
 
             // Yii::$app->session->setFlash('success', 'Thank you for contacting us. We will respond to you as soon as possible.');
             
