@@ -11,7 +11,9 @@ use common\widgets\Alert;
 
 
 $this->title = 'Contact us';
-?>
+?><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+</style>
 <div class="pattern-square"></div>
 <section class="pt-10 pb-10 bg-dark text-center">
     <div class="container mt-5">
@@ -42,15 +44,15 @@ $this->title = 'Contact us';
         </div>
     </div>
 
-    <div class="container">
-        <div class="row justify-content-lg-center">
-            <div class="col-12 col-lg-9">   <?= Alert::widget() ?>
-                <div class="bg-white border rounded shadow-sm overflow-hidden">
+    <div class="container mt-4">
+        <div  class="row  justify-content-center"> <?= Alert::widget() ?>
+            <div class="col-12 col-lg-6">  
+                <div  class="bg-white border rounded shadow-sm overflow-hidden">
                     <!-- <h2 class="text-center">Contact</h2> -->
                  
-                    <?php $form = ActiveForm::begin(['options' => ['class' => 'rounded bg-white shadow p-3']]) ?>
-
-                    <div class="row gy-3 gy-xl-5 p-4 p-xl-5">
+                    <?php $form = ActiveForm::begin(['options' => ['class' => '  p-3']]) ?>
+              
+                    <div class="row align-items-center gy-3 gy-xl-5 p-4 p-xl-5">
                         <div class="col-12 ">
                             <label for="fullname" class="form-label">Full Name <span class="text-danger">*</span></label>
                             <!-- <input type="text" class="form-control" id="fullname" name="fullname" value="" required> -->
@@ -75,7 +77,7 @@ $this->title = 'Contact us';
                   </span> -->
                             <!-- <input type="tel" class="form-control" id="phone" name="phone" value=""> -->
                             <?= $form->field($model, 'mobile', [
-                                'options' => ['class'=>'col-md-12']
+                              
                             ])->widget(PhoneInput::class, [
                                 'jsOptions' => [
                                     'preferredCountries' => ['jo'],
@@ -106,9 +108,60 @@ $this->title = 'Contact us';
 
                     <?php ActiveForm::end() ?>
 
-
                 </div>
+                
             </div>
+            
+            
+            <div class="col-lg-6 mt-4"><div class="info-wrap w-100 p-md-5 p-5 py-5 img">
+            <h2 style="color: #0F172A; text-shadow: 1px 1px 2px #1111;">Get in touch</h2><hr class="w-50 text-secoundry">
+<p class="mb-4">We're open for any suggestion or just to have a chat</p>
+<div class="dbox w-100 d-flex align-items-end mt-3">
+
+<!-- <span class="fa fa-map-marker"></span> -->
+<img class="me-3" src="https://cdn-icons-png.flaticon.com/512/3247/3247310.png" width="6.5%">
+
+<h5 class="ml-5" style="color: #0F172A; text-shadow: 1px 1px 2px #888888;">
+    <span class="bold">Phone: </span> +962790751376
+</h5>
+
+</div>
+
+<div class="dbox w-100 d-flex align-items-end mt-3">
+
+<!-- <span class="fa fa-map-marker"></span> -->
+<!-- <img src="https://cdn-icons-png.flaticon.com/512/6596/6596116.png" width="10%"> -->
+<img class="me-3" src="https://cdn-icons-png.flaticon.com/512/15047/15047587.png" width="6.5%">
+
+<h5 class="ml-5" style="color: #0F172A; text-shadow: 1px 1px 2px #888888;">
+    <span class="bold">Email: </span> ahmed@releans.com
+</h5>
+<!-- <div class="text ml-4">
+<p><span>Email:</span> <a href="mailto:info@yoursite.com">relenas@gmail.com</a></p>
+</div> -->
+</div>
+
+
+<div class="dbox w-100 d-flex align-items-end mt-3">
+
+<img class="me-3" src="https://cdn-icons-png.flaticon.com/512/854/854878.png" width="6.5%">
+
+
+<h5 class="ml-5" style="color: #0F172A; text-shadow: 1px 1px 2px #888888;">
+    <span class="bold">Address: </span> Swaifieh-Amman
+</h5>
+</div>
+
+<!-- <div class="dbox w-100 d-flex align-items-center">
+<div class="icon d-flex align-items-center justify-content-center">
+<span class="fa fa-paper-plane"></span>
+</div>
+<div class="text pl-3">
+<p><span>Email:</span> <a href="mailto:info@yoursite.com">info@yoursite.com</a></p>
+</div>
+</div> -->
+
+</div></div>
         </div>
     </div>
 </section>

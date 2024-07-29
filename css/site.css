@@ -106,5 +106,7 @@ a.desc:after {
 
 
 
-
-
+.is-valid:not(:required):not(.btn), .was-validated :valid:not(:required):not(.btn) {
+  background-image: initial;
+  border-color: var(--bs-gray-300) !important;
+}

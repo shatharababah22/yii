@@ -80,7 +80,10 @@ $this->title = 'Review Your Insurance Details';
                                                         <td><?=  $passenger->dob ?></td>
                                                         <td><?= $passenger->country ?></td>
                                                         <td>
-                                                            <a href="#">Retake</a>
+                                                          
+                                                            <?= Html::a('Retake', ['/insurance/retake', 'id' => $passenger->id,'policyId'=>$policy->id]) ?>
+
+                                                            
                                                         </td>
                                                     </tr>
                                                     <?php endforeach; ?>

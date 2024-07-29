@@ -3,10 +3,12 @@
 namespace frontend\controllers;
 
 use common\models\Countries;
+use common\models\InsuranceCountries;
 use frontend\models\InquiryForm;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
 use Yii;
+// InsuranceCountries
 use yii\base\InvalidArgumentException;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
@@ -76,14 +78,37 @@ class SiteController extends Controller
      *
      * @return mixed
      */
-    public function actionIndex()
+    public function actionIndex($slug = null)
     {
+        $country = InsuranceCountries::findOne(['slug' => $slug]);
         $model = new InquiryForm();
+
+        $sourceCountry = $country ? $country->country_code : null;
+
+        // $insurances = $country ? \common\models\Insurances::find()
+        //     ->joinWith('insuranceCountries')
+        //     ->where(['source_country' => $country->source_country])
+        //     ->all() : [];
+
+        $insurances = $country
+            ? \common\models\Insurances::find()->joinWith('insuranceCountries')->where(['source_country' => $country->source_country])->all()
+            : \common\models\Insurances::find()->all();
+        // dd( $country);
+        // return $this->render('country', [
+        //     'model' => $model,
+        //     'country' => $country,
+        //     'sourceCountry' => $sourceCountry,
+        //     'insurances' => $insurances,
+        // ]);
         return $this->render('index',[
-            'model' => $model,
-        ]);
+            'model' => $model,    'model' => $model,
+            'country' => $country,
+            'sourceCountry' => $sourceCountry,
+            'insurances' => $insurances]);
     }
 
+
+    
     /**
      * Logs in a user.
      *

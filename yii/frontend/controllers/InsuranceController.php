@@ -66,31 +66,31 @@ class InsuranceController extends \yii\web\Controller
             $draft->DepartCountryCode = $model->from_country;
             $draft->ArrivalCountryCode = $model->to_country;
 
-            // Check the format of $model->date
-            $departureDateFormat = 'd/m/Y'; // Change this if necessary based on the input format
+  
+            $departureDateFormat = 'd/m/Y'; 
             $departureDate = DateTime::createFromFormat($departureDateFormat, $model->date);
 
-            // Check if date parsing was successful
+         
             if ($departureDate === false) {
-                // Handle parsing error
+               
                 $errors = DateTime::getLastErrors();
-                var_dump($errors); // Output parsing errors
+                var_dump($errors); 
                 die('Failed to parse departure date.');
             }
 
-            // Convert to timestamp and calculate return date
+          
             $timestamp = $departureDate->getTimestamp();
             $duration = '+' . ($model->duration - 1) . ' day';
             $draft->return_date = date('Y-m-d', strtotime($duration, $timestamp));
 
-            // Set other attributes
+          
             $draft->departure_date = $departureDate->format('Y-m-d'); // Store in Y-m-d format
             $draft->adult = $model->adult;
             $draft->children = $model->children;
             $draft->infant = $model->infants;
             $draft->price = $price * $passengers;
 
-            // Save and redirect
+      
             if ($draft->save()) {
                 return $this->redirect(['insurance/passengers', 'draft' => $draft->id]);
             } else {
@@ -175,7 +175,10 @@ class InsuranceController extends \yii\web\Controller
                 'status' => $price ? $price->status : 'Pricing::STATUS_INACTIVE',
             ];
         }
-
+        if (empty($options)) {
+            Yii::$app->session->setFlash('error', 'No plans are available for the selected options.');
+            return $this->redirect(Yii::$app->getRequest()->getReferrer());
+        }
         return $this->render('index', [
             'model' => $model,
             'options' => $options,
@@ -196,7 +199,24 @@ class InsuranceController extends \yii\web\Controller
     }
 
 
-
+    public function actionRetake($id,$policyId)
+    {
+        // dd('shatha');
+        // dd($id,$policyId);
+        $policy = PolicyDraft::findOne(['id'=>$policyId]);
+    
+        if ($policy === null) {
+            throw new \yii\web\NotFoundHttpException('The requested policy draft does not exist.');
+        }
+    
+        $passenger = PolicyDraftPassengers::findOne(['id' => $id]);
+        if ($passenger !== null) {
+            $passenger->delete();
+        }
+    
+        return $this->redirect(['insurance/passengers', 'draft' =>$policy->id]);
+    }
+    
     // protected function getCountryName($countryCode)
     // {
 
@@ -319,6 +339,7 @@ class InsuranceController extends \yii\web\Controller
                             $PolicyDraftPassengers->warning = isset($json_request['authentication']['warning']) ? implode(',', $json_request['authentication']['warning']) : "null";
                             $PolicyDraftPassengers->document_link = '/uploads/' . $fileName;
                             $PolicyDraftPassengers->save();
+                      
                             return $this->redirect(['review', 'draft' => $policy->id]);
                         } else {
                             Yii::$app->session->setFlash('error', join(" and ", $json_request['authentication']['warning']));
@@ -350,29 +371,29 @@ class InsuranceController extends \yii\web\Controller
 
 
 
-    public function actionType($slug = null)
-    {
-        $country = InsuranceCountries::findOne(['slug' => $slug]);
-        $model = new InquiryForm();
+    // public function actionType($slug = null)
+    // {
+    //     $country = InsuranceCountries::findOne(['slug' => $slug]);
+    //     $model = new InquiryForm();
 
-        $sourceCountry = $country ? $country->country_code : null;
+    //     $sourceCountry = $country ? $country->country_code : null;
 
-        // $insurances = $country ? \common\models\Insurances::find()
-        //     ->joinWith('insuranceCountries')
-        //     ->where(['source_country' => $country->source_country])
-        //     ->all() : [];
+    //     // $insurances = $country ? \common\models\Insurances::find()
+    //     //     ->joinWith('insuranceCountries')
+    //     //     ->where(['source_country' => $country->source_country])
+    //     //     ->all() : [];
 
-        $insurances = $country
-            ? \common\models\Insurances::find()->joinWith('insuranceCountries')->where(['source_country' => $country->source_country])->all()
-            : \common\models\Insurances::find()->all();
-        // dd( $country);
-        return $this->render('country', [
-            'model' => $model,
-            'country' => $country,
-            'sourceCountry' => $sourceCountry,
-            'insurances' => $insurances,
-        ]);
-    }
+    //     $insurances = $country
+    //         ? \common\models\Insurances::find()->joinWith('insuranceCountries')->where(['source_country' => $country->source_country])->all()
+    //         : \common\models\Insurances::find()->all();
+    //     // dd( $country);
+    //     return $this->render('site/', [
+    //         'model' => $model,
+    //         'country' => $country,
+    //         'sourceCountry' => $sourceCountry,
+    //         'insurances' => $insurances,
+    //     ]);
+    // }
 
 
 
@@ -390,66 +411,77 @@ class InsuranceController extends \yii\web\Controller
                 throw new NotFoundHttpException('No insurance records found.');
             }
         }
-        $country = InsuranceCountries::findOne(['slug' => $slug]);
+        // $country = InsuranceCountries::findOne(['slug' => $slug]);
         $insurance = Insurances::findOne(['slug' => $slug]);
-
-        if ($country === null && $insurance === null) {
-            throw new NotFoundHttpException('The requested page does not exist.');
-        }
+        // if ($country === null && $insurance === null) {
+        //     throw new NotFoundHttpException('The requested page does not exist.');
+        // }
         $model = new InquiryForm();
-
-
-
         return $this->render('programs', [
             'model' => $model,
-            'country' => $country,
+          
             'insurance' => $insurance,
         ]);
     }
 
-    public function actionCheck()
-    {
-        $model = new \yii\base\DynamicModel(['mobile', 'reCaptcha']);
-        $model->addRule(['mobile'], 'required');
-        // 
-        if ($model->load(Yii::$app->request->post())) {
-            // dd(  $model);
-            // $otpAttempts = Yii::$app->session->get('otp_attempts', 0);
+ public function actionCheck()
+{
+    $model = new \yii\base\DynamicModel(['mobile', 'reCaptcha']);
+    $model->addRule(['mobile'], 'required');
+    
+    if ($model->load(Yii::$app->request->post())) {
+        $mobile = $model->mobile;
 
-            // if ($otpAttempts >= 3 && !$model->validate(['reCaptcha'])) {
-            //     Yii::$app->session->setFlash('error', 'CAPTCHA verification failed.');
-            //     return $this->refresh();
+        // Retrieve the customer by mobile number
+        $customer = Customers::findOne(['mobile' => $mobile]);
+
+        if ($customer) {
+            // Check the remaining time for OTP sending
+            // $lastSent = Yii::$app->db->createCommand('SELECT last_sent_at FROM otp_requests WHERE mobile_number=:mobile')
+            //     ->bindValue(':mobile', $mobile)
+            //     ->queryScalar();
+
+            // $currentTime = time();
+            // $remainingTime = 0;
+
+            // if ($lastSent) {
+            //     $lastSentTime = strtotime($lastSent);
+            //     $remainingTime = ($lastSentTime + 300) - $currentTime; // 300 seconds = 5 minutes
+
+            //     if ($remainingTime > 0) {
+            //         Yii::$app->session->setFlash('info', "Please wait {$remainingTime} seconds before requesting a new OTP.");
+            //         return $this->render('policy', ['model' => $model]);
+            //     }
             // }
 
-            // Yii::$app->session->set('otp_attempts', 0);
+            // Send the OTP
+            $response = $this->actionSend($mobile);
+            $responseData = json_decode($response, true);
 
-            $mobile = $model->mobile;
-            // dd( $mobile);
+            if ($responseData && $responseData['status'] == 201) {
+                // Update or insert the OTP request time
+                // Yii::$app->db->createCommand()->insert('otp_requests', [
+                //     'mobile_number' => $mobile,
+                //     'last_sent_at' => date('Y-m-d H:i:s'),
+                // ])->execute();
 
-            $customer = Customers::findOne(['mobile' => $mobile]);
-
-            if ($customer) {
-                $response = $this->actionSend($mobile);
-                $responseData = json_decode($response, true);
-                // dd($responseData);
-                if ($responseData && $responseData['status'] == 201) {
-                    // Yii::$app->session->setFlash('success', 'OTP sent successfully.');
-                    Yii::$app->session->set('mobile', $mobile);
-                    return $this->redirect(['verify-otp']);
-                } else {
-                    Yii::$app->session->setFlash('error', 'Failed to send OTP.');
-                }
+                Yii::$app->session->set('mobile', $mobile);
+                return $this->redirect(['verify-otp']);
             } else {
-                Yii::$app->session->setFlash('error', 'Mobile number not found.');
+                Yii::$app->session->setFlash('error', 'Failed to send OTP.');
             }
-
-            // Yii::$app->session->set('otp_attempts', $otpAttempts + 1);
+        } else {
+            Yii::$app->session->setFlash('error', 'Mobile number not found.');
         }
-
-        return $this->render('policy', [
-            'model' => $model,
-        ]);
     }
+
+    return $this->render('policy', [
+        'model' => $model,
+    ]);
+}
+
+
+
 
 
     // public function actionResend($mobile)
@@ -578,8 +610,8 @@ class InsuranceController extends \yii\web\Controller
 
                 if (isset($responseData['status']) && $responseData['status'] == 200) {
                     // Yii::$app->session->setFlash('success', 'OTP verified successfully.');
-                    Yii::$app->session->remove('mobile');
-
+                    // Yii::$app->session->remove('mobile');
+Yii::$app->session->remove('last_resend_timestamp');
                     return $this->redirect(['display-policy']);
                 } else {
                     Yii::$app->session->setFlash('error', 'Failed to verify OTP.');
@@ -656,26 +688,26 @@ class InsuranceController extends \yii\web\Controller
     public function actionContact()
     {
         $model = new \yii\base\DynamicModel(['name', 'email', 'message', 'mobile']);
-        $model->addRule(['name', 'email', 'message','mobile'], 'required')
+        $model->addRule(['name', 'email', 'message', 'mobile'], 'required')
             ->addRule('email', 'email');
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             // dd( $model);
             $email = filter_var($model->email, FILTER_VALIDATE_EMAIL) ? $model->email : 'no-reply@example.com';
             $name = !empty($model->name) ? $model->name : 'Unknown';
-$message=$model->message;
-$mobile=$model->mobile;
+            $message = $model->message;
+            $mobile = $model->mobile;
             Yii::$app->mailer->compose()
                 ->setTo('shatha.rababah@releans.com')
-                ->setFrom([$email=>$name])
+                ->setFrom([$email => $name])
                 ->setSubject('Contact Form Submission')
-                ->setHtmlBody('<b>Hay</b>' .$name.'</br>'. $message.'<br>'.$mobile)
+                ->setHtmlBody('<b>Hay</b>' . $name . '</br>' . $message . '<br>' . $mobile)
                 ->send();
-                    // Yii::$app->session->setFlash('Thank you for contacting us. We will respond to you as soon as possible.');
-                    Yii::$app->session->setFlash('success', 'Thank you for contacting us. We will respond to you as soon as possible.');
+            // Yii::$app->session->setFlash('Thank you for contacting us. We will respond to you as soon as possible.');
+            Yii::$app->session->setFlash('success', 'Thank you for contacting us. We will respond to you as soon as possible.');
 
             // Yii::$app->session->setFlash('success', 'Thank you for contacting us. We will respond to you as soon as possible.');
-            
+
             return $this->refresh();
         }
 
@@ -1007,7 +1039,7 @@ $mobile=$model->mobile;
 
         $response = curl_exec($ch);
         curl_close($ch);
-        // dd()
+        // dd( json_decode($response, true));
 
         return json_decode($response, true);
     }

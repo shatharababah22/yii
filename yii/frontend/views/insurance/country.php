@@ -435,7 +435,7 @@ $this->title = '360Protect';
                 </div>
                 <div class="col-lg-12">
                     <div class="text-center">
-                        <a href="/insurances" class="btn btn-primary">Get Started</a>
+                        <a href="/" class="btn btn-primary">Get Started</a>
                     </div>
                 </div>
             </div>

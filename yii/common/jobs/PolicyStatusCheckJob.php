@@ -9,16 +9,21 @@ use common\models\Policy;
 use common\models\PolicyDraft;
 use common\models\PolicyDraftPassengers;
 // use yii\db\Transaction;
+
 class PolicyStatusCheckJob extends BaseObject implements JobInterface
 {
     public $id;
     public $policyId;
+    public $policyDraft;
+    public $customer;
+    public $passenger;
+    public $fromCountryName;
+    public $toCountryName;
 
     public function execute($queue)
     {
         $responses = $this->viewPolicy($this->id);
-        // var_dump($responses);
-        // exit;
+
         if ($responses === null) {
             Yii::error("Failed to retrieve policy data for ID: {$this->id}", __METHOD__);
             return;
@@ -39,27 +44,22 @@ class PolicyStatusCheckJob extends BaseObject implements JobInterface
             $policy->PolicyURLLink = $response['PolicyURLLink'] ?? '';
             $policy->status = $response['status'] ?? 1;
             $policy->status_description = $response['status_description'] ?? 'Status Description';
-            if ($policy->save()) {
-                $send =  $this->sendMessage($policy->customer->mobile, $policy->PolicyURLLink);
 
-                // exit;
+            if ($policy->status == 0) {
+                $policy->status_description = 'Canceled';
+            }
+
+            if ($policy->save()) {
+                $send = $this->sendMessage($policy->customer->mobile, $policy->PolicyURLLink);
+
                 if ($send['status'] == 201) {
-                    var_dump($send['status']);
-                    // Yii::$app->db->createCommand()->delete('policy_draft')->execute();
                     PolicyDraft::deleteAll();
                     PolicyDraftPassengers::deleteAll();
-
-                    // Yii::$app->db->createCommand()->delete('draft_draft_passengers')->execute();
-
-
-                    // $transaction->commit();
+                    Yii::$app->session->remove('try');
                 }
             } else {
-
-
-                Yii::error("Customer not found for policy ID: {$this->policyId}", __METHOD__);
-                $try = 0;
-                Yii::$app->session->set('try', $try);
+                Yii::error("Failed to update policy with ID: {$this->policyId}", __METHOD__);
+                Yii::$app->session->set('try', Yii::$app->session->get('try', 0) + 1);
             }
         }
     }

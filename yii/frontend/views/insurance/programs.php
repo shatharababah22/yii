@@ -8,7 +8,56 @@ use yii\bootstrap5\ActiveForm;
 use yii\helpers\Html;
 
 $this->title = $insurance->name;
-?>
+
+
+
+
+
+$flashMessage = Yii::$app->session->getFlash('error');
+if ($flashMessage) {
+    $this->registerJs("
+        $(document).ready(function() {
+            $('#flashMessageContent').text('{$flashMessage}');
+            $('#flashMessageModal').modal('show');
+        });
+    ");
+}
+
+
+?>      <style>.footer-color {
+    background: #2DAE87;
+}
+
+.footer-btn {
+    background: #415762;
+}
+
+/* .check-container {
+    background: white;
+    height: 82px;
+    width: 82px;
+}
+
+.iconheight {
+    height: 36px;
+    width: 36px;
+} */
+
+
+
+.angle::after {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    top: -1px;
+    left: 48%;
+    background: #fff;
+    clip-path: polygon(50% 50%, 0 0, 100% 0);
+}
+</style>
+
+
 <!--hero start-->
 <section class="bg-primary-dark pt-9 right-slant-shape" data-cue="fadeIn">
     <div class="container">
@@ -381,3 +430,77 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 </script>
+
+
+
+
+
+
+<!-- Modal HTML -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+
+<div class="modal fade border rounded shadow-sm" id="flashMessageModal" tabindex="-1" aria-labelledby="flashMessageModalLabel" aria-hidden="true">
+        <div class="modal-dialog ">
+            <div class="modal-content rounded shadow-sm"">
+         
+                <div class="modal-body">
+                <div class="modal-header border-0">
+                    <!-- <h1 class="modal-title fs-5" id="flashMessageModalLabel">Modal title</h1> -->
+                    <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                    <div class="text-center">
+                        <div class="d-flex justify-content-center pb-2">
+                            <div class="check-container d-flex justify-content-center align-items-center ">
+                                <img class="iconheight" src="https://cdn-icons-png.flaticon.com/512/7466/7466073.png" alt="check-lg" width="25%" height="90%">
+                            </div>
+                        </div>
+                        <h3 class="fw-bold" style="color: #0F172A;">No Data Available</h3>
+
+                        <small class="fw-bold">
+    It seems there are no available options for your current selection. Please try changing the departure, arrival countries, and so on to see supported options.
+</small>
+
+                    </div>
+                </div>
+                <div class="modal-footer border-0 justify-content-center footer-color rounded-0 position-relative">
+                    <div class="angle "></div>
+                    <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
+                    <!-- <div class="text-center p-4 "> -->
+                    <!-- <p class="text-muted">For example, you might try selecting different countries to find available options, such as from Jordan to Lebanon.</p> -->
+                    <!-- <style>
+    .btn-custom-close {
+        background-color: #f8f9fa; 
+        border: 1px solid #dee2e6; 
+        color: #0F172A; 
+        font-size: 1.5rem; 
+        line-height: 1; 
+        width:80%; 
+        height:23%; 
+        display: flex; 
+        align-items: center;
+        justify-content: center; 
+        border-radius: 10%; 
+    }
+
+    .btn-custom-close:hover {
+        background-color: #e9ecef; 
+        color: #0056b3;
+    }
+
+    .btn-custom-close:focus {
+        box-shadow: none; 
+    }
+</style> -->
+
+<!-- <button type="button" class="btn btn-custom-close shadow-none  rounded-0 px-5" data-bs-dismiss="modal" aria-label="Close">
+   Close
+</button> -->
+
+                    <!-- </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
