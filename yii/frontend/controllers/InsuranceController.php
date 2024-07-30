@@ -51,7 +51,7 @@ class InsuranceController extends \yii\web\Controller
         }
         // dd($model);
         if ($model->load(Yii::$app->request->post())) {
-           
+
             $passengers = $model->adult + $model->children;
             $pricing = Pricing::find()
                 ->where(['plan_id' => $model->plan])
@@ -66,38 +66,38 @@ class InsuranceController extends \yii\web\Controller
             //     Yii::$app->session->setFlash('error', 'No pricing found for selected plan and duration.');
             //     return $this->refresh(); 
             // }
-// dd($model->from_country);
-        
+            // dd($model->from_country);
+
             $draft = new PolicyDraft();
             $draft->insurance_id = $model->type;
             $draft->plan_id = $model->plan;
             $draft->DepartCountryCode = $model->from_country;
             $draft->ArrivalCountryCode = $model->to_country;
 
-            $departureDateFormat = 'd/m/Y'; 
+            $departureDateFormat = 'd/m/Y';
             $departureDate = DateTime::createFromFormat($departureDateFormat, $model->date);
 
-         
+
             if ($departureDate === false) {
-               
+
                 $errors = DateTime::getLastErrors();
-                var_dump($errors); 
+                var_dump($errors);
                 die('Failed to parse departure date.');
             }
 
-          
+
             $timestamp = $departureDate->getTimestamp();
             $duration = '+' . ($model->duration - 1) . ' day';
             $draft->return_date = date('Y-m-d', strtotime($duration, $timestamp));
 
-          
+
             $draft->departure_date = $departureDate->format('Y-m-d'); // Store in Y-m-d format
             $draft->adult = $model->adult;
             $draft->children = $model->children;
             $draft->infant = $model->infants;
             $draft->price = $price * $passengers;
 
-      
+
             if ($draft->save()) {
                 return $this->redirect(['insurance/passengers', 'draft' => $draft->id]);
             } else {
@@ -182,7 +182,7 @@ class InsuranceController extends \yii\web\Controller
                 'status' => $price ? $price->status : 'Pricing::STATUS_INACTIVE',
             ];
         }
-        if (empty($options )) {
+        if (empty($options)) {
             Yii::$app->session->setFlash('error', 'No plans are available for the selected options.');
             return $this->redirect(Yii::$app->getRequest()->getReferrer());
         }
@@ -208,25 +208,25 @@ class InsuranceController extends \yii\web\Controller
 
     public function actionRetake($id, $policyId)
     {
-       
+
         $policy = PolicyDraft::findOne(['id' => $policyId]);
-    
+
         if ($policy === null) {
             throw new \yii\web\NotFoundHttpException('The requested policy draft does not exist.');
         }
-    
-    
+
+
         $passengers = PolicyDraftPassengers::findAll(['draft_id' => $policyId]);
-    
+
         foreach ($passengers as $passenger) {
             $passenger->delete();
         }
-    
-   
+
+
         return $this->redirect(['insurance/passengers', 'draft' => $policy->id]);
     }
-    
-    
+
+
     // protected function getCountryName($countryCode)
     // {
 
@@ -290,18 +290,18 @@ class InsuranceController extends \yii\web\Controller
 
         if ($model->load(Yii::$app->request->post()) && $policy->load(Yii::$app->request->post())) {
             $policy->save();
-        
-            $allFilesProcessed = true; 
-        
+
+            $allFilesProcessed = true;
+
             foreach ($attr as $item) {
                 // dd($attr['i']);
-                $files = UploadedFile::getInstances($model, $item); 
-        
+                $files = UploadedFile::getInstances($model, $item);
+
                 foreach ($files as $file) {
                     if ($file !== null) {
-                        $fileName = $file->baseName . '.' . $file->extension;
+                        $fileName = $file->baseName . '.' .time(). $file->extension;
                         $path = Yii::getAlias('@webroot/uploads/') . $fileName;
-        
+
                         if ($file->saveAs($path)) {
                             $post = [
                                 'file_base64' => base64_encode(file_get_contents($path)),
@@ -311,20 +311,20 @@ class InsuranceController extends \yii\web\Controller
                                 'verify_expiry' => true,
                                 'type' => "IPD"
                             ];
-        
+
                             $ch = curl_init();
                             curl_setopt($ch, CURLOPT_URL, 'https://api.idanalyzer.com');
                             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                             curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($post));
                             $response = curl_exec($ch);
                             curl_close($ch);
-        
+
                             $json_request = json_decode($response, true);
-        
+
                             if (isset($json_request['error'])) {
                                 Yii::$app->session->setFlash('error', $json_request['error']['message'] . ' (File: ' . $fileName . ')');
                                 $allFilesProcessed = false;
-                                break 2; 
+                                break 2;
                             } elseif ($json_request['verification']['passed']) {
                                 $dob = $json_request['result']['dob'] ?? "null";
                                 $PolicyDraftPassengers = new PolicyDraftPassengers();
@@ -338,32 +338,32 @@ class InsuranceController extends \yii\web\Controller
                                 $PolicyDraftPassengers->country = $json_request['result']['issuerOrg_iso2'] ?? "null";
                                 $PolicyDraftPassengers->nationality = $json_request['result']['nationality_iso2'] ?? "null";
                                 $PolicyDraftPassengers->gender = $json_request['result']['sex'] ?? "null";
-        
+
                                 $PolicyDraftPassengers->gender = ($PolicyDraftPassengers->gender == 'M') ? 'Male' : 'Female';
                                 $PolicyDraftPassengers->id_type = ($PolicyDraftPassengers->id_type == 'P') ? 'Passport' : $PolicyDraftPassengers->id_type;
                                 $PolicyDraftPassengers->warning = isset($json_request['authentication']['warning']) ? implode(',', $json_request['authentication']['warning']) : "null";
                                 $PolicyDraftPassengers->document_link = '/uploads/' . $fileName;
                                 $PolicyDraftPassengers->save();
                             } else {
-                            //   dd("shatha");
+                                //   dd("shatha");
                                 Yii::$app->session->setFlash('error', join(" and ", $json_request['authentication']['warning']));
-                                $allFilesProcessed = false; 
-                                break; 
+                                $allFilesProcessed = false;
+                                break;
                             }
                         } else {
                             Yii::$app->session->setFlash('error', 'Failed to save file: ' . $file->name);
-                            $allFilesProcessed = false; 
-                            break; 
+                            $allFilesProcessed = false;
+                            break;
                         }
                     }
                 }
             }
-        
+
             if ($allFilesProcessed) {
                 return $this->redirect(['review', 'draft' => $policy->id]);
             }
         }
-        
+
 
 
         return $this->render('passengers', [
@@ -435,66 +435,66 @@ class InsuranceController extends \yii\web\Controller
         $model = new InquiryForm();
         return $this->render('programs', [
             'model' => $model,
-          
+
             'insurance' => $insurance,
         ]);
     }
 
- public function actionCheck()
-{
-    $model = new \yii\base\DynamicModel(['mobile', 'reCaptcha']);
-    $model->addRule(['mobile'], 'required');
-    
-    if ($model->load(Yii::$app->request->post())) {
-        $mobile = $model->mobile;
+    public function actionCheck()
+    {
+        $model = new \yii\base\DynamicModel(['mobile', 'reCaptcha']);
+        $model->addRule(['mobile'], 'required');
 
-        // Retrieve the customer by mobile number
-        $customer = Customers::findOne(['mobile' => $mobile]);
+        if ($model->load(Yii::$app->request->post())) {
+            $mobile = $model->mobile;
 
-        if ($customer) {
-            // Check the remaining time for OTP sending
-            // $lastSent = Yii::$app->db->createCommand('SELECT last_sent_at FROM otp_requests WHERE mobile_number=:mobile')
-            //     ->bindValue(':mobile', $mobile)
-            //     ->queryScalar();
+            // Retrieve the customer by mobile number
+            $customer = Customers::findOne(['mobile' => $mobile]);
 
-            // $currentTime = time();
-            // $remainingTime = 0;
+            if ($customer) {
+                // Check the remaining time for OTP sending
+                // $lastSent = Yii::$app->db->createCommand('SELECT last_sent_at FROM otp_requests WHERE mobile_number=:mobile')
+                //     ->bindValue(':mobile', $mobile)
+                //     ->queryScalar();
 
-            // if ($lastSent) {
-            //     $lastSentTime = strtotime($lastSent);
-            //     $remainingTime = ($lastSentTime + 300) - $currentTime; // 300 seconds = 5 minutes
+                // $currentTime = time();
+                // $remainingTime = 0;
 
-            //     if ($remainingTime > 0) {
-            //         Yii::$app->session->setFlash('info', "Please wait {$remainingTime} seconds before requesting a new OTP.");
-            //         return $this->render('policy', ['model' => $model]);
-            //     }
-            // }
+                // if ($lastSent) {
+                //     $lastSentTime = strtotime($lastSent);
+                //     $remainingTime = ($lastSentTime + 300) - $currentTime; // 300 seconds = 5 minutes
 
-            // Send the OTP
-            $response = $this->actionSend($mobile);
-            $responseData = json_decode($response, true);
+                //     if ($remainingTime > 0) {
+                //         Yii::$app->session->setFlash('info', "Please wait {$remainingTime} seconds before requesting a new OTP.");
+                //         return $this->render('policy', ['model' => $model]);
+                //     }
+                // }
 
-            if ($responseData && $responseData['status'] == 201) {
-                // Update or insert the OTP request time
-                // Yii::$app->db->createCommand()->insert('otp_requests', [
-                //     'mobile_number' => $mobile,
-                //     'last_sent_at' => date('Y-m-d H:i:s'),
-                // ])->execute();
+                // Send the OTP
+                $response = $this->actionSend($mobile);
+                $responseData = json_decode($response, true);
 
-                Yii::$app->session->set('mobile', $mobile);
-                return $this->redirect(['verify-otp']);
+                if ($responseData && $responseData['status'] == 201) {
+                    // Update or insert the OTP request time
+                    // Yii::$app->db->createCommand()->insert('otp_requests', [
+                    //     'mobile_number' => $mobile,
+                    //     'last_sent_at' => date('Y-m-d H:i:s'),
+                    // ])->execute();
+
+                    Yii::$app->session->set('mobile', $mobile);
+                    return $this->redirect(['verify-otp']);
+                } else {
+                    Yii::$app->session->setFlash('error', 'Failed to send OTP.');
+                }
             } else {
-                Yii::$app->session->setFlash('error', 'Failed to send OTP.');
+                Yii::$app->session->setFlash('error', 'Mobile number not found.');
             }
-        } else {
-            Yii::$app->session->setFlash('error', 'Mobile number not found.');
         }
-    }
 
-    return $this->render('policy', [
-        'model' => $model,
-    ]);
-}
+        return $this->render('policy', [
+            'model' => $model,
+        ]);
+    }
 
 
 
@@ -627,7 +627,7 @@ class InsuranceController extends \yii\web\Controller
                 if (isset($responseData['status']) && $responseData['status'] == 200) {
                     // Yii::$app->session->setFlash('success', 'OTP verified successfully.');
                     // Yii::$app->session->remove('mobile');
-Yii::$app->session->remove('last_resend_timestamp');
+                    Yii::$app->session->remove('last_resend_timestamp');
                     return $this->redirect(['display-policy']);
                 } else {
                     Yii::$app->session->setFlash('error', 'Failed to verify OTP.');
