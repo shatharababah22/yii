@@ -199,23 +199,26 @@ class InsuranceController extends \yii\web\Controller
     }
 
 
-    public function actionRetake($id,$policyId)
+    public function actionRetake($id, $policyId)
     {
-        // dd('shatha');
-        // dd($id,$policyId);
-        $policy = PolicyDraft::findOne(['id'=>$policyId]);
+       
+        $policy = PolicyDraft::findOne(['id' => $policyId]);
     
         if ($policy === null) {
             throw new \yii\web\NotFoundHttpException('The requested policy draft does not exist.');
         }
     
-        $passenger = PolicyDraftPassengers::findOne(['id' => $id]);
-        if ($passenger !== null) {
+    
+        $passengers = PolicyDraftPassengers::findAll(['draft_id' => $policyId]);
+    
+        foreach ($passengers as $passenger) {
             $passenger->delete();
         }
     
-        return $this->redirect(['insurance/passengers', 'draft' =>$policy->id]);
+   
+        return $this->redirect(['insurance/passengers', 'draft' => $policy->id]);
     }
+    
     
     // protected function getCountryName($countryCode)
     // {
@@ -280,74 +283,80 @@ class InsuranceController extends \yii\web\Controller
 
         if ($model->load(Yii::$app->request->post()) && $policy->load(Yii::$app->request->post())) {
             $policy->save();
-
+        
+            $allFilesProcessed = true; 
+        
             foreach ($attr as $item) {
-                $model->$item = UploadedFile::getInstance($model, $item);
-
-                $file = $model->$item;
-                if ($file !== null) {
-                    $fileName = rand() . '-' . strtotime(date('Y-m-d H:i:s')) . '.' . $file->extension;
-                    $path = Yii::getAlias('@webroot/uploads/') . $fileName;
-
-                    if ($file->saveAs($path)) {
-                        $post = [
-                            'file_base64' => base64_encode(file_get_contents($path)),
-                            'apikey' => 'pS2xHPtEAwqbspQBxFBYKpFIO54pqwNg',
-                            'authenticate' => true,
-                            'authenticate_module' => 2,
-                            'verify_expiry' => true,
-                            'type' => "IPD"
-                        ];
-
-                        $ch = curl_init();
-                        curl_setopt($ch, CURLOPT_URL, 'https://api.idanalyzer.com');
-                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($post));
-                        $response = curl_exec($ch);
-                        curl_close($ch);
-
-                        $json_request = json_decode($response, true);
-                        // dd($json_request);
-
-
-                        if (isset($json_request['error'])) {
-                            Yii::$app->session->setFlash('error', $json_request['error']['message']);
-                        } elseif ($json_request['verification']['passed']) {
-                            $dob = $json_request['result']['dob'] ?? "null";
-                            $PolicyDraftPassengers = new PolicyDraftPassengers();
-                            $PolicyDraftPassengers->draft_id = $policy->id;
-                            $PolicyDraftPassengers->id_number = $json_request['result']['documentNumber'] ?? "null";
-                            $PolicyDraftPassengers->first_name = $json_request['result']['firstName'] ?? "null";
-                            $PolicyDraftPassengers->middle_name = $json_request['result']['middleName'] ?? "null";
-                            $PolicyDraftPassengers->last_name = $json_request['result']['lastName'] ?? "null";
-                            $PolicyDraftPassengers->dob = $dob;
-                            $PolicyDraftPassengers->id_type = $json_request['result']['documentType'] ?? "null";
-                            $PolicyDraftPassengers->country = $json_request['result']['issuerOrg_iso2'] ?? "null";
-                            $PolicyDraftPassengers->nationality = $json_request['result']['nationality_iso2'] ?? "null";
-                            $PolicyDraftPassengers->gender = $json_request['result']['sex'] ?? "null";
-
-
-                            if ($PolicyDraftPassengers->gender == 'M') {
-                                $PolicyDraftPassengers->gender = 'Male';
+                // dd($attr['i']);
+                $files = UploadedFile::getInstances($model, $item); 
+        
+                foreach ($files as $file) {
+                    if ($file !== null) {
+                        $fileName = $file->baseName . '.' . $file->extension;
+                        $path = Yii::getAlias('@webroot/uploads/') . $fileName;
+        
+                        if ($file->saveAs($path)) {
+                            $post = [
+                                'file_base64' => base64_encode(file_get_contents($path)),
+                                'apikey' => 'pS2xHPtEAwqbspQBxFBYKpFIO54pqwNg',
+                                'authenticate' => true,
+                                'authenticate_module' => 2,
+                                'verify_expiry' => true,
+                                'type' => "IPD"
+                            ];
+        
+                            $ch = curl_init();
+                            curl_setopt($ch, CURLOPT_URL, 'https://api.idanalyzer.com');
+                            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($post));
+                            $response = curl_exec($ch);
+                            curl_close($ch);
+        
+                            $json_request = json_decode($response, true);
+        
+                            if (isset($json_request['error'])) {
+                                Yii::$app->session->setFlash('error', $json_request['error']['message'] . ' (File: ' . $fileName . ')');
+                                $allFilesProcessed = false;
+                                break 2; 
+                            } elseif ($json_request['verification']['passed']) {
+                                $dob = $json_request['result']['dob'] ?? "null";
+                                $PolicyDraftPassengers = new PolicyDraftPassengers();
+                                $PolicyDraftPassengers->draft_id = $policy->id;
+                                $PolicyDraftPassengers->id_number = $json_request['result']['documentNumber'] ?? "null";
+                                $PolicyDraftPassengers->first_name = $json_request['result']['firstName'] ?? "null";
+                                $PolicyDraftPassengers->middle_name = $json_request['result']['middleName'] ?? "null";
+                                $PolicyDraftPassengers->last_name = $json_request['result']['lastName'] ?? "null";
+                                $PolicyDraftPassengers->dob = $dob;
+                                $PolicyDraftPassengers->id_type = $json_request['result']['documentType'] ?? "null";
+                                $PolicyDraftPassengers->country = $json_request['result']['issuerOrg_iso2'] ?? "null";
+                                $PolicyDraftPassengers->nationality = $json_request['result']['nationality_iso2'] ?? "null";
+                                $PolicyDraftPassengers->gender = $json_request['result']['sex'] ?? "null";
+        
+                                $PolicyDraftPassengers->gender = ($PolicyDraftPassengers->gender == 'M') ? 'Male' : 'Female';
+                                $PolicyDraftPassengers->id_type = ($PolicyDraftPassengers->id_type == 'P') ? 'Passport' : $PolicyDraftPassengers->id_type;
+                                $PolicyDraftPassengers->warning = isset($json_request['authentication']['warning']) ? implode(',', $json_request['authentication']['warning']) : "null";
+                                $PolicyDraftPassengers->document_link = '/uploads/' . $fileName;
+                                $PolicyDraftPassengers->save();
                             } else {
-                                $PolicyDraftPassengers->gender = 'Female';
+                            //   dd("shatha");
+                                Yii::$app->session->setFlash('error', join(" and ", $json_request['authentication']['warning']));
+                                $allFilesProcessed = false; 
+                                break; 
                             }
-
-                            if ($PolicyDraftPassengers->id_type == 'P') {
-                                $PolicyDraftPassengers->id_type = 'Passport';
-                            }
-                            $PolicyDraftPassengers->warning = isset($json_request['authentication']['warning']) ? implode(',', $json_request['authentication']['warning']) : "null";
-                            $PolicyDraftPassengers->document_link = '/uploads/' . $fileName;
-                            $PolicyDraftPassengers->save();
-                      
-                            return $this->redirect(['review', 'draft' => $policy->id]);
                         } else {
-                            Yii::$app->session->setFlash('error', join(" and ", $json_request['authentication']['warning']));
+                            Yii::$app->session->setFlash('error', 'Failed to save file: ' . $file->name);
+                            $allFilesProcessed = false; 
+                            break; 
                         }
                     }
                 }
             }
+        
+            if ($allFilesProcessed) {
+                return $this->redirect(['review', 'draft' => $policy->id]);
+            }
         }
+        
 
 
         return $this->render('passengers', [

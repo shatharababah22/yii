@@ -15,21 +15,21 @@ return [
         'request' => [
             'csrfParam' => '_csrf-frontend',
         ],
-   'mailer' => [
+        'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
             'viewPath' => '@common/mail',
             'useFileTransport' => false, // Set to false to send real emails
             'transport' => [
                 'class' => 'Swift_SmtpTransport',
-                'host' => 'smtp.gmail.com', 
+                'host' => 'smtp.gmail.com',
                 'username' => 'shatha.rababah@releans.com',
                 'password' => 'pypgbaxtfgguzyze',
-               
-                'port' => '587', 
-                'encryption' => 'tls', 
+
+                'port' => '587',
+                'encryption' => 'tls',
             ],
- 
- 
+
+
         ],
         'reCaptcha' => [
             'class' => 'himiklab\yii2\recaptcha\ReCaptchaConfig',
