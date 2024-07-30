@@ -41,7 +41,7 @@ AppAsset::register($this);
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
-    <script src="/js/vendors/color-modes.js"></script>
+    <!-- <script src="/js/vendors/color-modes.js"></script> -->
 
 </head>
 
