@@ -32,7 +32,6 @@ class m240627_120409_create_policy_table extends Migration
             'updated_at' => $this->integer()->notNull(),
             'source' => $this->integer()->null(),
             'price' => $this->decimal(10, 2)->null(),
-            'slug' => $this->string()->notNull(),
         ]);
 
         // creates index for column `customer_id`

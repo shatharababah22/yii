@@ -43,9 +43,15 @@ class InsuranceController extends \yii\web\Controller
 
         $fromCountryName = $this->getCountryName($model->from_country);
         $toCountryName = $this->getCountryName($model->to_country);
+
+        if ($model->from_country === $model->to_country) {
+            // dd( $model->to_country );
+            Yii::$app->session->setFlash('error', 'Departure and arrival countries cannot be the same.');
+            return $this->redirect(Yii::$app->getRequest()->getReferrer());
+        }
         // dd($model);
         if ($model->load(Yii::$app->request->post())) {
-
+           
             $passengers = $model->adult + $model->children;
             $pricing = Pricing::find()
                 ->where(['plan_id' => $model->plan])
@@ -60,13 +66,14 @@ class InsuranceController extends \yii\web\Controller
             //     Yii::$app->session->setFlash('error', 'No pricing found for selected plan and duration.');
             //     return $this->refresh(); 
             // }
+// dd($model->from_country);
+        
             $draft = new PolicyDraft();
             $draft->insurance_id = $model->type;
             $draft->plan_id = $model->plan;
             $draft->DepartCountryCode = $model->from_country;
             $draft->ArrivalCountryCode = $model->to_country;
 
-  
             $departureDateFormat = 'd/m/Y'; 
             $departureDate = DateTime::createFromFormat($departureDateFormat, $model->date);
 
@@ -175,7 +182,7 @@ class InsuranceController extends \yii\web\Controller
                 'status' => $price ? $price->status : 'Pricing::STATUS_INACTIVE',
             ];
         }
-        if (empty($options)) {
+        if (empty($options )) {
             Yii::$app->session->setFlash('error', 'No plans are available for the selected options.');
             return $this->redirect(Yii::$app->getRequest()->getReferrer());
         }
