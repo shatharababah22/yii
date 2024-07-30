@@ -46,7 +46,7 @@ class Policy extends \yii\db\ActiveRecord
         return [
             TimestampBehavior::class,
             'class' => SluggableBehavior::class,
-            'attribute' => 'id', 
+            'attribute' => 'source', 
             'slugAttribute' => 'slug',
         ];
 
