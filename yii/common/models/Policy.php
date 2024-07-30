@@ -4,7 +4,7 @@ namespace common\models;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
-
+use yii\behaviors\SluggableBehavior;
 /**
  * This is the model class for table "policy".
  *
@@ -45,7 +45,12 @@ class Policy extends \yii\db\ActiveRecord
     {
         return [
             TimestampBehavior::class,
+            'class' => SluggableBehavior::class,
+            'attribute' => 'id', 
+            'slugAttribute' => 'slug',
         ];
+
+        
     }
     /**
      * {@inheritdoc}
@@ -69,6 +74,7 @@ class Policy extends \yii\db\ActiveRecord
         ];
     }
 
+    
     /**
      * {@inheritdoc}
      */
