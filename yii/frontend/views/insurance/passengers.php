@@ -30,7 +30,7 @@ $this->title = 'Trip Details Submission';
     <div class="container mt-1">
         <div class="row">
             <div class="col-lg-10 offset-lg-1 col-md-12 col-12">
-            <?= Alert::widget() ?>
+                <?= Alert::widget() ?>
                 <div class="row g-xl-7 gy-5">
                     <div class="col-md-7 col-12">
                         <div class="card shadow-sm">
@@ -40,9 +40,7 @@ $this->title = 'Trip Details Submission';
                                     <?= $form->field($policy, 'from_airport')->dropDownList(
                                         \yii\helpers\ArrayHelper::map(
                                             \common\models\Airports::find()
-                                                ->leftJoin('countries', 'countries.id = airports.country_id')
-                                                ->where(['countries.code' => $policy->DepartCountryCode])
-                                                
+                                                ->leftJoin('countries', 'countries.code = airports.countryCode')->where(['countries.code' => $policy->DepartCountryCode])
                                                 ->all(),
                                             'code',
                                             'name'
@@ -53,9 +51,8 @@ $this->title = 'Trip Details Submission';
                                     <?= $form->field($policy, 'going_to')->dropDownList(
                                         \yii\helpers\ArrayHelper::map(
                                             \common\models\Airports::find()
-                                                ->leftJoin('countries', 'countries.id = airports.country_id')
+                                                ->leftJoin('countries', 'countries.code = airports.countryCode')
                                                 ->where(['countries.code' => $policy->ArrivalCountryCode])
-                                             
                                                 ->all(),
                                             'code',
                                             'name'
@@ -73,12 +70,12 @@ $this->title = 'Trip Details Submission';
                                     <?= $form->field($policy, 'email')->textInput() ?>
                                 </div>
                                 <div class="col-md-6">
-                                <?= $form->field($policy, 'mobile')->widget(PhoneInput::class, [
-                                            'jsOptions' => [
-                                                'preferredCountries' => ['jo'],
-                                                'class' => '',
-                                            ]
-                                        ]); ?>
+                                    <?= $form->field($policy, 'mobile')->widget(PhoneInput::class, [
+                                        'jsOptions' => [
+                                            'preferredCountries' => ['jo'],
+                                            'class' => '',
+                                        ]
+                                    ]); ?>
                                 </div>
                                 <div class="d-grid">
                                     <?= Html::submitButton('Review', ['class' => 'btn w-100 btn-primary text-white', 'name' => 'login-button']) ?>
@@ -111,7 +108,7 @@ $this->title = 'Trip Details Submission';
                                         <span>Date: </span>
                                     </div>
                                     <div class="col-md-6 text-end">
-                                        <span class="fw-bold"><?=  $policy->departure_date  ?></span>
+                                        <span class="fw-bold"><?= $policy->departure_date  ?></span>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -119,7 +116,7 @@ $this->title = 'Trip Details Submission';
                                         <span>Return Date: </span>
                                     </div>
                                     <div class="col-md-6 text-end">
-                                        <span class="fw-bold"><?=  $policy->return_date  ?></span>
+                                        <span class="fw-bold"><?= $policy->return_date  ?></span>
                                     </div>
                                 </div>
                                 <div class="row">
