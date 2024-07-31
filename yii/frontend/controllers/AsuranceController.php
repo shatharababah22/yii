@@ -221,7 +221,7 @@ class AsuranceController extends \yii\web\Controller
         }
 
 
-        return $this->redirect(['Asurance/passengers', 'draft' => $policy->id]);
+        return $this->redirect(['insurance/passengers', 'draft' => $policy->id]);
     }
 
 
@@ -272,8 +272,92 @@ class AsuranceController extends \yii\web\Controller
 
             $allFilesProcessed = true;
 
+            //             foreach ($attr as $item) {
+            //                 // dd($attr['i']);
+            //                 $files = UploadedFile::getInstances($model, $item);
+
+            //                 foreach ($files as $file) {
+            //                     if ($file !== null) {
+            //                         $fileName = $file->baseName . '.' . time() . $file->extension;
+            //                         $path = Yii::getAlias('@webroot/uploads/') . $fileName;
+
+            //                         if ($file->saveAs($path)) {
+            //                             $post = [
+            //                                 'file_base64' => base64_encode(file_get_contents($path)),
+            //                                 'apikey' => 'pS2xHPtEAwqbspQBxFBYKpFIO54pqwNg',
+            //                                 'authenticate' => true,
+            //                                 'authenticate_module' => 2,
+            //                                 'verify_expiry' => true,
+            //                                 'type' => "IPD"
+            //                             ];
+
+            //                             $ch = curl_init();
+            //                             curl_setopt($ch, CURLOPT_URL, 'https://api.idanalyzer.com');
+            //                             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            //                             curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($post));
+            //                             $response = curl_exec($ch);
+            //                             curl_close($ch);
+
+            //                             $json_request = json_decode($response, true);
+
+            //                             if (isset($json_request['error'])) {
+            //                                 Yii::$app->session->setFlash('error', $json_request['error']['message'] . ' (File: ' . $fileName . ')');
+            //                                 $allFilesProcessed = false;
+            //                                 // PolicyDraftPassengers::deleteAll(['draft_id' => $policy->id]);
+
+            //                                 break 2;
+            //                             } elseif ($json_request['verification']['passed']) {
+            //                                 $existingRecord = PolicyDraftPassengers::find()->where(['draft_id' => $policy->id])->one();
+
+
+            // if ($existingRecord === null) {
+            //     $dob = $json_request['result']['dob'] ?? "null";
+            //     $PolicyDraftPassengers = new PolicyDraftPassengers();
+            //     $PolicyDraftPassengers->draft_id = $policy->id;
+            //     $PolicyDraftPassengers->id_number = $json_request['result']['documentNumber'] ?? "null";
+            //     $PolicyDraftPassengers->first_name = $json_request['result']['firstName'] ?? "null";
+            //     $PolicyDraftPassengers->middle_name = $json_request['result']['middleName'] ?? "null";
+            //     $PolicyDraftPassengers->last_name = $json_request['result']['lastName'] ?? "null";
+            //     $PolicyDraftPassengers->dob = $dob;
+            //     $PolicyDraftPassengers->id_type = $json_request['result']['documentType'] ?? "null";
+            //     $PolicyDraftPassengers->country = $json_request['result']['issuerOrg_iso2'] ?? "null";
+            //     $PolicyDraftPassengers->nationality = $json_request['result']['nationality_iso2'] ?? "null";
+            //     $PolicyDraftPassengers->gender = $json_request['result']['sex'] ?? "null";
+
+            //     $PolicyDraftPassengers->gender = ($PolicyDraftPassengers->gender == 'M') ? 'Male' : 'Female';
+            //     $PolicyDraftPassengers->id_type = ($PolicyDraftPassengers->id_type == 'P') ? 'Passport' : $PolicyDraftPassengers->id_type;
+            //     $PolicyDraftPassengers->warning = isset($json_request['authentication']['warning']) ? implode(',', $json_request['authentication']['warning']) : "null";
+            //     $PolicyDraftPassengers->document_link = '/uploads/' . $fileName;
+            // $PolicyDraftPassengers->save();
+            // }
+            //                                 // $PolicyDraftPassengers->save();
+            //                                 // $policydraft= PolicyDraftPassengers::findAll((['draft_id' => $policy->id]));
+            //                                 // if( !empty($policydraft) ){
+            //                                 //     foreach($policydraft as $policy){
+
+            //                                 //     }
+            //                                 // }
+            //                             } else {
+            //                                 //   dd("shatha");
+            //                                 Yii::$app->session->setFlash('error', join(" and ", $json_request['authentication']['warning']));
+
+            //                                 $allFilesProcessed = false;
+
+            //                                 break;
+            //                             }
+            //                         } else {
+            //                             Yii::$app->session->setFlash('error', 'Failed to save file: ' . $file->name);
+            //                             $allFilesProcessed = false;
+            //                             // PolicyDraftPassengers::deleteAll(['draft_id' => $policy->id]);
+
+            //                             break;
+            //                         }
+            //                     }
+            //                 }
+            //             }
+
+
             foreach ($attr as $item) {
-                // dd($attr['i']);
                 $files = UploadedFile::getInstances($model, $item);
 
                 foreach ($files as $file) {
@@ -303,46 +387,54 @@ class AsuranceController extends \yii\web\Controller
                             if (isset($json_request['error'])) {
                                 Yii::$app->session->setFlash('error', $json_request['error']['message'] . ' (File: ' . $fileName . ')');
                                 $allFilesProcessed = false;
-                                PolicyDraftPassengers::deleteAll(['draft_id' => $policy->id]);
-
                                 break 2;
                             } elseif ($json_request['verification']['passed']) {
-                                $dob = $json_request['result']['dob'] ?? "null";
-                                $PolicyDraftPassengers = new PolicyDraftPassengers();
-                                $PolicyDraftPassengers->draft_id = $policy->id;
-                                $PolicyDraftPassengers->id_number = $json_request['result']['documentNumber'] ?? "null";
-                                $PolicyDraftPassengers->first_name = $json_request['result']['firstName'] ?? "null";
-                                $PolicyDraftPassengers->middle_name = $json_request['result']['middleName'] ?? "null";
-                                $PolicyDraftPassengers->last_name = $json_request['result']['lastName'] ?? "null";
-                                $PolicyDraftPassengers->dob = $dob;
-                                $PolicyDraftPassengers->id_type = $json_request['result']['documentType'] ?? "null";
-                                $PolicyDraftPassengers->country = $json_request['result']['issuerOrg_iso2'] ?? "null";
-                                $PolicyDraftPassengers->nationality = $json_request['result']['nationality_iso2'] ?? "null";
-                                $PolicyDraftPassengers->gender = $json_request['result']['sex'] ?? "null";
+                                $existingRecord = PolicyDraftPassengers::find()
+                                    ->where(['draft_id' => $policy->id])
+                                    ->andWhere([
+                                        'first_name' => $json_request['result']['firstName'] ?? "null",
+                                        'middle_name' => $json_request['result']['middleName'] ?? "null",
+                                        'last_name' => $json_request['result']['lastName'] ?? "null"
+                                    ])
+                                    ->one();
 
-                                $PolicyDraftPassengers->gender = ($PolicyDraftPassengers->gender == 'M') ? 'Male' : 'Female';
-                                $PolicyDraftPassengers->id_type = ($PolicyDraftPassengers->id_type == 'P') ? 'Passport' : $PolicyDraftPassengers->id_type;
-                                $PolicyDraftPassengers->warning = isset($json_request['authentication']['warning']) ? implode(',', $json_request['authentication']['warning']) : "null";
-                                $PolicyDraftPassengers->document_link = '/uploads/' . $fileName;
-                                $PolicyDraftPassengers->save();
+                                if ($existingRecord === null) {
+                                    $dob = $json_request['result']['dob'] ?? "null";
+                                    $PolicyDraftPassengers = new PolicyDraftPassengers();
+                                    $PolicyDraftPassengers->draft_id = $policy->id;
+                                    $PolicyDraftPassengers->id_number = $json_request['result']['documentNumber'] ?? "null";
+                                    $PolicyDraftPassengers->first_name = $json_request['result']['firstName'] ?? "null";
+                                    $PolicyDraftPassengers->middle_name = $json_request['result']['middleName'] ?? "null";
+                                    $PolicyDraftPassengers->last_name = $json_request['result']['lastName'] ?? "null";
+                                    $PolicyDraftPassengers->dob = $dob;
+                                    $PolicyDraftPassengers->id_type = $json_request['result']['documentType'] ?? "null";
+                                    $PolicyDraftPassengers->country = $json_request['result']['issuerOrg_iso2'] ?? "null";
+                                    $PolicyDraftPassengers->nationality = $json_request['result']['nationality_iso2'] ?? "null";
+                                    $PolicyDraftPassengers->gender = $json_request['result']['sex'] ?? "null";
+
+                                    $PolicyDraftPassengers->gender = ($PolicyDraftPassengers->gender == 'M') ? 'Male' : 'Female';
+                                    $PolicyDraftPassengers->id_type = ($PolicyDraftPassengers->id_type == 'P') ? 'Passport' : $PolicyDraftPassengers->id_type;
+                                    $PolicyDraftPassengers->warning = isset($json_request['authentication']['warning']) ? implode(',', $json_request['authentication']['warning']) : "null";
+                                    $PolicyDraftPassengers->document_link = '/uploads/' . $fileName;
+                                    $PolicyDraftPassengers->save();
+                                } else {
+                                    Yii::$app->session->setFlash('warning', 'A document for this person already exists. You cannot upload another document for the same person. Please try with a different person or document.');
+                                    $allFilesProcessed = false;
+                                }
                             } else {
-                                //   dd("shatha");
                                 Yii::$app->session->setFlash('error', join(" and ", $json_request['authentication']['warning']));
-
                                 $allFilesProcessed = false;
-                                PolicyDraftPassengers::deleteAll(['draft_id' => $policy->id]);
                                 break;
                             }
                         } else {
                             Yii::$app->session->setFlash('error', 'Failed to save file: ' . $file->name);
                             $allFilesProcessed = false;
-                            PolicyDraftPassengers::deleteAll(['draft_id' => $policy->id]);
-
                             break;
                         }
                     }
                 }
             }
+
 
             if ($allFilesProcessed) {
                 return $this->redirect(['review', 'draft' => $policy->id]);
@@ -382,10 +474,11 @@ class AsuranceController extends \yii\web\Controller
             if ($customer) {
 
                 $sessionData = Yii::$app->session->get('session_data', []);
+            
                 $lastResendTimestamp = $sessionData['last_resend_timestamp'] ?? 0;
                 $currentTimestamp = time();
                 $interval = 5 * 60;
-
+                // dd( $currentTimestamp );
                 if ($lastResendTimestamp && ($currentTimestamp - $lastResendTimestamp < $interval)) {
                     $remainingTime = $interval - ($currentTimestamp - $lastResendTimestamp);
                     Yii::$app->session->setFlash('info', "Please wait " . intval($remainingTime / 60) . "m " . ($remainingTime % 60) . "s before requesting a new OTP.");
@@ -425,40 +518,32 @@ class AsuranceController extends \yii\web\Controller
         $lastResendTimestamp = $sessionData['last_resend_timestamp'] ?? 0;
         $currentTimestamp = time();
         $interval = 5 * 60;
-
+    
         if ($lastResendTimestamp && ($currentTimestamp - $lastResendTimestamp < $interval)) {
             Yii::$app->session->setFlash('error', 'You can only resend OTP every 5 minutes.');
             return $this->redirect(['verify-otp']);
         }
-
+    
         $sessionData = [
             'last_resend_timestamp' => $currentTimestamp,
             'mobile_resend' => $mobile,
         ];
-
-
+    
         Yii::$app->session->set('session_data', $sessionData);
-
-
+    
         $response = $this->actionSend($mobile);
         $responseData = json_decode($response, true);
-
+    
         if ($responseData && $responseData['status'] == 201) {
             Yii::$app->session->set('mobile', $mobile);
-            // $lastResendTimestamp = 5 * 60;
-            // Yii::$app->session->remove(
-            //     'session_data'[0],
-            //     'last_resend_timestamp',
-
-            // );
-
             return $this->redirect(['verify-otp']);
         } else {
             Yii::$app->session->setFlash('error', 'Failed to send OTP.');
         }
-
+    
         return $this->redirect(['verify-otp']);
     }
+    
 
 
 
@@ -496,21 +581,79 @@ class AsuranceController extends \yii\web\Controller
     }
 
 
+    // public function actionVerifyOtp()
+    // {
+    //     $model = new \yii\base\DynamicModel(['otp']);
+    //     $model->addRule(['otp'], 'required');
+    //     $mobile = Yii::$app->session->get('mobile');
+
+    //     if ($model->load(Yii::$app->request->post())) {
+
+    //         $otpArray = Yii::$app->request->post('DynamicModel')['otp'];
+    //         $model->otp = implode('', $otpArray);
+
+    //         if ($model->validate()) {
+    //             $otp = $model->otp;
+    //             $curl = curl_init();
+    //             curl_setopt_array($curl, array(
+    //                 CURLOPT_URL => "https://api.releans.com/v2/otp/check",
+    //                 CURLOPT_RETURNTRANSFER => true,
+    //                 CURLOPT_ENCODING => "",
+    //                 CURLOPT_MAXREDIRS => 10,
+    //                 CURLOPT_TIMEOUT => 0,
+    //                 CURLOPT_FOLLOWLOCATION => true,
+    //                 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    //                 CURLOPT_CUSTOMREQUEST => "POST",
+    //                 CURLOPT_POSTFIELDS => "mobile=$mobile&code=$otp",
+    //                 CURLOPT_HTTPHEADER => array(
+    //                     "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6ImEzNWE5MmFmLWVhMGItNGYwNy04ZmMzLWQ2NmM3NWVmOTlkZCIsImlhdCI6MTcyMDA3NzI4MSwiaXNzIjoxOTQ3OH0.-cHxsksuyLILpuuBbKmNAo_TiZSJTwmtjNPF1CeyRug"
+    //                 ),
+    //             ));
+
+    //             $response = curl_exec($curl);
+    //             curl_close($curl);
+
+    //             $responseData = json_decode($response, true);
+
+    //             // $sessionData = Yii::$app->session->get('session_data', []);
+    //             // $lastResendTimestamp = $sessionData['last_resend_timestamp'] ?? 0;
+    //             if (isset($responseData['status']) && $responseData['status'] == 200) {
+    //                 // Yii::$app->session->setFlash('success', 'OTP verified successfully.');
+    //                 // Yii::$app->session->remove('mobile');
+    //                 // $lastResendTimestamp = 5 * 60;
+    //                 // Yii::$app->session->remove(
+    //                 //     'session_data'[0],
+    //                 //     'last_resend_timestamp',
+
+    //                 // );
+
+    //                 return $this->redirect(['display-policy']);
+    //             } else {
+    //                 Yii::$app->session->setFlash('error', 'Failed to verify OTP.');
+    //             }
+    //         }
+    //     }
+
+    //     return $this->render('/insurance/verify-otp', [
+    //         'model' => $model,
+    //         'mobile' => $mobile
+    //     ]);
+    // }
+
     public function actionVerifyOtp()
     {
         $model = new \yii\base\DynamicModel(['otp']);
         $model->addRule(['otp'], 'required');
         $mobile = Yii::$app->session->get('mobile');
-
+    
         if ($model->load(Yii::$app->request->post())) {
-
             $otpArray = Yii::$app->request->post('DynamicModel')['otp'];
             $model->otp = implode('', $otpArray);
-
+    
             if ($model->validate()) {
                 $otp = $model->otp;
                 $curl = curl_init();
-                curl_setopt_array($curl, array(
+                curl_setopt_array($curl, [
                     CURLOPT_URL => "https://api.releans.com/v2/otp/check",
                     CURLOPT_RETURNTRANSFER => true,
                     CURLOPT_ENCODING => "",
@@ -520,42 +663,35 @@ class AsuranceController extends \yii\web\Controller
                     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                     CURLOPT_CUSTOMREQUEST => "POST",
                     CURLOPT_POSTFIELDS => "mobile=$mobile&code=$otp",
-                    CURLOPT_HTTPHEADER => array(
+                    CURLOPT_HTTPHEADER => [
                         "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6ImEzNWE5MmFmLWVhMGItNGYwNy04ZmMzLWQ2NmM3NWVmOTlkZCIsImlhdCI6MTcyMDA3NzI4MSwiaXNzIjoxOTQ3OH0.-cHxsksuyLILpuuBbKmNAo_TiZSJTwmtjNPF1CeyRug"
-                    ),
-                ));
-
+                    ],
+                ]);
+    
                 $response = curl_exec($curl);
                 curl_close($curl);
-
+    
                 $responseData = json_decode($response, true);
-
-                // $sessionData = Yii::$app->session->get('session_data', []);
-                // $lastResendTimestamp = $sessionData['last_resend_timestamp'] ?? 0;
+    
                 if (isset($responseData['status']) && $responseData['status'] == 200) {
-                    // Yii::$app->session->setFlash('success', 'OTP verified successfully.');
-                    // Yii::$app->session->remove('mobile');
-                    // $lastResendTimestamp = 5 * 60;
-                    // Yii::$app->session->remove(
-                    //     'session_data'[0],
-                    //     'last_resend_timestamp',
-
-                    // );
-
+                    // $sessionData = Yii::$app->session->get('session_data', []);
+                    // $sessionData['last_resend_timestamp'] = time() + (5 * 60) + 10;
+                    // Yii::$app->session->set('session_data', $sessionData);
+    // dd(    $sessionData );
+    Yii::$app->session->remove('session_data');
                     return $this->redirect(['display-policy']);
                 } else {
                     Yii::$app->session->setFlash('error', 'Failed to verify OTP.');
                 }
             }
         }
-
+    
         return $this->render('/insurance/verify-otp', [
             'model' => $model,
             'mobile' => $mobile
-        ]);
+        ]); 
     }
-
-
+    
     public function actionContact()
     {
         $model = new \yii\base\DynamicModel(['name', 'email', 'message', 'mobile']);

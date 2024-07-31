@@ -97,7 +97,8 @@ $this->title = 'Your Policy';
         ]
     ); ?>
 <?php else: ?>
-    <p>No PDF available for download.</p>
+  <i class="bi bi-file-earmark-excel"></i>
+    No PDF available for download
 <?php endif; ?>
 
     <!-- <i class="bi bi-file-pdf-fill me-2"></i> -->

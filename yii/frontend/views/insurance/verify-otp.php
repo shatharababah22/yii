@@ -7,7 +7,7 @@
 use yii\bootstrap5\Html;
 use yii\bootstrap5\ActiveForm;
 use yii\helpers\Url;
-
+use common\widgets\Alert;
 $this->title = 'Verify OTP';
 $this->registerJs("
 const inputs = ['input-0', 'input-1', 'input-2', 'input-3'];
@@ -68,12 +68,14 @@ $remainingTime = ($lastResendTimestamp ? max(0, $interval - ($currentTimestamp -
 
 
 <section class="my-5 wrapper ">
+
     <div class="container w-75">
+    <?= Alert::widget() ?>
         <div class="col-sm-8 offset-sm-2 col-lg-6 offset-lg-3 col-xl-6 offset-xl-3 text-center">
             <!-- <div class="logo">
 					<img decoding="async" src="images/logo.png" class="img-fluid" alt="logo">
 				</div> -->
-
+           
             <?php $form = ActiveForm::begin(['options' => ['class' => 'rounded bg-white shadow p-5']]) ?>
 
             <h3 class="text-dark fw-bolder fs-4 mb-2">Two Step Verification</h3>
