@@ -25,14 +25,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'cityName',['options' => ['class' => 'mt-2']])  ?>
 
-    <?= $form->field($model, 'country_id', ['options' => ['class' => 'mt-2']])->dropDownList(
-        \yii\helpers\ArrayHelper::map(
-            \common\models\Countries::find()->all(),
-            'id',
-            'country'
-        ),
-        ['class' => 'form-select','prompt' => 'Select passenger']
-    ) ?>
+
    <div class="offcanvas-footer ">
       <div class="row ">
         <div class="col">

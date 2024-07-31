@@ -95,7 +95,7 @@ if ($flashMessage) {
                     <div class="position-relative">
                         <div class="card shadow-sm">
                             <div class="card-body">
-                                <?php $form = ActiveForm::begin(['action' => '/insurance/travel', 'method' => 'get', 'options' => ['class' => 'row needs-validation g-3']]) ?>
+                                <?php $form = ActiveForm::begin(['action' => '/asurance/travel', 'method' => 'get', 'options' => ['class' => 'row needs-validation g-3']]) ?>
                                 <div class="col-lg-12">
                                     <div class="mb-3">
                                         <h3 class="mb-0 text-center">Get Covered</h3>
@@ -259,7 +259,7 @@ if ($flashMessage) {
                             <?php else : ?>
                                 <div class="flag-placeholder rounded-circle"></div>
                             <?php endif; ?>
-                            <h6 class="my-2 ms-2"><?= $country->source_country ?></h6>
+                            <h6 class="my-2 ms-2"><?=  ucwords(strtolower($country->source_country)) ?></h6>
                         </li>
                     <?php endforeach; ?>
                 </ul>
@@ -315,7 +315,7 @@ if ($flashMessage) {
 
             <?php foreach ($insurances as $insurance) : ?>
                 <div class="col-md-4 mt-5">
-                    <a href="<?= Url::to(['/insurance/programs', 'slug' => $insurance->slug]) ?>" class="card text-bg-light shadow" data-cue="fadeUp">
+                    <a href="<?= Url::to(['/asurance/programs', 'slug' => $insurance->slug]) ?>" class="card text-bg-light shadow" data-cue="fadeUp">
                         <img src="<?= Yii::$app->request->baseUrl ?>/dashboard/images/<?= $insurance->photo ?>" class="card-img" alt="img">
                         <div class="card-img-overlay text-white d-inline-flex justify-content-start align-items-end overlay-dark">
                             <div class="text-capitalize">

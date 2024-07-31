@@ -64,7 +64,7 @@ $this->title = 'Your Policy';
    
             <th><?= Yii::t('app', 'Price') ?></th>
             <th><?= Yii::t('app', 'Status') ?></th>
-
+<th><?= Yii::t('app', 'Your Policy') ?></th>
           </tr>
         </thead>
         <tbody>
@@ -84,9 +84,20 @@ $this->title = 'Your Policy';
                 <td><?= Html::encode($policy->departure_date) ?></td>
                 <td><?= Html::encode($policy->return_date) ?></td>
                 <td><?= $policy->price ?> JD</td>
-                <td><?= Html::encode($policy->status == 0 ? "Waiting activation" : "Active") ?></td>
-    
-
+                <td><?= Html::encode($policy->status === 0 ? "Processing" : "Completed") ?></td>
+                <td>
+    <!-- <i class="bi bi-file-pdf-fill me-2"></i> -->
+    <?= Html::a(
+        '<i class="bi bi-file-pdf-fill"></i> Download',
+        $policy->PolicyURLLink,
+        [
+            // 'class' => 'btn border border-secondary',
+            'target' => '_blank',
+            'download' => true,
+            'data-pjax' => '0', 
+        ]
+    ) ?>
+</td>
               </tr>
             <?php endforeach; ?>
           <?php else : ?>

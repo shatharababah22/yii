@@ -74,7 +74,13 @@ AppAsset::register($this);
                                     <?php foreach ($countries as $country) : ?>
                                         <li>
 
-                                            <?= Html::a(Yii::t('app', $country->source_country), ['/site/index', 'slug' => $country->slug], ['class' => 'dropdown-item', 'data-cue' => 'fadeUp']) ?>
+                                        <?= Html::a(
+    Yii::t('app', 
+        ucwords(strtolower($country->source_country))
+    ), 
+    ['/site/index', 'slug' => $country->slug], 
+    ['class' => 'dropdown-item', 'data-cue' => 'fadeUp']
+) ?>
 
 
                                         </li> <?php endforeach; ?>
@@ -94,10 +100,10 @@ AppAsset::register($this);
 
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="/insurance/check" role="button" aria-expanded="false"><?= Yii::t('app', 'Check Policy') ?></a>
+                                <a class="nav-link" href="/asurance/check" role="button" aria-expanded="false"><?= Yii::t('app', 'Check Policy') ?></a>
                             </li>
                             <li class="nav-item">
-                            <?= Html::a(Yii::t('app', 'Contact us'), ['/insurance/contact'], ['class' => 'nav-link', 'data-cue' => 'fadeUp']) ?>
+                            <?= Html::a(Yii::t('app', 'Contact us'), ['/asurance/contact'], ['class' => 'nav-link', 'data-cue' => 'fadeUp']) ?>
 
                             </li>
                         </ul>
@@ -222,7 +228,7 @@ AppAsset::register($this);
                                     ?>
                                     <?php foreach ($countries as $insurance) : ?>
                                         <li class="mb-2">
-                                            <?= Html::a(Yii::t('app', $insurance->source_country), ['/insurance/type', 'slug' => $insurance->slug], ['class' => 'text-decoration-none', 'style' => 'color:#64748B;']) ?>
+                                            <?= Html::a(Yii::t('app',  ucwords(strtolower($insurance->source_country))), ['/site/index', 'slug' => $insurance->slug], ['class' => 'text-decoration-none', 'style' => 'color:#64748B;']) ?>
 
                                         </li> <?php endforeach; ?>
 
@@ -242,7 +248,7 @@ AppAsset::register($this);
                                 <ul class="list-unstyled mb-0 py-3 py-lg-0">
                                     <li class="mb-2">
 
-                                        <?= Html::a(Yii::t('app', 'Check Policy'), ['/insurance/check'], ['class' => 'text-decoration-none ', 'style' => 'color:#64748B;']) ?>
+                                        <?= Html::a(Yii::t('app', 'Check Policy'), ['/asurance/check'], ['class' => 'text-decoration-none ', 'style' => 'color:#64748B;']) ?>
 
                                     </li>
 
@@ -253,7 +259,7 @@ AppAsset::register($this);
                                 <ul class="list-unstyled mb-0 py-3 py-lg-0">
                                     <li class="mb-2">
 
-                                        <?= Html::a(Yii::t('app', 'Contact us'), ['/insurance/contact'], ['class' => 'text-decoration-none ', 'style' => 'color:#64748B;']) ?>
+                                        <?= Html::a(Yii::t('app', 'Contact us'), ['/asurance/contact'], ['class' => 'text-decoration-none ', 'style' => 'color:#64748B;']) ?>
 
                                     </li>
 

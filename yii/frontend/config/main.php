@@ -74,10 +74,10 @@ return [
             'showScriptName' => false,
             'rules' => [
                 'insurances' => 'insurance/type',
-                // 'insurance/<slug:\w+>' => 'insurance/type/<slug:\w+>',
+                'insurance/<slug>' => 'insurance/programs',
                 // 'insurance/<slug:\w+>' => 'site/programs',
 
-                // 'insurance/countries/<slug>' => 'site/index',
+                'insurance/countries/<slug>' => 'site/index',
                 // 'insurance/travel' => 'insurance/travel',
                 // 'insurance/<slug>' => 'insurance/programs',
 

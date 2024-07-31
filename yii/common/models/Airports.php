@@ -31,11 +31,11 @@ class Airports extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['code', 'name', 'cityCode', 'cityName'], 'required'],
+            [['code', 'name', 'cityCode', 'cityName','countryCode','countryCode'], 'required'],
             [['code', 'cityCode'], 'string', 'max' => 50],
             [['name', 'cityName'], 'string', 'max' => 200],
-            [['country_id'], 'integer'],
-            [['country_id'], 'exist', 'skipOnError' => true, 'targetClass' => Countries::class, 'targetAttribute' => ['country_id' => 'id']],
+            // [['country_id'], 'integer'],
+            // [['country_id'], 'exist', 'skipOnError' => true, 'targetClass' => Countries::class, 'targetAttribute' => ['country_id' => 'id']],
         ];
     }
 
@@ -50,7 +50,9 @@ class Airports extends \yii\db\ActiveRecord
             'name' => Yii::t('app', 'Name'),
             'cityCode' => Yii::t('app', 'City Code'),
             'cityName' => Yii::t('app', 'City Name'),
-            'country_id' => Yii::t('app', 'Country Name'),
+            'countryName' => Yii::t('app', 'Country Name'),
+            'countryCode' => Yii::t('app', 'Country Code'),
+            // 'country_id' => Yii::t('app', 'Country Name'),
         ];
     }
 
@@ -59,10 +61,10 @@ class Airports extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getCountry()
-    {
-        return $this->hasOne(Countries::class, ['id' => 'country_id']);
-    }
+    // public function getCountry()
+    // {
+    //     return $this->hasOne(Countries::class, ['id' => 'country_id']);
+    // }
 
 
     public static function getCountryCodeByAirportCode($airportCode)

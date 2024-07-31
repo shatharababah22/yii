@@ -18,27 +18,17 @@ class m240623_114417_create_airports_table extends Migration
             'name' => $this->string(200),
             'cityCode' => $this->string(50),
             'cityName' => $this->string(200),
-            'country_id' => $this->integer()->notNull(),
+            'countryName' => $this->string(200),
+            'countryCode' => $this->string(200),
+
+          
             
         ]);
 
-        
-        $this->createIndex(
-            '{{%idx-airports-country_id}}',
-            '{{%airports}}',
-            'country_id'
-        );
+  
 
       
-        $this->addForeignKey(
-            '{{%fk-airports-country_id}}',
-            '{{%airports}}',
-            'country_id',
-            '{{%countries}}',
-            'id',
-        
-            'CASCADE'
-        );
+    
     }
 
     /**
@@ -46,19 +36,7 @@ class m240623_114417_create_airports_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropForeignKey(
-            '{{%fk-airports-country_id}}',
-            '{{%airports}}'
-        );
-
-
-
-
-
-        $this->dropIndex(
-            '{{%idx-airports-country_id}}',
-            '{{%airports}}'
-        );
+       
 
         $this->dropTable('{{%airports}}');
     }

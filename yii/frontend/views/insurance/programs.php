@@ -100,7 +100,7 @@ if ($flashMessage) {
                 <div class="row align-items-center g-5">
                     <div class="card shadow-sm">
                         <div class="card-body">
-                            <?php $form = ActiveForm::begin(['action' => '/insurance/travel', 'method' => 'get', 'options' => ['class' => 'row needs-validation g-3']]) ?>
+                            <?php $form = ActiveForm::begin(['action' => '/asurance/travel', 'method' => 'get', 'options' => ['class' => 'row needs-validation g-3']]) ?>
                             <div class="col-lg-12">
                                 <div class="mb-3">
                                     <h3 class="mb-0 text-center">Get Now Travel Insurance</h3>
@@ -114,7 +114,7 @@ if ($flashMessage) {
                                 </label>
                                 <!-- <?php $model->from_country; ?> -->
                                 <?= $form->field($model, 'from_country')->dropDownList(\yii\helpers\ArrayHelper::map(
-                                    Countries::find()->all(),
+                                    Countries::find()->cache(27000)->all(),
                                     'code',
                                     'country'
                                 ), ['prompt' => 'Departure'])->label(false) ?>
@@ -125,7 +125,7 @@ if ($flashMessage) {
                                     <span class="text-danger">*</span>
                                 </label>
                                 <?= $form->field($model, 'to_country')->dropDownList(\yii\helpers\ArrayHelper::map(
-                                    Countries::find()->all(),
+                                    Countries::find()->cache(27000)->all(),
                                     'code',
                                     'country'
                                 ), ['prompt' => 'Arrival'])->label(false) ?>

@@ -81,7 +81,7 @@ $this->title = 'Review Your Insurance Details';
                                                         <td><?= $passenger->country ?></td>
                                                         <td>
                                                           
-                                                            <?= Html::a('Retake', ['/insurance/retake', 'id' => $passenger->id,'policyId'=>$policy->id]) ?>
+                                                            <?= Html::a('Retake', ['/asurance/retake', 'id' => $passenger->id,'policyId'=>$policy->id]) ?>
 
                                                             
                                                         </td>
@@ -97,7 +97,7 @@ $this->title = 'Review Your Insurance Details';
                                     </table>
                                 </div>
                                 <div class="mt-2">
-                                <?= Html::a('Pay Now', ['/insurance/payment', 'id' => $policy->id], ['class' => 'btn btn-warning w-100']) ?>
+                                <?= Html::a('Pay Now', ['/asurance/payment', 'id' => $policy->id], ['class' => 'btn btn-warning w-100']) ?>
                                 </div>
                             </div>
                         </div>

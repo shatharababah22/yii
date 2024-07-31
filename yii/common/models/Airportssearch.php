@@ -17,7 +17,7 @@ class Airportssearch extends Airports
     public function rules()
     {
         return [
-            [['id', 'country_id'], 'integer'],
+            [['id'], 'integer'],
             [['code', 'name', 'cityCode', 'cityName'], 'safe'],
         ];
     }
@@ -70,7 +70,7 @@ class Airportssearch extends Airports
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'country_id' => $this->country_id,
+            // 'country_id' => $this->country_id,
         ]);
 
         $query->andFilterWhere(['like', 'code', $this->code])

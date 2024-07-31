@@ -31,15 +31,9 @@ use yii\bootstrap5\ActiveForm;
 
     <?= $form->field($model, 'cityName', ['options' => ['class' => 'col-sm-6']])->textInput(['maxlength' => true]) ?>
 
+    <?= $form->field($model, 'countryCode', ['options' => ['class' => 'col-sm-6']])->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'countryName', ['options' => ['class' => 'col-sm-6']])->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'country_id', ['options' => ['class' => 'col-sm-6']])->dropDownList(
-        \yii\helpers\ArrayHelper::map(
-            \common\models\Countries::find()->all(),
-            'id',
-            'country'
-        ),
-        ['class' => 'form-select']
-    ) ?>
 </div>
 
 <div class="row mb-2">

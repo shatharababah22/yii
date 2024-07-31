@@ -34,10 +34,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     </div>
                     <!-- End Col -->
-
+<!-- 
                     <div class="col-sm-auto">
                         <?= Html::a('Create Airport', Url::to(['airport/create']), ['class' => 'btn btn-primary']) ?>
-                    </div>
+                    </div> -->
                     <!-- End Col -->
                 </div>
                 <!-- End Row -->
@@ -149,8 +149,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                         </a>
                                     </td>
                                     <td><?= Html::encode($country->code) ?></td>
-                                    <td><?= Html::encode($country->country->country) ?></td>
-                                    <td><?= Html::encode($country->country->code) ?></td>
+                                    <td><?= Html::encode($country->countryName) ?></td>
+                                    <td><?= Html::encode($country->countryCode) ?></td>
                                     <td><?= Html::encode($country->cityName) ?></td>
                                     <td><?= Html::encode($country->cityCode) ?></td>
 

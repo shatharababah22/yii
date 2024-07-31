@@ -35,7 +35,9 @@ function addListener(input) {
     });
 }
 ");
-$lastResendTimestamp = Yii::$app->session->get('last_resend_timestamp');
+// $lastResendTimestamp = Yii::$app->session->get('last_resend_timestamp');
+$sessionData = Yii::$app->session->get('session_data', []);
+        $lastResendTimestamp = $sessionData['last_resend_timestamp'];
 $currentTimestamp = time();
 
 
@@ -45,7 +47,11 @@ $interval = 5 * 60;
 $remainingTime = ($lastResendTimestamp ? max(0, $interval - ($currentTimestamp - $lastResendTimestamp)) : 0);
 
 // $lastFourDigits = substr($mobile, -4);
+
+
 ?>
+
+
 <div class="pattern-square"></div>
 <section class="pt-10 pb-10 bg-dark text-center ">
     <div class="container mt-5">
@@ -126,7 +132,7 @@ $remainingTime = ($lastResendTimestamp ? max(0, $interval - ($currentTimestamp -
           Please wait <?= intval($remainingTime / 60) ?>m <?= $remainingTime % 60 ?>s
         </span>
     <?php else: ?>
-        <a href="<?= Url::to(['/insurance/resend', 'mobile' => $mobile]) ?>" class="fw-bold text-decoration-none" style="color:#0F172A">Resend</a>
+        <a href="<?= Url::to(['/asurance/resend', 'mobile' => $mobile]) ?>" class="fw-bold text-decoration-none" style="color:#0F172A">Resend</a>
     <?php endif; ?>
 </div>
 
@@ -139,7 +145,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (remainingTime > 0 && countdownElement) {
         const updateCountdown = () => {
             if (remainingTime <= 0) {
-                countdownElement.innerHTML = '<a href="<?= Url::to(['/insurance/resend', 'mobile' => $mobile]) ?>" class="fw-bold text-decoration-none" style="color:#0F172A">Resend</a>';
+                countdownElement.innerHTML = '<a href="<?= Url::to(['/asurance/resend', 'mobile' => $mobile]) ?>" class="fw-bold text-decoration-none" style="color:#0F172A">Resend</a>';
                 clearInterval(intervalId);
                 return;
             }
