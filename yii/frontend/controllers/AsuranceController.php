@@ -31,6 +31,9 @@ class AsuranceController extends \yii\web\Controller
 {
     public function actionTravel()
     {
+
+        // $session = Yii::$app->session;
+        // $session->destroy();
         $model = new InquiryForm();
         $model->setAttributes(\Yii::$app->request->get('InquiryForm'));
 
@@ -92,7 +95,7 @@ class AsuranceController extends \yii\web\Controller
 
 
             if ($draft->save()) {
-                return $this->redirect(['Asurance/passengers', 'draft' => $draft->id]);
+                return $this->redirect(['passengers', 'draft' => $draft->id]);
             } else {
                 var_dump($draft->errors);
                 die();
@@ -223,7 +226,7 @@ class AsuranceController extends \yii\web\Controller
 
 
 
-    
+
 
     public function actionPassengers($draft)
     {
@@ -395,12 +398,12 @@ class AsuranceController extends \yii\web\Controller
 
                 if ($responseData && $responseData['status'] == 201) {
 
-                 
-            Yii::$app->session->remove(
-                'session_data'[0],
-                'last_resend_timestamp',
+                    $lastResendTimestamp = 5 * 60;
+                    Yii::$app->session->remove(
+                        'session_data'[0],
+                        'last_resend_timestamp',
 
-            );
+                    );
 
                     Yii::$app->session->set('mobile', $mobile);
                     return $this->redirect(['verify-otp']);
@@ -442,13 +445,13 @@ class AsuranceController extends \yii\web\Controller
 
         if ($responseData && $responseData['status'] == 201) {
             Yii::$app->session->set('mobile', $mobile);
+            // $lastResendTimestamp = 5 * 60;
+            // Yii::$app->session->remove(
+            //     'session_data'[0],
+            //     'last_resend_timestamp',
 
-            Yii::$app->session->remove(
-                'session_data'[0],
-                'last_resend_timestamp',
+            // );
 
-            );
-            
             return $this->redirect(['verify-otp']);
         } else {
             Yii::$app->session->setFlash('error', 'Failed to send OTP.');
@@ -527,15 +530,17 @@ class AsuranceController extends \yii\web\Controller
 
                 $responseData = json_decode($response, true);
 
+                // $sessionData = Yii::$app->session->get('session_data', []);
+                // $lastResendTimestamp = $sessionData['last_resend_timestamp'] ?? 0;
                 if (isset($responseData['status']) && $responseData['status'] == 200) {
                     // Yii::$app->session->setFlash('success', 'OTP verified successfully.');
                     // Yii::$app->session->remove('mobile');
+                    // $lastResendTimestamp = 5 * 60;
+                    // Yii::$app->session->remove(
+                    //     'session_data'[0],
+                    //     'last_resend_timestamp',
 
-                    Yii::$app->session->remove(
-                        'session_data'[0],
-                        'last_resend_timestamp',
-
-                    );
+                    // );
 
                     return $this->redirect(['display-policy']);
                 } else {
@@ -791,7 +796,7 @@ class AsuranceController extends \yii\web\Controller
                             'id' => $id,
                             'policyId' => $policy->id
                         ]));
-                        return $this->redirect(['/insurance/display-policy', 'policyId' => $policy->id]);
+                        return $this->redirect(['display-policy', 'policyId' => $policy->id]);
                     } else {
                         var_dump($policy->errors);
                     }
@@ -909,5 +914,4 @@ class AsuranceController extends \yii\web\Controller
 
         return json_decode($response, true);
     }
-
 }

@@ -86,17 +86,22 @@ $this->title = 'Your Policy';
                 <td><?= $policy->price ?> JD</td>
                 <td><?= Html::encode($policy->status === 0 ? "Processing" : "Completed") ?></td>
                 <td>
-    <!-- <i class="bi bi-file-pdf-fill me-2"></i> -->
+                <?php if (!empty($policy->PolicyURLLink)): ?>
     <?= Html::a(
         '<i class="bi bi-file-pdf-fill"></i> Download',
         $policy->PolicyURLLink,
         [
-            // 'class' => 'btn border border-secondary',
             'target' => '_blank',
             'download' => true,
-            'data-pjax' => '0', 
+            'data-pjax' => '0',
         ]
-    ) ?>
+    ); ?>
+<?php else: ?>
+    <p>No PDF available for download.</p>
+<?php endif; ?>
+
+    <!-- <i class="bi bi-file-pdf-fill me-2"></i> -->
+
 </td>
               </tr>
             <?php endforeach; ?>

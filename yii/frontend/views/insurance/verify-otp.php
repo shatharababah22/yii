@@ -37,7 +37,7 @@ function addListener(input) {
 ");
 // $lastResendTimestamp = Yii::$app->session->get('last_resend_timestamp');
 $sessionData = Yii::$app->session->get('session_data', []);
-$lastResendTimestamp = isset($sessionData['last_resend_timestamp']) ? $sessionData['last_resend_timestamp'] : 0;
+$lastResendTimestamp = isset($sessionData['last_resend_timestamp']) ? $sessionData['last_resend_timestamp'] : 5*60;
 $currentTimestamp = time();
 
 
