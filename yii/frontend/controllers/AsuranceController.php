@@ -761,51 +761,52 @@ class AsuranceController extends \yii\web\Controller
             throw new NotFoundHttpException('The requested policy does not exist.');
         }
 
-        $model = new \yii\base\DynamicModel(['number', 'expmonth', 'expyear', 'cvv', 'price']);
-        $model->addRule(['number', 'expmonth', 'expyear', 'cvv', 'price'], 'required')
-            ->addRule(['number'], 'string', ['length' => 16])
-            ->addRule(['cvv'], 'string', ['length' => [3, 4]])
-            ->addRule(['expmonth', 'expyear'], 'integer');
+        // $model = new \yii\base\DynamicModel(['number', 'expmonth', 'expyear', 'cvv', 'price']);
+        // $model->addRule(['number', 'expmonth', 'expyear', 'cvv', 'price'], 'required')
+        //     ->addRule(['number'], 'string', ['length' => 16])
+        //     ->addRule(['cvv'], 'string', ['length' => [3, 4]])
+        //     ->addRule(['expmonth', 'expyear'], 'integer');
 
-        $model->price = $policyDraft->price;
+        // $model->price = $policyDraft->price;
 
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $paymentData = [
-                'name' => $passenger->first_name,
-                'phone' => $policyDraft->mobile,
-                'country' => $passenger->nationality,
-                'ip' => '20002',
-                'email' => $policyDraft->email,
-                'price' => $policyDraft->price
-            ];
+        // if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+        $paymentData = [
+            'name' => $passenger->first_name . ' ' . $passenger->last_name,
+            'phone' => $policyDraft->mobile,
+            'country' => $passenger->nationality,
+            'ip' => '20002',
+            'email' => $policyDraft->email,
+            'price' => $policyDraft->price
+        ];
 
 
-            $response = $this->processPayment($paymentData,$policyDraft, $passenger );
-            return $this->redirect($response);
+        $response = $this->processPayment($paymentData, $policyDraft, $passenger);
+        return $this->redirect($response);
 
-        
-        }
 
-        return $this->render('/insurance/payment', [
-            'model' => $model,
-            'policy' => $policyDraft,
-        ]);
+        // }
+
+        // return $this->render('/insurance/payment', [
+        //     'model' => $model,
+        //     'policy' => $policyDraft,
+        // ]);
     }
 
     public function actionPaymentCallback($policyDraft, $passenger)
+    // {   dd("shathsa");
     {
         $postData = Yii::$app->request->post();
         if (isset($postData['respStatus']) && $postData['respStatus'] === 'A') {
             $fromCountryName = $this->getCountryName($policyDraft->DepartCountryCode);
             $toCountryName = $this->getCountryName($policyDraft->ArrivalCountryCode);
-    
-            $response = $postData; 
-    
+
+            $response = $postData;
+
             if (isset($response['tran_ref']) && !empty($response['tran_ref'])) {
                 $apiEndpoint = 'https://tuneprotectjo.com/api/policies';
                 $apiKey = 'eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjJlMzM3YmM2LWFmMzMtNDFjNS04ZTM2LWQ2NzJjMWRjNDYyNSIsImlhdCI6IjIwMjQtMDctMDQiLCJpc3MiOjE4M30.jdsWqHcU0cL4ZHKr0oZYBvamRrpYwvfCARitiBTVzqU';
 
-    
+
                 $departureDate = new DateTime($policyDraft->departure_date);
                 $returnDate = new DateTime($policyDraft->return_date);
                 $interval = $departureDate->diff($returnDate);
@@ -813,7 +814,7 @@ class AsuranceController extends \yii\web\Controller
                 $dob = new DateTime($passenger->dob);
                 $now = new DateTime();
                 $age = $now->diff($dob)->y;
-    
+
                 $apiPayload = [
                     "source" => $fromCountryName,
                     "from_country" => $fromCountryName,
@@ -847,7 +848,7 @@ class AsuranceController extends \yii\web\Controller
                         ]
                     ]
                 ];
-    
+
                 $ch = curl_init($apiEndpoint);
                 curl_setopt($ch, CURLOPT_HTTPHEADER, [
                     'Authorization: Bearer ' . $apiKey,
@@ -856,30 +857,30 @@ class AsuranceController extends \yii\web\Controller
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 curl_setopt($ch, CURLOPT_POST, true);
                 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($apiPayload));
-    
+
                 $apiResponse = curl_exec($ch);
                 $apiResponseData = json_decode($apiResponse, true);
-    
+
                 if (curl_errno($ch)) {
                     Yii::$app->session->setFlash('error', 'Failed to communicate with the policy API.');
                     curl_close($ch);
                     return $this->redirect(['error-page']);
                 }
                 curl_close($ch);
-    
+
                 if (isset($apiResponseData['id']) && !empty($apiResponseData['id'])) {
                     $customer = Customers::findOne(['mobile' => $policyDraft->mobile]);
                     if (!$customer) {
                         $customer = new Customers();
                         $customer->email = $policyDraft->email;
                         $customer->mobile = $policyDraft->mobile;
-    
+
                         if (!$customer->save(false)) {
                             Yii::$app->session->setFlash('error', 'Failed to save the customer.');
                             return $this->redirect(['error-page']);
                         }
                     }
-    
+
                     $id = $apiResponseData['id'];
                     $policy = new Policy();
                     $policy->customer_id = $customer->id;
@@ -899,7 +900,7 @@ class AsuranceController extends \yii\web\Controller
                     $policy->PolicyURLLink = $apiResponseData['PolicyURLLink'] ?? '';
                     $policy->status = $apiResponseData['status'] ?? 0;
                     $policy->status_description = $apiResponseData['status_description'] ?? 'Status Description';
-    
+
                     if ($policy->save()) {
                         Yii::$app->queue->delay(5)->push(new \common\jobs\PolicyStatusCheckJob([
                             'id' => $id,
@@ -917,13 +918,23 @@ class AsuranceController extends \yii\web\Controller
                 $errorMessage = $postData['message'] ?? 'Payment failed. Please try again.';
                 Yii::$app->session->setFlash('error', $errorMessage);
             }
-    
-            return $this->redirect(['error-page']);
         }
-    }
-    
+        $errorMessage = $postData['message'] ?? 'Payment failed. Please try again.';
+        Yii::$app->session->setFlash('error', $errorMessage);
+// dd( $policyDraft);
+$url = Yii::$app->urlManager->createAbsoluteUrl([
+    'asurance/review',
+    'draft' => $policyDraft
+]);
 
-    protected function processPayment($data,$policyDraft, $passenger)
+return $this->redirect($url);
+
+     
+   
+    }
+
+
+    protected function processPayment($data, $policyDraft, $passenger)
     {
         $serverKey = 'SNJN6DLBLB-JGDKD6BLLG-BMGLG6BHZB';
         $endpoint = 'https://secure-jordan.paytabs.com/payment/request';
@@ -937,8 +948,17 @@ class AsuranceController extends \yii\web\Controller
             'cart_amount' => $data['price'],
             'cart_description' => 'Payment for insurance policy',
             'callback' => Yii::$app->urlManager->createAbsoluteUrl(['check']),
-            'return' => Yii::$app->urlManager->createAbsoluteUrl(['asurance/payment-callback',['policyDraft'=>$policyDraft,'passenger'=>$passenger]]),
-            'hide_shipping' => false,
+            
+
+            // 'return' => Yii::$app->urlManager->createAbsoluteUrl(['asurance/payment-callback',array('policyDraft' => $policyDraft, 'passenger' => $passenger),  'protocol' => 'https' ]),
+            'return' => Yii::$app->urlManager->createAbsoluteUrl([
+        'asurance/payment-callback',
+        'policyDraft' => $policyDraft->id,
+        'passenger' => $passenger->id,
+        'protocol' => 'https'
+    ]),
+            'hide_shipping' => true,
+    
             'customer_details' => array(
                 'name' => $data['name'],
                 'email' => $data['email'],
@@ -965,7 +985,7 @@ class AsuranceController extends \yii\web\Controller
         $response = json_decode(curl_exec($ch));
 
         curl_close($ch);
-        // dd(  $response);
+        // dd( $response);
 
         return $response->redirect_url;
     }

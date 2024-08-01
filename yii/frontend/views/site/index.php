@@ -58,7 +58,79 @@ if ($flashMessage) {
     background: #fff;
     clip-path: polygon(50% 50%, 0 0, 100% 0);
 }
+
+
+
+
+
+
+/* CSS Styling */
+.scroll-container {
+    position: relative;
+    overflow: hidden;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+}
+
+.scroll-wrapper {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    gap: 15px;
+}
+
+.scroll-item {
+    flex: 0 0 auto;
+    width: 25%; 
+}
+
+.scroll-btn {
+    background-color: #007bff; 
+    border: none;
+    color: white;
+    padding: 15px;
+    font-size: 18px;
+    cursor: pointer;
+    z-index: 1;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.scroll-btn.left {
+    left: 0;
+}
+
+.scroll-btn.right {
+    right: 0;
+}
+
+
 </style>
+
+<script>
+
+
+function scrollLeft() {
+    const container = document.querySelector('.scroll-wrapper');
+    console.log('Scrolling left:', container);
+    container.scrollBy({
+        left: -container.clientWidth,
+        behavior: 'smooth'
+    });
+}
+
+function scrollRight() {
+    const container = document.querySelector('.scroll-wrapper');
+    console.log('Scrolling right:', container);
+    container.scrollBy({
+        left: container.clientWidth,
+        behavior: 'smooth'
+    });
+}
+
+</script>
 <!--hero start-->
 <section class="bg-primary-dark pt-9 right-slant-shape" data-cue="fadeIn">
     <div class="container">
@@ -283,7 +355,7 @@ if ($flashMessage) {
                 <div class="swiper logoSwiper swiper-initialized swiper-horizontal swiper-backface-hidden" data-cue="slideInDown" data-show="true" style="animation-name: slideInDown; animation-duration: 600ms; animation-timing-function: ease; animation-delay: 0ms; animation-direction: normal; animation-fill-mode: both;">
                     <?php foreach (\common\models\InsuranceCountries::find()->all() as $Countries) : ?>
 
-                        <div class="swiper-wrapper pb-7" id="swiper-wrapper-3ec847c46421dd89" aria-live="off">
+                        <div class="swiper-wrapper pb-4" id="swiper-wrapper-3ec847c46421dd89" aria-live="off">
                             <div class="swiper-slide swiper-slide-active" role="group" aria-label="1 / 5" data-swiper-slide-index="0" style="width: 172.2px; margin-right: 50px;">
                                 <div data-cue="slideInDown" data-show="true" style="animation-name: slideInDown; animation-duration: 600ms; animation-timing-function: ease; animation-delay: 200ms; animation-direction: normal; animation-fill-mode: both;">
                                     <figure class="text-center">
@@ -309,32 +381,52 @@ if ($flashMessage) {
 
 <section class="my-xl-9 my-5" id="insurances_programs">
     <div class="container" data-cue="fadeIn">
+    <div class="row">
+            <div class="col-md-12" data-cue="fadeIn">
+                <div class="mb-xl-7 mb-4 text-center">
+                    <h2 class="mb-2">
+            Ansurance Types
+        </h2>
+        <p class="mb-0">
+            Explore various related insurance options that might suit your needs.
+        </p>
+                </div>
+            </div>
+        </div>
         <div class="row">
 
 
 
-            <?php foreach ($insurances as $insurance) : ?>
-                <div class="col-md-4 mt-5">
-                    <a href="<?= Url::to(['/asurance/programs', 'slug' => $insurance->slug]) ?>" class="card text-bg-light shadow" data-cue="fadeUp">
-                        <img src="<?= Yii::$app->request->baseUrl ?>/dashboard/images/<?= $insurance->photo ?>" class="card-img" alt="img">
-                        <div class="card-img-overlay text-white d-inline-flex justify-content-start align-items-end overlay-dark">
-                            <div class="text-capitalize">
-                                <h2 class="card-title"><?= $insurance->name ?></h2>
-                                <div class="mb-4 justify-content-center">
-                                    <div class="price-text">
-                                        <span class="small">starts from </span>
-                                        <div class="price price-show h1 text-warning">
-                                            <span>$</span>
-                                            <span><?= $insurance->price ?></span>
-                                        </div>
+ 
+
+           <!-- HTML Structure -->
+<div class="scroll-container">
+    <!-- <button class="scroll-btn btn btn-primary left" onclick="scrollLeft()">&lt;</button> -->
+    <div class="scroll-wrapper">
+        <?php foreach ($insurances as $insurance) : ?>
+            <div class="scroll-item">
+                <a href="<?= Url::to(['/asurance/programs', 'slug' => $insurance->slug]) ?>" class="card text-bg-light shadow" data-cue="fadeUp">
+                    <img src="<?= Yii::$app->request->baseUrl ?>/dashboard/images/<?= $insurance->photo ?>" class="card-img" alt="img">
+                    <div class="card-img-overlay text-white d-inline-flex justify-content-start align-items-end overlay-dark ">
+                        <div class="text-capitalize">
+                            <h2 class="card-title" style="font-size:x-large;"><?= $insurance->name ?></h2>
+                            <div class="mb-4 justify-content-center">
+                                <div class="price-text">
+                                    <span class="small">starts from </span>
+                                    <div class="price price-show h1 text-warning">
+                                        <span>$</span>
+                                        <span><?= $insurance->price ?></span>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </a>
-                </div>
-            <?php endforeach; ?>
-
+                    </div>
+                </a>
+            </div>
+        <?php endforeach; ?>
+    </div>
+    <!-- <button class="scroll-btn btn btn-primary right " onclick="scrollRight()">&gt;</button> -->
+</div>
 
 
 

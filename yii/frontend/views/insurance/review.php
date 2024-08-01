@@ -7,7 +7,7 @@
 use yii\bootstrap5\Html;
 use yii\bootstrap5\ActiveForm;
 use yii\captcha\Captcha;
-
+use common\widgets\Alert;
 $this->title = 'Review Your Insurance Details';
 ?>
 <div class="pattern-square"></div>
@@ -26,7 +26,9 @@ $this->title = 'Review Your Insurance Details';
 <section class="mb-xl-9 my-5">
     <div class="container">
         <div class="row">
+      
             <div class="col-lg-10 offset-lg-1 col-md-12 col-12">
+            <?= Alert::widget() ?>
                 <div class="row g-xl-7 gy-5">
                     <div class="col-md-12 col-12">
                         <div class="card shadow-sm">
