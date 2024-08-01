@@ -805,13 +805,14 @@ class AsuranceController extends \yii\web\Controller
             $fromCountryName = $this->getCountryName($policyDraft->DepartCountryCode);
             $toCountryName = $this->getCountryName($policyDraft->ArrivalCountryCode);
 
-            $response = $postData;
+            $response = $postData['tranRef'];
 
-            if (isset($response['tran_ref']) && !empty($response['tran_ref'])) {
+            if (isset($response) && !empty($response)) {
                 $apiEndpoint = 'https://tuneprotectjo.com/api/policies';
                 $apiKey = 'eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjJlMzM3YmM2LWFmMzMtNDFjNS04ZTM2LWQ2NzJjMWRjNDYyNSIsImlhdCI6IjIwMjQtMDctMDQiLCJpc3MiOjE4M30.jdsWqHcU0cL4ZHKr0oZYBvamRrpYwvfCARitiBTVzqU';
 
 
+                
                 $departureDate = new DateTime($policyDraft->departure_date);
                 $returnDate = new DateTime($policyDraft->return_date);
                 $interval = $departureDate->diff($returnDate);
