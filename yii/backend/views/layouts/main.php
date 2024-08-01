@@ -403,9 +403,21 @@ AppAsset::register($this);
 
            
 
+              <div class="nav-item">
+                      <a class="nav-link dropdown-toggle " href="<?= Url::to(['/benefit/index']) ?>" role="button" data-bs-toggle="collapse" data-bs-target="#navbarVerticalMenuAuthenticationLoginMenu" aria-expanded="false" aria-controls="navbarVerticalMenuAuthenticationLoginMenu">
+                      <i class="bi bi-info-circle nav-icon"></i>
+
+                        Main benefit
+                      </a>
+
+                      <div id="navbarVerticalMenuAuthenticationLoginMenu" class="nav-collapse collapse " data-bs-parent="#navbarVerticalMenuAuthenticationMenu">
+                        <a class="nav-link " href="<?= Url::to(['/benefit/index']) ?>">  Main benefit</a>
+                        <a class="nav-link " href="<?= Url::to(['/coverage/index']) ?>">Coverage</a>
+                      </div>
+                    </div>
 
               <!-- Collapse -->
-              <div class="nav-item">
+              <!-- <div class="nav-item">
                 <a class="nav-link dropdown-toggle  collapsed" href="<?= Url::to(['/benefit/index']) ?>" role="button" data-bs-toggle="collapse" data-bs-target="#navbarVerticalMenuAuthentication" aria-expanded="false" aria-controls="navbarVerticalMenuAuthentication">
                   <i class="bi bi-info-circle nav-icon"></i>
                   <span class="nav-link-title">Benefit</span>
@@ -413,36 +425,24 @@ AppAsset::register($this);
 
                 <div id="navbarVerticalMenuAuthentication" class="nav-collapse collapse " data-bs-parent="#navbarVerticalMenu">
                   <div id="navbarVerticalMenuAuthenticationMenu">
-                    <!-- Collapse -->
+                
                     <div class="nav-item">
                       <a class="nav-link dropdown-toggle " href="<?= Url::to(['/benefit/index']) ?>" role="button" data-bs-toggle="collapse" data-bs-target="#navbarVerticalMenuAuthenticationLoginMenu" aria-expanded="false" aria-controls="navbarVerticalMenuAuthenticationLoginMenu">
                         Main benefit
                       </a>
 
                       <div id="navbarVerticalMenuAuthenticationLoginMenu" class="nav-collapse collapse " data-bs-parent="#navbarVerticalMenuAuthenticationMenu">
-                        <a class="nav-link " href="<?= Url::to(['/benefit/index']) ?>">overview</a>
-                        <a class="nav-link " href="<?= Url::to(['/benefit/create']) ?>">Add benefit</a>
+                        <a class="nav-link " href="<?= Url::to(['/benefit/index']) ?>">  Main benefit</a>
+                        <a class="nav-link " href="<?= Url::to(['/coverage/index']) ?>">Coverage</a>
                       </div>
                     </div>
 
 
 
-                    <!-- Collapse -->
-                    <div class="nav-item">
-                      <a class="nav-link dropdown-toggle " href="<?= Url::to(['/coverage/index']) ?>" role="button" data-bs-toggle="collapse" data-bs-target="#navbarVerticalMenuAuthentication2StepVerificationMenu" aria-expanded="false" aria-controls="navbarVerticalMenuAuthentication2StepVerificationMenu">
-                        Coverage
-                      </a>
-
-                      <div id="navbarVerticalMenuAuthentication2StepVerificationMenu" class="nav-collapse collapse " data-bs-parent="#navbarVerticalMenuAuthenticationMenu">
-                        <a class="nav-link " href="<?= Url::to(['/coverage/index']) ?>">Overview</a>
-                        <a class="nav-link " href="<?= Url::to(['/coverage/create']) ?>">Add plan coverage</a>
-                      </div>
-                    </div>
-                    <!-- End Collapse -->
 
                   </div>
                 </div>
-              </div>
+              </div> -->
               <!-- End Collapse -->
 
               <!-- Collapse -->

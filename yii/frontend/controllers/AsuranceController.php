@@ -29,6 +29,7 @@ use yii\web\UploadedFile;
 
 class AsuranceController extends \yii\web\Controller
 {
+    public $enableCsrfValidation = false;
     public function actionTravel()
     {
 
@@ -210,23 +211,23 @@ class AsuranceController extends \yii\web\Controller
         if ($policy === null) {
             throw new \yii\web\NotFoundHttpException('The requested policy draft does not exist.');
         }
-    
+
         $passenger = PolicyDraftPassengers::findOne($id);
         if ($passenger !== null) {
-         
+
             $passenger->delete();
         }
         $passengers = PolicyDraftPassengers::findAll(['draft_id' => $policyId]);
-    
-    
-        return $this->redirect(['passengers', 'draft' => $policy->id,'passengers'=>$passengers]);
+
+
+        return $this->redirect(['passengers', 'draft' => $policy->id, 'passengers' => $passengers]);
     }
-    
 
 
 
 
-    public function actionPassengers($draft,$passengers=null)
+
+    public function actionPassengers($draft, $passengers = null)
     {
 
         // dd($draft);
@@ -436,7 +437,7 @@ class AsuranceController extends \yii\web\Controller
 
 
             if ($allFilesProcessed || !empty($passengers)) {
-                return $this->redirect(['review', 'draft' => $policy->id , 'passengers' => $passengers]);
+                return $this->redirect(['review', 'draft' => $policy->id, 'passengers' => $passengers]);
             }
         }
 
@@ -473,7 +474,7 @@ class AsuranceController extends \yii\web\Controller
             if ($customer) {
 
                 $sessionData = Yii::$app->session->get('session_data', []);
-            
+
                 $lastResendTimestamp = $sessionData['last_resend_timestamp'] ?? 0;
                 $currentTimestamp = time();
                 $interval = 5 * 60;
@@ -517,32 +518,32 @@ class AsuranceController extends \yii\web\Controller
         $lastResendTimestamp = $sessionData['last_resend_timestamp'] ?? 0;
         $currentTimestamp = time();
         $interval = 5 * 60;
-    
+
         if ($lastResendTimestamp && ($currentTimestamp - $lastResendTimestamp < $interval)) {
             Yii::$app->session->setFlash('error', 'You can only resend OTP every 5 minutes.');
             return $this->redirect(['verify-otp']);
         }
-    
+
         $sessionData = [
             'last_resend_timestamp' => $currentTimestamp,
             'mobile_resend' => $mobile,
         ];
-    
+
         Yii::$app->session->set('session_data', $sessionData);
-    
+
         $response = $this->actionSend($mobile);
         $responseData = json_decode($response, true);
-    
+
         if ($responseData && $responseData['status'] == 201) {
             Yii::$app->session->set('mobile', $mobile);
             return $this->redirect(['verify-otp']);
         } else {
             Yii::$app->session->setFlash('error', 'Failed to send OTP.');
         }
-    
+
         return $this->redirect(['verify-otp']);
     }
-    
+
 
 
 
@@ -644,11 +645,11 @@ class AsuranceController extends \yii\web\Controller
         $model = new \yii\base\DynamicModel(['otp']);
         $model->addRule(['otp'], 'required');
         $mobile = Yii::$app->session->get('mobile');
-    
+
         if ($model->load(Yii::$app->request->post())) {
             $otpArray = Yii::$app->request->post('DynamicModel')['otp'];
             $model->otp = implode('', $otpArray);
-    
+
             if ($model->validate()) {
                 $otp = $model->otp;
                 $curl = curl_init();
@@ -666,31 +667,31 @@ class AsuranceController extends \yii\web\Controller
                         "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6ImEzNWE5MmFmLWVhMGItNGYwNy04ZmMzLWQ2NmM3NWVmOTlkZCIsImlhdCI6MTcyMDA3NzI4MSwiaXNzIjoxOTQ3OH0.-cHxsksuyLILpuuBbKmNAo_TiZSJTwmtjNPF1CeyRug"
                     ],
                 ]);
-    
+
                 $response = curl_exec($curl);
                 curl_close($curl);
-    
+
                 $responseData = json_decode($response, true);
-    
+
                 if (isset($responseData['status']) && $responseData['status'] == 200) {
                     // $sessionData = Yii::$app->session->get('session_data', []);
                     // $sessionData['last_resend_timestamp'] = time() + (5 * 60) + 10;
                     // Yii::$app->session->set('session_data', $sessionData);
-    // dd(    $sessionData );
-    Yii::$app->session->remove('session_data');
+                    // dd(    $sessionData );
+                    Yii::$app->session->remove('session_data');
                     return $this->redirect(['display-policy']);
                 } else {
                     Yii::$app->session->setFlash('error', 'Failed to verify OTP.');
                 }
             }
         }
-    
+
         return $this->render('/insurance/verify-otp', [
             'model' => $model,
             'mobile' => $mobile
-        ]); 
+        ]);
     }
-    
+
     public function actionContact()
     {
         $model = new \yii\base\DynamicModel(['name', 'email', 'message', 'mobile']);
@@ -770,15 +771,18 @@ class AsuranceController extends \yii\web\Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $paymentData = [
-                'number' => $model->number,
-                'expmonth' => $model->expmonth,
-                'expyear' => $model->expyear,
-                'cvv' => $model->cvv,
-                'price' => $policyDraft->price,
-                'payment-token' => Yii::$app->request->post('payment-token'),
+                'name' => $passenger->first_name,
+                'phone' => $policyDraft->mobile,
+                'country' => $passenger->nationality,
+                'ip' => '20002',
+                'email' => $policyDraft->email,
+                'price' => $policyDraft->price
             ];
 
+
             $response = $this->processPayment($paymentData);
+            return $this->redirect($response);
+
             $fromCountryName = $this->getCountryName($policyDraft->DepartCountryCode);
             $toCountryName = $this->getCountryName($policyDraft->ArrivalCountryCode);
             // dd($policyDraft->source);
@@ -808,7 +812,7 @@ class AsuranceController extends \yii\web\Controller
                     "to_country" => $toCountryName,
                     "to_airport" => $policyDraft->going_to,
                     "departure_date" => $policyDraft->departure_date,
-                    "days" => $days+1,
+                    "days" => $days + 1,
                     "adult" => $policyDraft->adult,
                     "child" => $policyDraft->children,
                     "infant" => $policyDraft->infant,
@@ -1008,7 +1012,11 @@ class AsuranceController extends \yii\web\Controller
     }
 
 
+    public function actionPaymentCallback()
+    {
 
+        var_dump(Yii::$app->request->post());
+    }
 
     protected function processPayment($data)
     {
@@ -1023,15 +1031,21 @@ class AsuranceController extends \yii\web\Controller
             'cart_currency' => 'JOD',
             'cart_amount' => $data['price'],
             'cart_description' => 'Payment for insurance policy',
-            'return' => Yii::$app->urlManager->createAbsoluteUrl(['check']),
-            'callback' => Yii::$app->urlManager->createAbsoluteUrl(['payment-callback']),
-            'payment_token' => $data['payment-token'],
-            'expiry_date' => $data['expmonth'] . '/' . $data['expyear'],
-            'cvv' => $data['cvv'],
-
-
+            'callback' => Yii::$app->urlManager->createAbsoluteUrl(['check']),
+            'return' => Yii::$app->urlManager->createAbsoluteUrl(['asurance/payment-callback']),
+            'hide_shipping' => false,
+            'customer_details' => array(
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'phone' => $data['phone'],
+                'country' => $data['country'],
+                'ip' => $data['ip'],
+            )
+            // 'payment_token' => $data['payment-token'],
+            // 'expiry_date' => $data['expmonth'] . '/' . $data['expyear'],
+            // 'cvv' => $data['cvv'],
         ];
-
+        // dd($paymentPayload);
         $headers = [
             'Authorization:' . $serverKey,
             'Content-Type: application/json',
@@ -1043,10 +1057,11 @@ class AsuranceController extends \yii\web\Controller
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($paymentPayload));
 
-        $response = curl_exec($ch);
-        curl_close($ch);
-        // dd( json_decode($response, true));
+        $response = json_decode(curl_exec($ch));
 
-        return json_decode($response, true);
+        curl_close($ch);
+        // dd(  $response);
+
+        return $response->redirect_url;
     }
 }
