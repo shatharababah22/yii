@@ -866,7 +866,7 @@ class AsuranceController extends \yii\web\Controller
 
                 $apiResponse = curl_exec($ch);
                 $apiResponseData = json_decode($apiResponse, true);
-
+dd($apiResponseData);
                 if (curl_errno($ch)) {
                     Yii::$app->session->setFlash('error', 'Failed to communicate with the policy API.');
                     curl_close($ch);
@@ -946,7 +946,7 @@ return $this->redirect($url);
         $endpoint = 'https://secure-jordan.paytabs.com/payment/request';
 
         $paymentPayload = [
-            'profile_id' => '104394',
+            'profile_id' => '104090',
             'tran_type' => 'sale',
             'tran_class' => 'ecom',
             'cart_id' => 'cart_' . time(),
@@ -961,7 +961,7 @@ return $this->redirect($url);
         'asurance/payment-callback',
         'policyDraft' => $policyDraft->id,
         'passenger' => $passenger->id,
-        'protocol' => 'https'
+      
     ]),
             'hide_shipping' => true,
     
