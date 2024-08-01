@@ -206,29 +206,27 @@ class AsuranceController extends \yii\web\Controller
 
     public function actionRetake($id, $policyId)
     {
-
-        $policy = PolicyDraft::findOne(['id' => $policyId]);
-
+        $policy = PolicyDraft::findOne($policyId);
         if ($policy === null) {
             throw new \yii\web\NotFoundHttpException('The requested policy draft does not exist.');
         }
-
-
-        $passengers = PolicyDraftPassengers::findAll(['draft_id' => $policyId]);
-
-        foreach ($passengers as $passenger) {
+    
+        $passenger = PolicyDraftPassengers::findOne($id);
+        if ($passenger !== null) {
+         
             $passenger->delete();
         }
-
-
-        return $this->redirect(['insurance/passengers', 'draft' => $policy->id]);
+        $passengers = PolicyDraftPassengers::findAll(['draft_id' => $policyId]);
+    
+    
+        return $this->redirect(['passengers', 'draft' => $policy->id,'passengers'=>$passengers]);
     }
+    
 
 
 
 
-
-    public function actionPassengers($draft)
+    public function actionPassengers($draft,$passengers=null)
     {
 
         // dd($draft);
@@ -420,6 +418,7 @@ class AsuranceController extends \yii\web\Controller
                                 } else {
                                     Yii::$app->session->setFlash('warning', 'A document for this person already exists. You cannot upload another document for the same person. Please try with a different person or document.');
                                     $allFilesProcessed = false;
+                                    PolicyDraftPassengers::deleteAll(['draft_id' => $policy->id]);
                                 }
                             } else {
                                 Yii::$app->session->setFlash('error', join(" and ", $json_request['authentication']['warning']));
@@ -436,8 +435,8 @@ class AsuranceController extends \yii\web\Controller
             }
 
 
-            if ($allFilesProcessed) {
-                return $this->redirect(['review', 'draft' => $policy->id]);
+            if ($allFilesProcessed || !empty($passengers)) {
+                return $this->redirect(['review', 'draft' => $policy->id , 'passengers' => $passengers]);
             }
         }
 
@@ -809,7 +808,7 @@ class AsuranceController extends \yii\web\Controller
                     "to_country" => $toCountryName,
                     "to_airport" => $policyDraft->going_to,
                     "departure_date" => $policyDraft->departure_date,
-                    "days" => $days,
+                    "days" => $days+1,
                     "adult" => $policyDraft->adult,
                     "child" => $policyDraft->children,
                     "infant" => $policyDraft->infant,

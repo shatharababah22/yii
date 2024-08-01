@@ -62,10 +62,20 @@ $this->title = 'Trip Details Submission';
 
                                 <p>Upload all passengers passports separated</p>
                                 <?php foreach ($model->attributes() as $input) : ?>
-                                    <div class="col-md-12">
-                                        <?= $form->field($model, $input)->fileInput() ?>
-                                    </div>
-                                <?php endforeach; ?>
+<div class="col-md-12">
+    <?= $form->field($model, $input)->fileInput() ?>
+</div>
+<?php endforeach; ?>
+
+<?php if (isset($passengers)&& $passengers !== null): ?>
+    <?php foreach ($passengers as $passenger) : ?>
+        <div class="col-md-12">
+            <?= $form->field($passenger, 'first_name')->fileInput() ?>
+        </div>
+    <?php endforeach; ?>
+<?php endif; ?>
+
+
                                 <div class="col-md-6">
                                     <?= $form->field($policy, 'email')->textInput() ?>
                                 </div>

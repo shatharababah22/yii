@@ -9169,7 +9169,7 @@ fieldset:disabled .btn {
 .visually-hidden:not(caption) {
   position: absolute !important;
 }
-.stretched-link:after {
+/* .stretched-link:after {
   bottom: 0;
   content: "";
   left: 0;
@@ -9177,7 +9177,7 @@ fieldset:disabled .btn {
   right: 0;
   top: 0;
   z-index: 1;
-}
+} */
 .text-truncate {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -19427,7 +19427,7 @@ video {
   width: 3rem;
 }
 .btn-scroll-top:after {
-  color: var(--bs-primary);
+  color: #FFC107;
   content: "\f145";
   font-family: bootstrap-icons !important;
   font-size: 1.5rem;
@@ -19452,7 +19452,7 @@ video {
   fill: none;
 }
 .btn-scroll-top svg.progress-square path {
-  stroke: var(--bs-primary);
+  stroke:#FFC107;
   stroke-width: 2;
   box-sizing: border-box;
   transition: all 0.2s linear;
