@@ -792,9 +792,14 @@ class AsuranceController extends \yii\web\Controller
         // ]);
     }
 
-    public function actionPaymentCallback($policyDraft, $passenger)
+    public function actionPaymentCallback($policyDraft1, $passenger1)
     // {   dd("shathsa");
     {
+
+        $policyDraft = PolicyDraft::find()->where(['id' => $policyDraft1])->one();
+        $passenger = PolicyDraftPassengers::find()->where(['id' => $passenger1])->one();
+
+
         $postData = Yii::$app->request->post();
         if (isset($postData['respStatus']) && $postData['respStatus'] === 'A') {
             $fromCountryName = $this->getCountryName($policyDraft->DepartCountryCode);
