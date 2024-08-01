@@ -29,7 +29,7 @@ use yii\web\UploadedFile;
 
 class AsuranceController extends \yii\web\Controller
 {
-    public $enableCsrfValidation = false;
+    // public $enableCsrfValidation = false;
     public function actionTravel()
     {
 
@@ -753,7 +753,251 @@ class AsuranceController extends \yii\web\Controller
 
 
 
-    public function actionPayment($id)
+    // public function actionPayment($id)
+    // {
+    //     $policyDraft = PolicyDraft::findOne($id);
+    //     $passenger = PolicyDraftPassengers::find()->where(['draft_id' => $id])->one();
+    //     if ($policyDraft === null) {
+    //         throw new NotFoundHttpException('The requested policy does not exist.');
+    //     }
+
+    //     // $model = new \yii\base\DynamicModel(['number', 'expmonth', 'expyear', 'cvv', 'price']);
+    //     // $model->addRule(['number', 'expmonth', 'expyear', 'cvv', 'price'], 'required')
+    //     //     ->addRule(['number'], 'string', ['length' => 16])
+    //     //     ->addRule(['cvv'], 'string', ['length' => [3, 4]])
+    //     //     ->addRule(['expmonth', 'expyear'], 'integer');
+
+    //     // $model->price = $policyDraft->price;
+
+    //     // if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+    //     $paymentData = [
+    //         'name' => $passenger->first_name . ' ' . $passenger->last_name,
+    //         'phone' => $policyDraft->mobile,
+    //         'country' => $passenger->nationality,
+    //         'ip' => '20002',
+    //         'email' => $policyDraft->email,
+    //         'price' => $policyDraft->price
+    //     ];
+
+
+    //     $response = $this->processPayment($paymentData, $policyDraft, $passenger);
+    //     return $this->redirect($response);
+
+
+    //     // }
+
+    //     // return $this->render('/insurance/payment', [
+    //     //     'model' => $model,
+    //     //     'policy' => $policyDraft,
+    //     // ]);
+    // }
+
+    // public function actionPaymentCallback($policyDraft1, $passenger1)
+    // // {   dd("shathsa");
+    // {
+    //     // dd("sh")
+    //     $policyDraft = PolicyDraft::find()->where(['id' => $policyDraft1])->one();
+    //     $passenger = PolicyDraftPassengers::find()->where(['id' => $passenger1])->one();
+
+
+    //     $postData = Yii::$app->request->post();
+    //     if (isset($postData['respStatus']) && $postData['respStatus'] === 'A') {
+    //         $fromCountryName = $this->getCountryName($policyDraft->DepartCountryCode);
+    //         $toCountryName = $this->getCountryName($policyDraft->ArrivalCountryCode);
+
+    //         $response = $postData['tranRef'];
+
+    //         if (isset($response) && !empty($response)) {
+    //             $apiEndpoint = 'https://tuneprotectjo.com/api/policies';
+    //             $apiKey = 'eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjJlMzM3YmM2LWFmMzMtNDFjNS04ZTM2LWQ2NzJjMWRjNDYyNSIsImlhdCI6IjIwMjQtMDctMDQiLCJpc3MiOjE4M30.jdsWqHcU0cL4ZHKr0oZYBvamRrpYwvfCARitiBTVzqU';
+
+
+
+    //             $departureDate = new DateTime($policyDraft->departure_date);
+    //             $returnDate = new DateTime($policyDraft->return_date);
+    //             $interval = $departureDate->diff($returnDate);
+    //             $days = $interval->days;
+    //             $dob = new DateTime($passenger->dob);
+    //             $now = new DateTime();
+    //             $age = $now->diff($dob)->y;
+
+    //             $apiPayload = [
+    //                 "source" => $fromCountryName,
+    //                 "from_country" => $fromCountryName,
+    //                 "from_airport" => $policyDraft->from_airport,
+    //                 "to_country" => $toCountryName,
+    //                 "to_airport" => $policyDraft->going_to,
+    //                 "departure_date" => $policyDraft->departure_date,
+    //                 "days" => $days + 1,
+    //                 "adult" => $policyDraft->adult,
+    //                 "child" => $policyDraft->children,
+    //                 "infant" => $policyDraft->infant,
+    //                 "planCode" => $policyDraft->plan->plan_code,
+    //                 "contactDetails" => [
+    //                     "name" => "Test Test",
+    //                     "email" => $policyDraft->email,
+    //                     "mobile" => $policyDraft->mobile
+    //                 ],
+    //                 "passengers" => [
+    //                     [
+    //                         "IsInfant" => 0,
+    //                         "FirstName" => "Test",
+    //                         "LastName" => "Test",
+    //                         "Gender" => $passenger->gender,
+    //                         "DOB" => $passenger->dob,
+    //                         "Age" => $age,
+    //                         "IdentityType" => $passenger->id_type,
+    //                         "IdentityNo" => $passenger->id_number,
+    //                         "IsQualified" => true,
+    //                         "Nationality" => $passenger->nationality,
+    //                         "CountryOfResidence" => $passenger->country
+    //                     ]
+    //                 ]
+    //             ];
+
+    //             $ch = curl_init($apiEndpoint);
+    //             curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    //                 'Authorization: Bearer ' . $apiKey,
+    //                 'Content-Type: application/json',
+    //             ]);
+    //             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    //             curl_setopt($ch, CURLOPT_POST, true);
+    //             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($apiPayload));
+
+    //             $apiResponse = curl_exec($ch);
+    //             $apiResponseData = json_decode($apiResponse, true);
+
+    //             if (curl_errno($ch)) {
+    //                 Yii::$app->session->setFlash('error', 'Failed to communicate with the policy API.');
+    //                 curl_close($ch);
+    //                 return $this->redirect(['error-page']);
+    //             }
+    //             curl_close($ch);
+
+    //             if (isset($apiResponseData['id']) && !empty($apiResponseData['id'])) {
+    //                 $customer = Customers::findOne(['mobile' => $policyDraft->mobile]);
+    //                 if (!$customer) {
+    //                     $customer = new Customers();
+    //                     $customer->email = $policyDraft->email;
+    //                     $customer->mobile = $policyDraft->mobile;
+
+    //                     if (!$customer->save(false)) {
+    //                         Yii::$app->session->setFlash('error', 'Failed to save the customer.');
+    //                         return $this->redirect(['error-page']);
+    //                     }
+    //                 }
+
+    //                 $id = $apiResponseData['id'];
+    //                 $policy = new Policy();
+    //                 $policy->customer_id = $customer->id;
+    //                 $policy->source = $fromCountryName;
+    //                 $policy->from_airport = $policyDraft->from_airport;
+    //                 $policy->DepartCountryCode = $policyDraft->DepartCountryCode;
+    //                 $policy->departure_date = $policyDraft->departure_date;
+    //                 $policy->going_to = $policyDraft->going_to;
+    //                 $policy->ArrivalCountryCode = $policyDraft->ArrivalCountryCode;
+    //                 $policy->return_date = $policyDraft->return_date;
+    //                 $policy->price = $policyDraft->price;
+    //                 $policy->ProposalState = $apiResponseData['ProposalState'] ?? 'Proposal State';
+    //                 $policy->ItineraryID = $id;
+    //                 $policy->PNR = $apiResponseData['PNR'] ?? '';
+    //                 $policy->PolicyNo = $apiResponseData['PolicyNo'] ?? '';
+    //                 $policy->PolicyPurchasedDateTime = $apiResponseData['PolicyPurchasedDateTime'] ?? date('Y-m-d H:i:s');
+    //                 $policy->PolicyURLLink = $apiResponseData['PolicyURLLink'] ?? '';
+    //                 $policy->status = $apiResponseData['status'] ?? 0;
+    //                 $policy->status_description = $apiResponseData['status_description'] ?? 'Status Description';
+
+    //                 if ($policy->save()) {
+    //                     Yii::$app->queue->delay(5)->push(new \common\jobs\PolicyStatusCheckJob([
+    //                         'id' => $id,
+    //                         'policyId' => $policy->id
+    //                     ]));
+    //                     return $this->redirect(['display-policy', 'policyId' => $policy->id]);
+    //                 } else {
+    //                     Yii::$app->session->setFlash('error', 'Failed to save the policy.');
+    //                 }
+    //             } else {
+    //                 $errorMessage = $apiResponseData['error'] ?? 'Policy purchase failed. Please try again.';
+    //                 Yii::$app->session->setFlash('error', $errorMessage);
+    //             }
+    //         } else {
+    //             $errorMessage = $postData['message'] ?? 'Payment failed. Please try again.';
+    //             Yii::$app->session->setFlash('error', $errorMessage);
+    //         }
+    //     }
+    //     $errorMessage = $postData['message'] ?? 'Payment failed. Please try again.';
+    //     Yii::$app->session->setFlash('error', $errorMessage);
+    //     // dd( $policyDraft);
+    //     // $url = Yii::$app->urlManager->createAbsoluteUrl([
+
+    //     // ]);
+
+    //     return $this->redirect([
+    //         'asurance/review',
+    //         'draft' => $policyDraft
+    //     ]);
+    // }
+
+
+    // protected function processPayment($data, $policyDraft, $passenger)
+    // {
+    //     $serverKey = 'SNJN6DLBLB-JGDKD6BLLG-BMGLG6BHZB';
+    //     $endpoint = 'https://secure-jordan.paytabs.com/payment/request';
+
+    //     $paymentPayload = [
+    //         'profile_id' => '104394',
+    //         'tran_type' => 'sale',
+    //         'tran_class' => 'ecom',
+    //         'cart_id' => 'cart_' . time(),
+    //         'cart_currency' => 'JOD',
+    //         'cart_amount' => $data['price'],
+    //         'cart_description' => 'Payment for insurance policy',
+    //         'callback' => Yii::$app->urlManager->createAbsoluteUrl(['asurance/check']),
+
+
+    //         // 'return' => Yii::$app->urlManager->createAbsoluteUrl(['asurance/payment-callback',array('policyDraft' => $policyDraft, 'passenger' => $passenger),  'protocol' => 'https' ]),
+    //         'return' => Yii::$app->urlManager->createAbsoluteUrl([
+    //             'asurance/payment-callback',
+    //             'policyDraft' => $policyDraft->id,
+    //             'passenger' => $passenger->id,
+
+    //         ]),
+    //         'hide_shipping' => true,
+
+    //         'customer_details' => array(
+    //             'name' => $data['name'],
+    //             'email' => $data['email'],
+    //             'phone' => $data['phone'],
+    //             'country' => $data['country'],
+    //             'ip' => $data['ip'],
+    //         )
+    //         // 'payment_token' => $data['payment-token'],
+    //         // 'expiry_date' => $data['expmonth'] . '/' . $data['expyear'],
+    //         // 'cvv' => $data['cvv'],
+    //     ];
+    //     // dd($paymentPayload);
+    //     $headers = [
+    //         'Authorization:' . $serverKey,
+    //         'Content-Type: application/json',
+    //     ];
+
+    //     $ch = curl_init($endpoint);
+    //     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    //     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    //     curl_setopt($ch, CURLOPT_POST, true);
+    //     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($paymentPayload));
+
+    //     $response = json_decode(curl_exec($ch));
+
+    //     curl_close($ch);
+    //     // dd( $response);
+
+    //     return $response->redirect_url;
+    // }
+
+
+
+        public function actionPayment($id)
     {
         $policyDraft = PolicyDraft::findOne($id);
         $passenger = PolicyDraftPassengers::find()->where(['draft_id' => $id])->one();
@@ -761,66 +1005,47 @@ class AsuranceController extends \yii\web\Controller
             throw new NotFoundHttpException('The requested policy does not exist.');
         }
 
-        // $model = new \yii\base\DynamicModel(['number', 'expmonth', 'expyear', 'cvv', 'price']);
-        // $model->addRule(['number', 'expmonth', 'expyear', 'cvv', 'price'], 'required')
-        //     ->addRule(['number'], 'string', ['length' => 16])
-        //     ->addRule(['cvv'], 'string', ['length' => [3, 4]])
-        //     ->addRule(['expmonth', 'expyear'], 'integer');
+        $model = new \yii\base\DynamicModel(['number', 'expmonth', 'expyear', 'cvv', 'price']);
+        $model->addRule(['number', 'expmonth', 'expyear', 'cvv', 'price'], 'required')
+            ->addRule(['number'], 'string', ['length' => 16])
+            ->addRule(['cvv'], 'string', ['length' => [3, 4]])
+            ->addRule(['expmonth', 'expyear'], 'integer');
 
-        // $model->price = $policyDraft->price;
+        $model->price = $policyDraft->price;
 
-        // if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-        $paymentData = [
-            'name' => $passenger->first_name . ' ' . $passenger->last_name,
-            'phone' => $policyDraft->mobile,
-            'country' => $passenger->nationality,
-            'ip' => '20002',
-            'email' => $policyDraft->email,
-            'price' => $policyDraft->price
-        ];
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $paymentData = [
+                'number' => $model->number,
+                'expmonth' => $model->expmonth,
+                'expyear' => $model->expyear,
+                'cvv' => $model->cvv,
+                'price' => $policyDraft->price,
+                'payment-token' => Yii::$app->request->post('payment-token'),
+            ];
 
-
-        $response = $this->processPayment($paymentData, $policyDraft, $passenger);
-        return $this->redirect($response);
-
-
-        // }
-
-        // return $this->render('/insurance/payment', [
-        //     'model' => $model,
-        //     'policy' => $policyDraft,
-        // ]);
-    }
-
-    public function actionPaymentCallback($policyDraft1, $passenger1)
-    // {   dd("shathsa");
-    {
-
-        $policyDraft = PolicyDraft::find()->where(['id' => $policyDraft1])->one();
-        $passenger = PolicyDraftPassengers::find()->where(['id' => $passenger1])->one();
-
-
-        $postData = Yii::$app->request->post();
-        if (isset($postData['respStatus']) && $postData['respStatus'] === 'A') {
+            $response = $this->processPayment($paymentData);
             $fromCountryName = $this->getCountryName($policyDraft->DepartCountryCode);
             $toCountryName = $this->getCountryName($policyDraft->ArrivalCountryCode);
+            // dd($policyDraft->source);
 
-            $response = $postData['tranRef'];
-
-            if (isset($response) && !empty($response)) {
+            if (isset($response['tran_ref']) && !empty($response['tran_ref'])) {
                 $apiEndpoint = 'https://tuneprotectjo.com/api/policies';
                 $apiKey = 'eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjJlMzM3YmM2LWFmMzMtNDFjNS04ZTM2LWQ2NzJjMWRjNDYyNSIsImlhdCI6IjIwMjQtMDctMDQiLCJpc3MiOjE4M30.jdsWqHcU0cL4ZHKr0oZYBvamRrpYwvfCARitiBTVzqU';
 
-
-                
+                // dd($policyDraft->departure_date);
                 $departureDate = new DateTime($policyDraft->departure_date);
                 $returnDate = new DateTime($policyDraft->return_date);
+
                 $interval = $departureDate->diff($returnDate);
+                // dd($interval );
                 $days = $interval->days;
                 $dob = new DateTime($passenger->dob);
                 $now = new DateTime();
                 $age = $now->diff($dob)->y;
+                // dd($days);
+                // dd(date('Y-m-d', strtotime($policyDraft->departure_date)));
 
+                // personalNumber
                 $apiPayload = [
                     "source" => $fromCountryName,
                     "from_country" => $fromCountryName,
@@ -828,7 +1053,7 @@ class AsuranceController extends \yii\web\Controller
                     "to_country" => $toCountryName,
                     "to_airport" => $policyDraft->going_to,
                     "departure_date" => $policyDraft->departure_date,
-                    "days" => $days + 1,
+                    "days" => $days,
                     "adult" => $policyDraft->adult,
                     "child" => $policyDraft->children,
                     "infant" => $policyDraft->infant,
@@ -855,6 +1080,44 @@ class AsuranceController extends \yii\web\Controller
                     ]
                 ];
 
+                // dd( $apiPayload);
+                // dd($apiPayload);
+
+                // $apiPayload = [
+                //     "source" => "Jordan",
+                //     "from_country" => "Jordan",
+                //     "from_airport" => "AMM",
+                //     "to_country" => "Lebanon",
+                //     "to_airport" => "BEY",
+                //     "departure_date" => "2024-10-09",
+                //     "days" => 5,
+                //     "adult" => 1,
+                //     "child" => 0,
+                //     "infant" => 0,
+                //     "planCode" => "JO-API-OUTBOUND-DB COVID PLUS-SILVER",
+                //     "contactDetails" => [
+                //         "name" => "Test Test",
+                //         "email" => "name@example.com",
+                //         "mobile" => "077XXXXXXXX"
+                //     ],
+                //     "passengers" => [
+                //         [
+                //             "IsInfant" => 0,
+                //             "FirstName" => "Test",
+                //             "LastName" => "Test",
+                //             "Gender" => "Male",
+                //             "DOB" => "1991-03-01",
+                //             "Age" => 33,
+                //             "IdentityType" => "Passport",
+                //             "IdentityNo" => "1210000",
+                //             "IsQualified" => true,
+                //             "Nationality" => "JO",
+                //             "CountryOfResidence" => "JO"
+                //         ]
+                //     ]
+                // ];
+
+                // dd($apiPayload);
                 $ch = curl_init($apiEndpoint);
                 curl_setopt($ch, CURLOPT_HTTPHEADER, [
                     'Authorization: Bearer ' . $apiKey,
@@ -865,16 +1128,15 @@ class AsuranceController extends \yii\web\Controller
                 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($apiPayload));
 
                 $apiResponse = curl_exec($ch);
+                // dd(   $apiResponse );
+                // curl_close($ch);
+
                 $apiResponseData = json_decode($apiResponse, true);
 
-                if (curl_errno($ch)) {
-                    Yii::$app->session->setFlash('error', 'Failed to communicate with the policy API.');
-                    curl_close($ch);
-                    return $this->redirect(['error-page']);
-                }
-                curl_close($ch);
-
+                // dd($apiResponseData);
+                // dd( $apiResponseData);
                 if (isset($apiResponseData['id']) && !empty($apiResponseData['id'])) {
+
                     $customer = Customers::findOne(['mobile' => $policyDraft->mobile]);
                     if (!$customer) {
                         $customer = new Customers();
@@ -886,8 +1148,9 @@ class AsuranceController extends \yii\web\Controller
                             return $this->redirect(['error-page']);
                         }
                     }
-
+                    // $response = $this->viewPolicy($id);
                     $id = $apiResponseData['id'];
+                    // dd($id);
                     $policy = new Policy();
                     $policy->customer_id = $customer->id;
                     $policy->source = $fromCountryName;
@@ -898,49 +1161,101 @@ class AsuranceController extends \yii\web\Controller
                     $policy->ArrivalCountryCode = $policyDraft->ArrivalCountryCode;
                     $policy->return_date = $policyDraft->return_date;
                     $policy->price = $policyDraft->price;
-                    $policy->ProposalState = $apiResponseData['ProposalState'] ?? 'Proposal State';
+                    $policy->ProposalState = $response['ProposalState'] ?? 'Proposal State';
                     $policy->ItineraryID = $id;
-                    $policy->PNR = $apiResponseData['PNR'] ?? '';
-                    $policy->PolicyNo = $apiResponseData['PolicyNo'] ?? '';
-                    $policy->PolicyPurchasedDateTime = $apiResponseData['PolicyPurchasedDateTime'] ?? date('Y-m-d H:i:s');
-                    $policy->PolicyURLLink = $apiResponseData['PolicyURLLink'] ?? '';
-                    $policy->status = $apiResponseData['status'] ?? 0;
-                    $policy->status_description = $apiResponseData['status_description'] ?? 'Status Description';
+                    $policy->PNR = $response['PNR'] ?? '';
+                    $policy->PolicyNo = $response['PolicyNo'] ?? '';
+                    $policy->PolicyPurchasedDateTime = $response['PolicyPurchasedDateTime'] ?? date('Y-m-d H:i:s');
+                    $policy->PolicyURLLink = $response['PolicyURLLink'] ?? '';
+                    $policy->status = $response['status'] ?? 0;
+                    $policy->status_description = $response['status_description'] ?? 'Status Description';
 
                     if ($policy->save()) {
+                        // dd($policyDraft->departure_date);
                         Yii::$app->queue->delay(5)->push(new \common\jobs\PolicyStatusCheckJob([
                             'id' => $id,
                             'policyId' => $policy->id
                         ]));
                         return $this->redirect(['display-policy', 'policyId' => $policy->id]);
                     } else {
-                        Yii::$app->session->setFlash('error', 'Failed to save the policy.');
+                        var_dump($policy->errors);
                     }
+
+
+                    die();
+
+
+                    // Yii::$app->queue->stop( $job );
+                    // dd($job);
+                    // $id = $apiResponseData['id'];
+                    // dd($id );
+
+                    // dd(Yii::$app->queue->isWaiting($id));
+
+                    // dd(Yii::$app->queue->isReserved($id))
+                    // ;
+
+
+                    // dd(Yii::$app->queue->isDone($id));
+
+                    // sleep(10);
+
+                    // Read the log file
+                    //                     $logFile = Yii::getAlias('@runtime/logs/app.log');
+                    //                     $logContent = file_get_contents($logFile);
+                    //                     $logs = explode("\n", $logContent);
+                    //                     $result = '';
+
+                    //                     foreach (array_reverse($logs) as $log) {
+                    //                         if (strpos($log, "Policy ID: {$id}") !== false) {
+                    //                             $result = $log;
+                    //                             dd($log);
+                    //                             break;
+                    //                         }
+                    //                     }
+                    // dd($result);
+                    // $policy->ProposalState = $response['ProposalState'] ?? 'Proposal State';
+                    // $policy->ItineraryID = $id;
+                    // $policy->PNR = $response['PNR'] ?? '';
+                    // $policy->PolicyNo = $response['PolicyNo'] ?? '';
+                    // $policy->PolicyPurchasedDateTime = $response['PolicyPurchasedDateTime'] ?? date('Y-m-d H:i:s');
+                    // $policy->PolicyURLLink = $response['PolicyURLLink'] ?? '';
+                    // $policy->status = $response['status'] ?? 1;
+                    // $policy->status_description = $response['status_description'] ?? 'Status Description';
+
+                    // // Fill additional fields from the response
+                    // $policy->ProposalState = 'Proposal State'; // Set as needed
+                    // $policy->ItineraryID = $apiResponseData['id']; // Use the returned ID
+                    // $policy->PNR = ''; // Set as needed
+                    // // $policy->PolicyNo = $apiResponseData['PolicyNo'];
+                    // $policy->PolicyPurchasedDateTime = date('Y-m-d H:i:s'); // Set as needed
+                    // $policy->PolicyURLLink = $apiResponseData['PolicyURLLink'];
+                    // $policy->status = $apiResponseData['status'];
+                    // $policy->status_description = 'Status Description'; // Set as needed
+                    // dd( $response);
+                    // Yii::$app->session->setFlash('success', 'Payment successful and policy processing is underway.');
+                    // return $this->redirect(['payment-form', 'price' => $paymentData['price']]);
+
                 } else {
-                    $errorMessage = $apiResponseData['error'] ?? 'Policy purchase failed. Please try again.';
+                    $errorMessage = isset($apiResponseData['error']) ? $apiResponseData['error'] : 'Policy purchase failed. Please try again.';
                     Yii::$app->session->setFlash('error', $errorMessage);
                 }
             } else {
-                $errorMessage = $postData['message'] ?? 'Payment failed. Please try again.';
+                $errorMessage = isset($response['message']) ? $response['message'] : 'Payment failed. Please try again.';
                 Yii::$app->session->setFlash('error', $errorMessage);
             }
         }
-        $errorMessage = $postData['message'] ?? 'Payment failed. Please try again.';
-        Yii::$app->session->setFlash('error', $errorMessage);
-// dd( $policyDraft);
-$url = Yii::$app->urlManager->createAbsoluteUrl([
-    'asurance/review',
-    'draft' => $policyDraft
-]);
 
-return $this->redirect($url);
-
-     
-   
+        return $this->render('/insurance/payment', [
+            'model' => $model,
+            'policy' => $policyDraft,
+        ]);
     }
 
 
-    protected function processPayment($data, $policyDraft, $passenger)
+
+
+    protected function processPayment($data)
     {
         $serverKey = 'SNJN6DLBLB-JGDKD6BLLG-BMGLG6BHZB';
         $endpoint = 'https://secure-jordan.paytabs.com/payment/request';
@@ -953,30 +1268,15 @@ return $this->redirect($url);
             'cart_currency' => 'JOD',
             'cart_amount' => $data['price'],
             'cart_description' => 'Payment for insurance policy',
-            'callback' => Yii::$app->urlManager->createAbsoluteUrl(['asurance/check']),
-            
+            'return' => Yii::$app->urlManager->createAbsoluteUrl(['check']),
+            'callback' => Yii::$app->urlManager->createAbsoluteUrl(['payment-callback']),
+            'payment_token' => $data['payment-token'],
+            'expiry_date' => $data['expmonth'] . '/' . $data['expyear'],
+            'cvv' => $data['cvv'],
 
-            // 'return' => Yii::$app->urlManager->createAbsoluteUrl(['asurance/payment-callback',array('policyDraft' => $policyDraft, 'passenger' => $passenger),  'protocol' => 'https' ]),
-            'return' => Yii::$app->urlManager->createAbsoluteUrl([
-        'asurance/payment-callback',
-        'policyDraft' => $policyDraft->id,
-        'passenger' => $passenger->id,
-        'protocol' => 'https'
-    ]),
-            'hide_shipping' => true,
-    
-            'customer_details' => array(
-                'name' => $data['name'],
-                'email' => $data['email'],
-                'phone' => $data['phone'],
-                'country' => $data['country'],
-                'ip' => $data['ip'],
-            )
-            // 'payment_token' => $data['payment-token'],
-            // 'expiry_date' => $data['expmonth'] . '/' . $data['expyear'],
-            // 'cvv' => $data['cvv'],
+
         ];
-        // dd($paymentPayload);
+
         $headers = [
             'Authorization:' . $serverKey,
             'Content-Type: application/json',
@@ -988,11 +1288,10 @@ return $this->redirect($url);
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($paymentPayload));
 
-        $response = json_decode(curl_exec($ch));
-
+        $response = curl_exec($ch);
         curl_close($ch);
-        // dd( $response);
+        // dd( json_decode($response, true));
 
-        return $response->redirect_url;
+        return json_decode($response, true);
     }
 }
