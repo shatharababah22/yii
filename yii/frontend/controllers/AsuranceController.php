@@ -118,19 +118,19 @@ class AsuranceController extends \yii\web\Controller
 
         // dd( $childrenPassenger );
         $plans = Plans::find()
-            // ->joinWith('pricings')
+            ->joinWith('pricings')
             ->where(['plans.insurance_id' => $model->type])
-            // ->andWhere(['pricing.duration' => $model->duration])
-            // ->andWhere([
-            //     'or',
-            //     ['pricing.passenger' => $adultPassenger],
-            //     ['pricing.passenger' => $childrenPassenger],
-            //     [
-            //         'and',
-            //         ['pricing.passenger' => $adultPassenger],
-            //         ['pricing.passenger' => $childrenPassenger]
-            //     ]
-            // ])
+            ->andWhere(['pricing.duration' => $model->duration])
+            ->andWhere([
+                'or',
+                ['pricing.passenger' => $adultPassenger],
+                ['pricing.passenger' => $childrenPassenger],
+                [
+                    'and',
+                    ['pricing.passenger' => $adultPassenger],
+                    ['pricing.passenger' => $childrenPassenger]
+                ]
+            ])
             ->all();
 
 
@@ -179,12 +179,7 @@ class AsuranceController extends \yii\web\Controller
                 'status' => $price ? $price->status : 'Pricing::STATUS_INACTIVE',
             ];
         }
-        $noPlansAvailable = empty($options);
-        $priceZero = array_filter($options, function($option) {
-            return $option['price'] == 0;
-        });
-        
-        if ($noPlansAvailable || !empty($priceZero)) {
+        if (empty($options)) {
             Yii::$app->session->setFlash('error', 'No plans are available for the selected options.');
             return $this->redirect(Yii::$app->getRequest()->getReferrer());
         }

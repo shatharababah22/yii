@@ -204,7 +204,16 @@ $this->title = 'Plan Details';
                                 <th scope="col">
                                     <div class="fs-5 text-dark fw-semibold">Plans</div>
                                 </th>    
-                                <?php foreach (\common\models\Plans::find()->where(['insurance_id' => $model->type])->all() as $plan) : ?>
+                                <?php foreach (\common\models\Plans::find()->where(['insurance_id' => $model->type])->joinWith('pricings')->andWhere(['pricing.duration' => $model->duration])->andWhere([
+                                    'or',
+                                    ['pricing.passenger' => $adultPassenger],
+                                    ['pricing.passenger' => $childrenPassenger],
+                                    [
+                                        'and',
+                                        ['pricing.passenger' => $adultPassenger],
+                                        ['pricing.passenger' => $childrenPassenger]
+                                    ]
+                                ])->all() as $plan) : ?>
                                     <th scope="col">
                                         <div class="fs-5 text-dark fw-semibold">
                                             <?= $plan->name ?>
@@ -220,8 +229,16 @@ $this->title = 'Plan Details';
                                     <td>
                                         <?= $planitem->title ?>
                                     </td>
-                                    <?php foreach (\common\models\Plans::find()->where(['insurance_id' => $model->type])->all() as $plan) : ?>
-                                        <td>
+                                    <?php foreach (\common\models\Plans::find()->where(['insurance_id' => $model->type])->joinWith('pricings')->andWhere(['pricing.duration' => $model->duration])->andWhere([
+                                        'or',
+                                        ['pricing.passenger' => $adultPassenger],
+                                        ['pricing.passenger' => $childrenPassenger],
+                                        [
+                                            'and',
+                                            ['pricing.passenger' => $adultPassenger],
+                                            ['pricing.passenger' => $childrenPassenger]
+                                        ]
+                                    ])->all() as $plan) : ?> <td>
                                             <?php
                                             $planCoverage = \common\models\PlansCoverage::find()->where(['item_id' => $planitem->id, 'plan_id' => $plan->id])->one();
                                             if ($planCoverage) :
