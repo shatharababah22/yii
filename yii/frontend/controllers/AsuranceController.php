@@ -953,7 +953,12 @@ return $this->redirect($url);
             'cart_currency' => 'JOD',
             'cart_amount' => $data['price'],
             'cart_description' => 'Payment for insurance policy',
-            'callback' => Yii::$app->urlManager->createAbsoluteUrl(['check']),
+            'callback' => Yii::$app->urlManager->createAbsoluteUrl([
+                'asurance/payment-callback',
+                'policyDraft' => $policyDraft->id,
+                'passenger' => $passenger->id,
+                'protocol' => 'https'
+            ]),
             
 
             // 'return' => Yii::$app->urlManager->createAbsoluteUrl(['asurance/payment-callback',array('policyDraft' => $policyDraft, 'passenger' => $passenger),  'protocol' => 'https' ]),
