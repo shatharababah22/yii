@@ -25,7 +25,8 @@ AppAsset::register($this);
     <meta name="msapplication-TileColor" content="#8b3dff" />
     <meta name="msapplication-config" content="/images/logo/logo-dark.png" />
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
-
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/bs-brain@2.0.4/components/facts/fact-4/assets/css/fact-4.css">
     <!-- <link rel="shortcut icon" href="favicon.ico" />
 
 <link rel="icon" type="image/x-icon" href="favicon.ico" /> -->

@@ -22,7 +22,9 @@ class AppAsset extends AssetBundle
         'css/main.css',
         // 'css/datepicker-kv',
         'css/style.css',
-        'css/flatpickr.css'
+        'css/flatpickr.css',
+        'https://cdnjs.cloudflare.com/ajax/libs/owl.carousel/2.3.4/assets/owl.carousel.min.css',
+        'https://cdnjs.cloudflare.com/ajax/libs/owl.carousel/2.3.4/assets/owl.theme.default.min.css',
     ];
     public $js = [
         'libs/bootstrap/dist/js/bootstrap.bundle.min.js',
@@ -41,7 +43,9 @@ class AppAsset extends AssetBundle
       'js/vendors/scrollcue.js',
       'js/bootstrap-datepicker',
       'js/datepicker-kv',
-      'js/flatpickr.min.js'
+      'js/flatpickr.min.js',
+      'https://cdnjs.cloudflare.com/ajax/libs/owl.carousel/2.3.4/owl.carousel.min.js',
+
     ];
     public $depends = [
         'yii\web\YiiAsset',

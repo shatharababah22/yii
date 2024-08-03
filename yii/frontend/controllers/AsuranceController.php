@@ -197,6 +197,176 @@ class AsuranceController extends \yii\web\Controller
 
 
 
+  // public function actionTravel()
+    // {
+
+    //     // $session = Yii::$app->session;
+    //     // $session->destroy();
+    //     $model = new InquiryForm();
+    //     $model->setAttributes(\Yii::$app->request->get('InquiryForm'));
+
+    //     $fromCountryName = $this->getCountryName($model->from_country);
+    //     $toCountryName = $this->getCountryName($model->to_country);
+
+    //     if ($model->from_country === $model->to_country) {
+    //         // dd( $model->to_country );
+    //         Yii::$app->session->setFlash('error', 'Departure and arrival countries cannot be the same.');
+    //         return $this->redirect(Yii::$app->getRequest()->getReferrer());
+    //     }
+    //     // dd($model);
+    //     if ($model->load(Yii::$app->request->post())) {
+
+    //         $passengers = $model->adult + $model->children;
+    //         $pricing = Pricing::find()
+    //             ->where(['plan_id' => $model->plan])
+    //             ->andWhere(['duration' => $model->duration])
+    //             ->one();
+
+    //         $price = $pricing->discount_price  && $pricing->status == 1  ? $pricing->discount_price : $pricing->price;
+
+    //         // dd($price);
+    //         // if (!$price) {
+
+    //         //     Yii::$app->session->setFlash('error', 'No pricing found for selected plan and duration.');
+    //         //     return $this->refresh(); 
+    //         // }
+    //         // dd($model->from_country);
+
+    //         $draft = new PolicyDraft();
+    //         $draft->insurance_id = $model->type;
+    //         $draft->plan_id = $model->plan;
+    //         $draft->DepartCountryCode = $model->from_country;
+    //         $draft->ArrivalCountryCode = $model->to_country;
+
+    //         $departureDateFormat = 'd/m/Y';
+    //         $departureDate = DateTime::createFromFormat($departureDateFormat, $model->date);
+
+
+    //         if ($departureDate === false) {
+
+    //             $errors = DateTime::getLastErrors();
+    //             var_dump($errors);
+    //             die('Failed to parse departure date.');
+    //         }
+
+
+    //         $timestamp = $departureDate->getTimestamp();
+    //         $duration = '+' . ($model->duration - 1) . ' day';
+    //         $draft->return_date = date('Y-m-d', strtotime($duration, $timestamp));
+
+
+    //         $draft->departure_date = $departureDate->format('Y-m-d'); // Store in Y-m-d format
+    //         $draft->adult = $model->adult;
+    //         $draft->children = $model->children;
+    //         $draft->infant = $model->infants;
+    //         $draft->price = $price * $passengers;
+
+
+    //         if ($draft->save()) {
+    //             return $this->redirect(['passengers', 'draft' => $draft->id]);
+    //         } else {
+    //             var_dump($draft->errors);
+    //             die();
+    //         }
+    //     }
+    //     // $adultPassenger = null;
+    //     // $childrenPassenger = null;
+
+    //     $plans = Plans::find()
+    //         ->where(['insurance_id' => $model->type])
+
+    //         ->all();
+    //     // if ($model->adult) {
+    //     //     $adultPassenger = "adult";
+    //     // }
+    //     // if ($model->children) {
+    //     //     $childrenPassenger = "child";
+    //     // }
+
+    //     // dd( $childrenPassenger );
+    //     // $plans = Plans::find()
+    //     //     ->joinWith('pricings')
+    //     //     ->where(['plans.insurance_id' => $model->type])
+    //     //     ->andWhere(['pricing.duration' => $model->duration])
+    //     //     ->andWhere([
+    //     //         'or',
+    //     //         ['pricing.passenger' => $adultPassenger],
+    //     //         ['pricing.passenger' => $childrenPassenger],
+    //     //         [
+    //     //             'and',
+    //     //             ['pricing.passenger' => $adultPassenger],
+    //     //             ['pricing.passenger' => $childrenPassenger]
+    //     //         ]
+    //     //     ])
+    //     //     ->all();
+
+
+
+    //     // $selectedPlan = null;
+    //     // $selectedPrice = null;
+
+    //     // foreach ($plans as $plan) {
+    //     //     foreach ($plan->pricings as $pricing) {
+    //     //         $passengerMatches = 
+    //     //             ($pricing->passenger == $model->adult && $pricing->children == $model->children) ||
+    //     //             ($pricing->passenger == 0 && $pricing->children == $model->children) ||
+    //     //             ($pricing->passenger== 0 && $pricing->passenger == $model->adult);
+    //     //         dd($passengerMatches );
+    //     //         if ($passengerMatches) {
+    //     //             $selectedPlan = $plan;
+    //     //             $selectedPrice = $pricing;
+    //     //             break 2; 
+    //     //         }
+    //     //     }
+    //     // }
+    //     // $model->from_country='JO';
+    //     // dd($model->from_country);
+    //     $CountryCode = strtoupper($model->from_country);
+    //     // dd($CountryCode);
+    //     $insuranceCountry = InsuranceCountries::find()
+    //         ->where(['insurance_id' => $model->type])
+    //         ->andWhere(['UPPER(country_code)' => $CountryCode])
+    //         ->one();
+
+
+    //     // dd( $insuranceCountry);
+    //     $options = [];
+    //     foreach ($plans as $plan) {
+    //         $insuranceTitle = $plan->insurance->name;
+    //         // dd($insuranceTitle);
+    //         $price = Pricing::find()
+    //             ->where(['plan_id' => $plan->id])
+    //             ->andWhere(['duration' => $model->duration])
+    //             ->one();
+
+    //             // dd(  $price);
+
+    //         $options[$plan->id] = [
+    //             'name' => $plan->name,
+    //             'price' => $price ? $price->price : 0,
+    //             'discount_price' => $price ? $price->discount_price : null,
+    //             'status' => $price ? $price->status : 'Pricing::STATUS_INACTIVE',
+    //         ];
+    //     }
+    //     foreach ($options as $value) {
+    //         if ($value['price']==null) {
+    //             Yii::$app->session->setFlash('error', 'No plans are available for the selected options.');
+    //             return $this->redirect(Yii::$app->getRequest()->getReferrer());
+    //         }
+    //     }
+    
+    //     return $this->render('/insurance/index', [
+    //         'model' => $model,
+    //         'options' => $options,
+    //         'insuranceTitle' => $insuranceTitle ?? '',
+    //         'insuranceCountry' => $insuranceCountry,
+    //         'fromCountryName' => $fromCountryName,
+    //         // 'adultPassenger' => $adultPassenger,
+    //         // 'childrenPassenger' => $childrenPassenger,
+    //         'toCountryName' => $toCountryName,
+    //     ]);
+
+    // }
 
     protected function getCountryName($countryCode)
     {
