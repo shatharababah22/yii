@@ -47,11 +47,11 @@ $this->title = 'Check Policy';
 
 
 
-<section class="mb-xl-9  mt-5">
+<section class="mb-9  mt-5">
     <div class="d-flex justify-content-center container">
-        <div class="row justify-content-center w-75 ">
+        <div class="row justify-content-center w-100 w-lg-75">
        
-            <div class="col-lg-8 col-md-10 col-12 w-75">
+            <div class="col-lg-8 col-md-10 col-12 w-100  w-lg-75">
             <?= Alert::widget() ?>
                 <div class="card shadow-sm">
                     <div class="card-body">

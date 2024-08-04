@@ -51,7 +51,6 @@ $remainingTime = ($lastResendTimestamp ? max(0, $interval - ($currentTimestamp -
 
 ?>
 
-
 <div class="pattern-square"></div>
 <section class="pt-10 pb-10 bg-dark text-center ">
     <div class="container mt-5">
@@ -124,16 +123,16 @@ $remainingTime = ($lastResendTimestamp ? max(0, $interval - ($currentTimestamp -
 
 
             <div class="col-md-12 d-flex justify-content-center">
-                <?= Html::submitButton('Verify', ['class' => 'btn btn-primary submit_btn my-4']) ?>
+                <?= Html::submitButton('Verify', ['class' => 'btn btn-primary submit_btn my-4 w-100 w-lg-25']) ?>
             </div>
        
 <div class="fw-normal text-muted mb-2">
-    Didn’t get the code? 
-    <?php if ($remainingTime > 0): ?>
+   
+    <?php if ($remainingTime > 0): ?><div id="div1" class="fa text-warning fs-4" ></div>
         <span class="fw-bold text-decoration-none" style="color:#0F172A">
-          Please wait <?= intval($remainingTime / 60) ?>m <?= $remainingTime % 60 ?>s
+        Please wait <?= intval($remainingTime / 60) ?>m <?= $remainingTime % 60 ?>s 
         </span>
-    <?php else: ?>
+    <?php else: ?> Didn’t get the code? 
         <a href="<?= Url::to(['/asurance/resend', 'mobile' => $mobile]) ?>" class="fw-bold text-decoration-none" style="color:#0F172A">Resend</a>
     <?php endif; ?>
 </div>
@@ -153,15 +152,38 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             let minutes = Math.floor(remainingTime / 60);
             let seconds = remainingTime % 60;
-            countdownElement.innerHTML = `Please wait ${minutes}m ${seconds}s`;
+            countdownElement.innerHTML = `Please wait ${minutes}m ${seconds}s to retry sending the message`;
             remainingTime--;
         };
 
-        updateCountdown(); // Initial call
+        updateCountdown(); 
         const intervalId = setInterval(updateCountdown, 1000);
     }
 });
+
+
+
+
 </script>
+
+
+<script>
+function hourglass() {
+  var a;
+  a = document.getElementById("div1");
+  a.innerHTML = "&#xf251;";
+  setTimeout(function () {
+      a.innerHTML = "&#xf252;";
+    }, 1000);
+  setTimeout(function () {
+      a.innerHTML = "&#xf253;";
+    }, 2000);
+}
+hourglass();
+setInterval(hourglass, 9000);
+</script>
+
+
 
             <?php ActiveForm::end() ?>
         </div>

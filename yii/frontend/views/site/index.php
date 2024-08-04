@@ -64,90 +64,180 @@ if ($flashMessage) {
 
 
 
-/* CSS Styling */
-.scroll-container {
-    position: relative;
-    overflow: hidden;
-    white-space: nowrap;
-    display: flex;
-    align-items: center;
+
+
+
+
+
+
+.carousel {
+            /* margin: 50px auto; */
+            padding: 0 80px;
+        }
+        .carousel .item {
+            color: #747d89;
+            min-height: 200px;
+            text-align: center;
+            overflow: hidden;
+        }
+        .carousel .thumb-wrapper {
+            padding: 15px 15px;
+            background: #fff;
+            border-radius: 6px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 2px 3px rgba(0,0,0,0.2);
+        }
+        .carousel .item .img-box {
+            height: 100px;
+            margin-bottom: 20px;
+            border-radius: 20px;
+            width: 100%;
+            position: relative;
+        }
+        .carousel .item img {    
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 20px;
+            display: inline-block;
+            position: absolute;
+            bottom: 0;
+            margin: 0 auto;
+            left: 0;
+            right: 0;
+        }
+        /* .carousel .item h4 {
+            font-size: 18px;
+        } */
+        /* .carousel .item h4, .carousel .item p, .carousel .item ul {
+            margin-bottom: 5px;
+        } */
+        .carousel .thumb-content .btn {
+            color: #7ac400;
+            font-size: 11px;
+            text-transform: uppercase;
+            font-weight: bold;
+            background: none;
+            border: 1px solid #7ac400;
+            /* padding: 0px 20px; */
+            margin-top: 5px;
+            line-height: 16px;
+            border-radius: 20px;
+        }
+        .carousel .thumb-content .btn:hover, .carousel .thumb-content .btn:focus {
+            color: #fff;
+            background: #7ac400;
+            box-shadow: none;
+        }
+        .carousel .thumb-content .btn i {
+            font-size: 14px;
+            font-weight: bold;
+            margin-left: 5px;
+        }
+        /* .carousel .item-price {
+            font-size: 13px;
+            padding: 2px 0;
+        } */
+        /* .carousel .item-price strike {
+            opacity: 0.7;
+            margin-right: 5px;
+        } */
+        .carousel-control-prev, .carousel-control-next {
+            height: 44px;
+            width: 40px;
+            /* background: #7ac400;     */
+            margin: auto 0;
+            border-radius: 4px;
+            opacity: 0.8;
+        }
+        /* .carousel-control-prev:hover, .carousel-control-next:hover {
+            background: #78bf00;
+            opacity: 1;
+        } */
+        .carousel-control-prev i, .carousel-control-next i {
+            font-size: 36px;
+            position: absolute;
+            top: 50%;
+            display: inline-block;
+            margin: -19px 0 0 0;
+            z-index: 5;
+            left: 0;
+            right: 0;
+            color: #fff;
+            text-shadow: none;
+            font-weight: bold;
+        }
+        .carousel-control-prev i {
+            margin-left: -2px;
+        }
+        .carousel-control-next i {
+            margin-right: -4px;
+        }        
+        .carousel-indicators {
+            bottom: -50px;
+        }
+        .carousel-indicators li, .carousel-indicators li.active {
+            width: 10px;
+            height: 10px;
+            margin: 4px;
+            border-radius: 50%;
+            border: none;
+        }
+        .carousel-indicators li {    
+            background: rgba(0, 0, 0, 0.2);
+        }
+        .carousel-indicators li.active {    
+            background: rgba(0, 0, 0, 0.6);
+        }
+        /* .carousel .wish-icon {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            z-index: 99;
+            cursor: pointer;
+            font-size: 16px;
+            color: #abb0b8;
+        } */
+    
+        .star-rating li {
+            padding: 0;
+        }
+        .star-rating i {
+            font-size: 14px;
+            color: #ffc000;
+        }
+
+        .carousel-item {
+    transition: transform 60s ease-out; 
 }
-
-.scroll-wrapper {
-    display: flex;
-    overflow-x: auto;
-    scroll-behavior: smooth;
-    gap: 15px;
-}
-
-.scroll-item {
-    flex: 0 0 auto;
-    width: 25%; 
-}
-
-
-
-
-
-.scroll-container {
-    overflow-x: auto;
-    white-space: nowrap;
-    position: relative;
-}
-
-
-.scroll-container::-webkit-scrollbar {
-    display: none; 
-}
-
-
-.scroll-container::-webkit-scrollbar-track {
-    background: transparent; 
-}
-
-
-.scroll-container::-webkit-scrollbar-thumb {
-    background: white;
-    border-radius: 10px; 
-    width: 5px; 
-}
-
-
-.scroll-container::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.7); 
-}
-
-
-.scroll-container {
-    scrollbar-width: thin; 
-    scrollbar-color: white transparent; 
-}
-
 </style>
 
-<script>
 
-
-function scrollLeft() {
-    const container = document.querySelector('.scroll-wrapper');
-    console.log('Scrolling left:', container);
-    container.scrollBy({
-        left: -container.clientWidth,
-        behavior: 'smooth'
+<!-- Include Bootstrap JS (Ensure it's the right version) -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script> -->
+<!-- <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const carousel = document.querySelector('#carouselExampleControls');
+    const carouselInstance = bootstrap.Carousel.getOrCreateInstance(carousel, {
+        interval: 5000, 
+        ride: 'carousel'
     });
-}
 
-function scrollRight() {
-    const container = document.querySelector('.scroll-wrapper');
-    console.log('Scrolling right:', container);
-    container.scrollBy({
-        left: container.clientWidth,
-        behavior: 'smooth'
+    const prevButton = document.querySelector('#prevButton');
+    const nextButton = document.querySelector('#nextButton');
+
+    prevButton.addEventListener('click', function() {
+        carouselInstance.prev();
     });
-}
 
-</script>
-<!--hero start-->
+    nextButton.addEventListener('click', function() {
+        carouselInstance.next();
+    });
+});
+
+</script> -->
+
+
 <section class="bg-primary-dark pt-9 right-slant-shape" data-cue="fadeIn">
     <div class="container">
         <div class="row align-items-center">
@@ -417,15 +507,17 @@ function scrollRight() {
         <div class="row justify-content-xl-center">
           <div class="col-12 col-xl-11">
             <h2 class="mb-3"> <span class="text-warning"> Who </span>Are We?</h2>
-            <p class="  mb-3">We help people to build incredible brands and superior products. Our perspective is to furnish outstanding captivating services.</p>
-            <p class="mb-5">We are a fast-growing company, but we have never lost sight of our core values. We believe in collaboration, innovation, and customer satisfaction. We are always looking for new ways to improve our products and services.</p>
-            <p class="mb-5">We are a fast-growing company, but we have never lost sight of our core values. We believe in collaboration, innovation, and customer satisfaction. We are always looking for new ways to improve our products and services.</p>
+            <p class="  mb-3">
+            At 360Protect, we specialize in providing comprehensive insurance solutions to safeguard your travels, belongings, and more. Whether you're embarking on a new adventure or simply seeking peace of mind, our goal is to offer tailored coverage that meets your unique needs.
+            </p>
+            <p class="mb-5">We pride ourselves on delivering exceptional insurance services with a focus on clarity and reliability. Our team is dedicated to ensuring that you receive the protection you need with the utmost convenience and efficiency.
+            </p>
 
             <div class="row gy-4 gy-md-0 gx-xxl-5X">
               <div class="col-12 col-md-6">
 
 
-              <a href="#!" class="btn btn-primary bsb-btn-2xl">
+              <a href="/asurance/about" class="btn btn-primary bsb-btn-2xl">
               Explore
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16">
                 <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8" />
@@ -476,12 +568,13 @@ function scrollRight() {
   <div class="container mb-2">
     <div class="row justify-content-md-center">
       <div class="col-12 col-md-10 col-lg-8 col-xl-7 col-xxl-6">
-      <h2 class="mb-2 text-white text-center">
-            Ansurance <Span class="text-warning"> Types</Span>
-        </h2>
-        <p class="mb-5 text-center">
-            Explore various related insurance options that might suit your needs.
-        </p>
+     <h2 class="mb-2 text-white text-center">
+    Key <span class="text-warning">Assurance</span> Statistics
+</h2>
+<p class="mb-5 text-center">
+    Check out the essential figures and data related to insurance coverage.
+</p>
+
         <!-- <hr class="w-50 mx-auto mb-5 mb-xl-9 border-secoundry-subtle "> -->
       </div>
     </div>
@@ -538,7 +631,7 @@ function scrollRight() {
   </div>
 </section>
 
-<section class="my-xl-9 my-5" id="insurances_programs">
+ <!-- <section class="my-xl-9 my-5" id="insurances_programs">
     <div class="container" data-cue="fadeIn">
     <div class="row">
             <div class="col-md-12" data-cue="fadeIn">
@@ -556,9 +649,12 @@ function scrollRight() {
 
 
 
+
+
+        
  
 
-           <!-- HTML Structure -->
+        
 <div class="scroll-container">
     <div class="scroll-wrapper">
         <?php foreach ($insurances as $insurance) : ?>
@@ -594,7 +690,109 @@ function scrollRight() {
 
         </div>
     </div>
+</section>  -->
+
+
+
+
+<section class="my-xl-9 my-5" id="insurances_programs">
+    <div class="container" data-cue="fadeIn">
+    <div class="row">
+            <div class="col-md-12" data-cue="fadeIn">
+                <div class="mb-xl-7 mb-4 text-center">
+                    <h2 class="mb-2">
+            Ansurance Types
+        </h2>
+        <p class="mb-0">
+            Explore various related insurance options that might suit your needs.
+        </p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+
+
+
+
+
+
+  
+        <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel" data-bs-interval="false">
+    <!-- Wrapper for carousel items -->
+    <div class="carousel-inner">
+        <?php 
+        $totalItems = count($insurances);
+        $itemsPerSlide = 3;
+        $totalSlides = ceil($totalItems / $itemsPerSlide);
+
+        for ($i = 0; $i < $totalSlides; $i++): 
+            $start = $i * $itemsPerSlide;
+            $end = min($start + $itemsPerSlide, $totalItems);
+        ?>
+            <div class="carousel-item <?= $i === 0 ? 'active' : '' ?>">
+                <div class="row">
+                    <?php for ($j = $start; $j < $end; $j++): ?>
+                        <div class="col-sm-4">
+                            <div class="thumb-wrapper">
+                                <!-- <span class="wish-icon"><i class="fa fa-heart-o"></i></span> -->
+                                 
+                                <div class="img-box">
+                                    <img src="<?= Yii::$app->request->baseUrl ?>/dashboard/images/<?= $insurances[$j]->photo ?>" class="img-fluid " alt="">                                    
+                                </div>
+                                <div class="thumb-content mt-2">
+                                    <h4 class="d-flex justify-content-start"><?= $insurances[$j]->name ?></h4> 
+
+                                     <div class="d-flex justify-content-start">
+                                <div class="price-text">
+                                    <span class="small">starts from </span>
+                                    <div class="price price-show h1 text-warning">
+                                        <span>$</span>
+                                        <span><?= $insurance->price ?></span>
+                                    </div>
+                                </div>
+                            </div>                                   
+                                    <!-- <div class="star-rating">
+                                        <ul class="list-inline">
+                                            <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                                            <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                                            <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                                            <li class="list-inline-item"><i class="fa fa-star"></i></li>
+                                            <li class="list-inline-item"><i class="fa fa-star-o"></i></li>
+                                        </ul>
+                                    </div> -->
+                                                             <!-- <a href="#" class="btn btn-primary">Add to Cart</a> -->
+                                </div>                        
+                            </div>
+                        </div>
+                    <?php endfor; ?>
+                </div>
+            </div>
+        <?php endfor; ?>
+    </div>  
+    
+    <!-- Carousel controls -->
+    <button class="carousel-control-prev btn btn-primary" type="button" id="prevButton">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next btn btn-primary" type="button" id="nextButton">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+
+
+            </div>
+        </div>
+    </div>
+
+
+    
+        </div>
+    </div>
 </section>
+
+
 
 
 
@@ -618,8 +816,10 @@ function scrollRight() {
         </div>
         <div class="row mb-7 pb-4 g-5 text-center text-lg-start">
             <div class="col-md-4" data-cue="fadeIn">
-                <img src="/images/4066885_building_company_coverage_insurance_office_icon.png" width="80" />
-                <h4 class="text-white-stable">Health Insurance</h4>
+                <!-- <img src="/images/4066885_building_company_coverage_insurance_office_icon.png" width="80" /> -->
+
+                <img width="80" height="80" src="/images/icons8-health-insurance-64 (1).png" class="mb-2"/>
+                <h4 class="text-white-stable ">Health Insurance</h4>
                 <p class="text-white-50 mb-3">Stay protected against unforeseen medical emergencies.</p>
                 <ul class="text-white-50">
                     <li>Medical Expenses Coverage</li>
@@ -627,20 +827,11 @@ function scrollRight() {
                     <li>24/7 Medical Assistance</li>
                 </ul>
             </div>
-            <div class="col-md-4" data-cue="fadeIn">
-                <img src="/images/4066893_coverage_insurance_liability_protect_travel_icon.png" width="80" />
-                <h4 class="text-white-stable">Travel Assistance</h4>
-                <p class="text-white-50 mb-3">Ensure smooth travels with comprehensive travel assistance services.</p>
-                <ul class="text-white-50">
-                    <li>Emergency Travel Assistance</li>
-                    <li>Trip Interruption Services</li>
-                    <li>Lost Passport Assistance</li>
-                </ul>
-            </div>
+       
 
             <div class="col-md-4" data-cue="fadeIn">
-                <img src="/images/4066902_coverage_insurance_liability_professional_protection_icon.png" width="80" />
-                <h4 class="text-white-stable">Property Insurance</h4>
+            <img width="75" height="75" src="/images/icons8-home-insurance-64 (1).png" class="mb-2"/>
+            <h4 class="text-white-stable">Property Insurance</h4>
                 <p class="text-white-50 mb-3">Protect your home and belongings with comprehensive property insurance.</p>
                 <ul class="text-white-50">
                     <li>Homeowners Insurance</li>
@@ -648,6 +839,20 @@ function scrollRight() {
                     <li>Flood Insurance</li>
                 </ul>
             </div>
+
+            <div class="col-md-4" data-cue="fadeIn">
+
+
+<img width="80" height="80" src="/images/icons8-travel-insurance-64 (1).png" class="mb-2"/>
+
+<h4 class="text-white-stable">Travel Assistance</h4>
+<p class="text-white-50 mb-3">Ensure smooth travels with comprehensive travel assistance services.</p>
+<ul class="text-white-50">
+    <li>Emergency Travel Assistance</li>
+    <li>Trip Interruption Services</li>
+    <li>Lost Passport Assistance</li>
+</ul>
+</div>
         </div>
     </div>
 </section>

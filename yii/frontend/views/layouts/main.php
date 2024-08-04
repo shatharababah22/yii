@@ -24,16 +24,41 @@ AppAsset::register($this);
 
     <meta name="msapplication-TileColor" content="#8b3dff" />
     <meta name="msapplication-config" content="/images/logo/logo-dark.png" />
+    
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    
     <link rel="stylesheet" href="https://unpkg.com/bs-brain@2.0.4/components/facts/fact-4/assets/css/fact-4.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+
+
+
+
+    
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans">
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"> -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script> -->
+<!--hero start-->
+<!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script> -->
+
+    <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Open+Sans">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> -->
+
+
+
     <!-- <link rel="shortcut icon" href="favicon.ico" />
 
 <link rel="icon" type="image/x-icon" href="favicon.ico" /> -->
-<link rel="shortcut icon" href="/images/favicon.ico" />
-<link rel="icon" type="image/x-icon" href="/images/favicon.ico" />
+    <link rel="shortcut icon" href="/images/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico" />
 
-<!-- 
+    <!-- 
 
 <link rel="shortcut icon" href="favicon.ico" />
 
@@ -67,7 +92,7 @@ AppAsset::register($this);
                                 <ul class="dropdown-menu">
                                     <?php
                                     $countries = \common\models\InsuranceCountries::find()
-                                        ->select(['source_country', 'slug']) 
+                                        ->select(['source_country', 'slug'])
                                         ->distinct()
                                         ->all();
                                     ?>
@@ -75,13 +100,14 @@ AppAsset::register($this);
                                     <?php foreach ($countries as $country) : ?>
                                         <li>
 
-                                        <?= Html::a(
-    Yii::t('app', 
-        ucwords(strtolower($country->source_country))
-    ), 
-    ['/site/index', 'slug' => $country->slug], 
-    ['class' => 'dropdown-item', 'data-cue' => 'fadeUp']
-) ?>
+                                            <?= Html::a(
+                                                Yii::t(
+                                                    'app',
+                                                    ucwords(strtolower($country->source_country))
+                                                ),
+                                                ['/site/index', 'slug' => $country->slug],
+                                                ['class' => 'dropdown-item', 'data-cue' => 'fadeUp']
+                                            ) ?>
 
 
                                         </li> <?php endforeach; ?>
@@ -100,13 +126,33 @@ AppAsset::register($this);
                                 </ul>
 
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/asurance/check" role="button" aria-expanded="false"><?= Yii::t('app', 'Check Policy') ?></a>
-                            </li>
-                            <li class="nav-item">
-                            <?= Html::a(Yii::t('app', 'Contact us'), ['/asurance/contact'], ['class' => 'nav-link', 'data-cue' => 'fadeUp']) ?>
+                            <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Pages</a>
 
+                            <ul class="dropdown-menu">
+                                <!-- <li>
+                                            <?= Html::a(Yii::t('app', 'Check Policy'),['/asurance/check'] ,['class' => 'dropdown-item', 'data-cue' => 'fadeUp']) ?>
+                                        </li> -->
+                                        <li>
+                                            <?= Html::a(Yii::t('app', 'About Us'),['/asurance/about'] , ['class' => 'dropdown-item', 'data-cue' => 'fadeUp']) ?>
+                                        </li>
+                                        <li>
+                                            <?= Html::a(Yii::t('app','Contact Us'),['/asurance/contact'] , ['class' => 'dropdown-item', 'data-cue' => 'fadeUp']) ?>
+                                        </li>
+                            </ul>
                             </li>
+
+
+                            <li class="nav-item">
+                            <!-- <a class="nav-link" href="#"  aria-expanded="false">Pages</a> -->
+
+                            <?= Html::a(Yii::t('app', 'Check Policy'),['/asurance/check'] ,['class' => 'nav-link', 'data-cue' => 'fadeUp']) ?>
+
+
+                                  
+                           
+                            </li>
+
                         </ul>
                         <div class="mt-3 mt-lg-0 d-flex align-items-center">
                             <a href="/" class="btn btn-light mx-2">Get Started</a>
@@ -122,12 +168,12 @@ AppAsset::register($this);
             <?= Breadcrumbs::widget([
                 'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
             ]) ?>
-        
+
             <?= $content ?>
         </main>
 
     </div>
-    
+
     <footer class="pt-7 border border-1">
         <div class="container ">
             <!-- Footer 4 column -->
@@ -193,7 +239,7 @@ AppAsset::register($this);
                             <div class="position-relative">
                                 <div class="mb-3 pb-2 d-flex justify-content-between border-bottom border-bottom-lg-0">
                                     <h5>Assurances</h5>
-                                    <a class="d-block d-lg-none stretched-link text-inherit" data-bs-toggle="collapse" href="#collapseLanding" role="button" aria-expanded="false" aria-controls="collapseLanding">
+                                    <a class="d-block d-lg-none  text-inherit" data-bs-toggle="collapse" href="#collapseLanding" role="button" aria-expanded="false" aria-controls="collapseLanding">
                                         <i class="bi bi-chevron-down"></i>
                                     </a>
                                 </div>
@@ -214,16 +260,16 @@ AppAsset::register($this);
                         <div class="col-lg-4 col-12">
                             <div class="mb-3 pb-2 d-flex justify-content-between border-bottom border-bottom-lg-0">
                                 <h5>Assurance Countries</h5>
-                                <a class="d-block d-lg-none stretched-link text-inherit" data-bs-toggle="collapse" href="#collapseResources" role="button" aria-expanded="false" aria-controls="collapseResources">
+                                <a class="d-block d-lg-none  text-inherit" data-bs-toggle="collapse" href="#collapseResources" role="button" aria-expanded="false" aria-controls="collapseResources">
                                     <i class="bi bi-chevron-down"></i>
                                 </a>
                             </div>
                             <div class="collapse d-lg-block" id="collapseResources" data-bs-parent="#ft-links">
                                 <ul class="list-unstyled mb-0 py-3 py-lg-0">
 
-                                <?php
+                                    <?php
                                     $countries = \common\models\InsuranceCountries::find()
-                                        ->select(['source_country', 'slug']) 
+                                        ->select(['source_country', 'slug'])
                                         ->distinct()->limit(5)
                                         ->all();
                                     ?>
@@ -241,7 +287,7 @@ AppAsset::register($this);
                         <div class="col-lg-4 col-12">
                             <div class="mb-3 pb-2 d-flex justify-content-between border-bottom border-bottom-lg-0 position-relative">
                                 <h5>Accounts</h5>
-                                <a class="d-block d-lg-none stretched-link text-inherit" data-bs-toggle="collapse" href="#collapseAccounts" role="button" aria-expanded="false" aria-controls="collapseAccounts">
+                                <a class="d-block d-lg-none  text-inherit" data-bs-toggle="collapse" href="#collapseAccounts" role="button" aria-expanded="false" aria-controls="collapseAccounts">
                                     <i class="bi bi-chevron-down"></i>
                                 </a>
                             </div>
@@ -261,6 +307,18 @@ AppAsset::register($this);
                                     <li class="mb-2">
 
                                         <?= Html::a(Yii::t('app', 'Contact us'), ['/asurance/contact'], ['class' => 'text-decoration-none ', 'style' => 'color:#64748B;']) ?>
+
+                                    </li>
+
+
+                                </ul>
+                            </div>
+
+                            <div class="collapse d-lg-block" id="collapseAccounts" data-bs-parent="#ft-links">
+                                <ul class="list-unstyled mb-0 py-3 py-lg-0">
+                                    <li class="mb-2">
+
+                                        <?= Html::a(Yii::t('app', 'About us'), ['/asurance/about'], ['class' => 'text-decoration-none ', 'style' => 'color:#64748B;']) ?>
 
                                     </li>
 
@@ -344,6 +402,10 @@ AppAsset::register($this);
 
 
 </body>
-
+<!-- 
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/countup.js/2.0.7/countUp.min.js"></script> -->
 </html>
 <?php $this->endPage();

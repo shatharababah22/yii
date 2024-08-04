@@ -894,6 +894,11 @@ class AsuranceController extends \yii\web\Controller
     }
 
 
+    public function actionAbout(){
+        return $this->render('/insurance/about');
+    }
+
+
     public function actionDisplayPolicy($policyId = null)
     {
         $mobile = Yii::$app->session->get('mobile');
