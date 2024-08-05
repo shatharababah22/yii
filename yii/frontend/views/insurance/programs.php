@@ -265,21 +265,39 @@ if ($flashMessage) {
 </section>
 
 <!--Testimonial start-->
-<section class="py-xl-9 py-5">
+<section class=" py-4 mb-5">
+
+
+
+<div class="row mb-4">
+            <div class="col-md-12" data-cue="fadeIn">
+                <div class="mb-xl-7 mb-4 text-center">
+                    <h2 class="mb-2">Certified insurance companies</h2>
+                    <p class="mb-0">Explore our curated selection of certified insurance companies,.</p>
+                </div>
+            </div>
+        </div>
+
+
     <div class="container">
         <div class="row gy-7 gx-lg-7">
-            <div class="col-lg-6 col-12" data-cue="fadeIn">
+            <div class="col-lg-6 col-12 " data-cue="fadeIn">
                 <div class="d-flex flex-column gap-3 mb-6">
                     <div>
-                        <h2>Certified insurance companies</h2>
-                        <p class="lead lh-lg mt-5">
-                            Explore our curated selection of certified insurance companies, trusted providers offering comprehensive coverage for your peace of mind. Rest assured with top-notch service and reliable protection for your travel needs.
-                        </p>
+                        <!-- <h2>Certified insurance companies</h2> -->
+                        <p class="">
+                        Explore our curated selection of certified insurance companies, each offering a wide range of insurance products tailored to meet your unique needs. With a focus on quality and reliability, we bring you top-notch service and protection from the best in the industry.</p>
+<p class="">
+    Discover the benefits of partnering with industry-leading
+     insurance experts who are committed to providing you with exceptional
+      coverage options. Our selected providers stand out for their dedication
+       to customer satisfaction and their ability to offer solutions that cater to your specific requirements.
+
                     </div>
                 </div>
             </div>
             <!-- //display just the insuranceCountries -->
-            <div class="col-lg-6 col-12" data-cue="fadeIn">
+            <div class="col-lg-6 col-12 mt-4" data-cue="fadeIn">
                 <div class="row g-4">
                     <?php foreach (\common\models\InsuranceCountries::find()->where(['insurance_id' => $insurance->id])->all() as $company) : ?>
 
@@ -287,9 +305,13 @@ if ($flashMessage) {
                             <div class="card card-lift text-center py-3">
                                 <div class="d-flex justify-content-center align-items-center">
                                     <img src="<?= Yii::$app->request->baseUrl ?>/dashboard/images/<?= $company->company_logo ?>" alt="company" style="max-width: 150px;height: 80px;" />
+                                    
                                 </div>
                             </div>
                         </div>
+
+
+                        
                     <?php endforeach; ?>
                 </div>
             </div>
@@ -375,7 +397,7 @@ if ($flashMessage) {
         <div class="row">
             <div class="col-xl-8 offset-xl-2 col-12">
                 <div class="text-center mb-xl-7 mb-5">
-                    <h2 class="text-white-stable mb-3">Protect with Confidence: <span class="text-warning">General Insurance</span></h2>
+                    <h2 class="text-white-stable mb-3">Protect with Confidence: <span class="text-warning">Travel Insurance</span></h2>
                     <p class="mb-0 text-white-50">
                         Ensure worry-free living with our comprehensive insurance plans. Whether you need health, life, auto, or home insurance, we've got you covered with protection against unexpected events and emergencies.
                     </p>
@@ -384,8 +406,10 @@ if ($flashMessage) {
         </div>
         <div class="row mb-7 pb-4 g-5 text-center text-lg-start">
             <div class="col-md-4" data-cue="fadeIn">
-                <img src="/images/4066885_building_company_coverage_insurance_office_icon.png" width="80" />
-                <h4 class="text-white-stable">Health Insurance</h4>
+                <!-- <img src="/images/4066885_building_company_coverage_insurance_office_icon.png" width="80" /> -->
+
+                <img width="80" height="80" src="/images/icons8-health-insurance-64 (1).png" class="mb-2"/>
+                <h4 class="text-white-stable ">Health Insurance</h4>
                 <p class="text-white-50 mb-3">Stay protected against unforeseen medical emergencies.</p>
                 <ul class="text-white-50">
                     <li>Medical Expenses Coverage</li>
@@ -393,20 +417,11 @@ if ($flashMessage) {
                     <li>24/7 Medical Assistance</li>
                 </ul>
             </div>
-            <div class="col-md-4" data-cue="fadeIn">
-                <img src="/images/4066893_coverage_insurance_liability_protect_travel_icon.png" width="80" />
-                <h4 class="text-white-stable">Travel Assistance</h4>
-                <p class="text-white-50 mb-3">Ensure smooth travels with comprehensive travel assistance services.</p>
-                <ul class="text-white-50">
-                    <li>Emergency Travel Assistance</li>
-                    <li>Trip Interruption Services</li>
-                    <li>Lost Passport Assistance</li>
-                </ul>
-            </div>
+       
 
             <div class="col-md-4" data-cue="fadeIn">
-                <img src="/images/4066902_coverage_insurance_liability_professional_protection_icon.png" width="80" />
-                <h4 class="text-white-stable">Property Insurance</h4>
+            <img width="75" height="75" src="/images/icons8-home-insurance-64 (1).png" class="mb-2"/>
+            <h3 class="text-white-stable">Property Insurance</h3>
                 <p class="text-white-50 mb-3">Protect your home and belongings with comprehensive property insurance.</p>
                 <ul class="text-white-50">
                     <li>Homeowners Insurance</li>
@@ -414,6 +429,20 @@ if ($flashMessage) {
                     <li>Flood Insurance</li>
                 </ul>
             </div>
+
+            <div class="col-md-4" data-cue="fadeIn">
+
+
+<img width="80" height="80" src="/images/icons8-travel-insurance-64 (1).png" class="mb-2"/>
+
+<h4 class="text-white-stable">Travel Assistance</h4>
+<p class="text-white-50 mb-3">Ensure smooth travels with comprehensive travel assistance services.</p>
+<ul class="text-white-50">
+    <li>Emergency Travel Assistance</li>
+    <li>Trip Interruption Services</li>
+    <li>Lost Passport Assistance</li>
+</ul>
+</div>
         </div>
     </div>
 </section>
@@ -443,7 +472,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <div class="modal fade border rounded shadow-sm" id="flashMessageModal" tabindex="-1" aria-labelledby="flashMessageModalLabel" aria-hidden="true">
         <div class="modal-dialog ">
-            <div class="modal-content rounded shadow-sm"">
+            <div class="modal-content rounded shadow-sm">
          
                 <div class="modal-body">
                 <div class="modal-header border-0">

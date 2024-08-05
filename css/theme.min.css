@@ -2239,7 +2239,7 @@ caption {
   text-align: left;
 }
 th {
-  font-weight: 400;
+  /* font-weight: 400; */
   text-align: inherit;
   text-align: -webkit-match-parent;
 }

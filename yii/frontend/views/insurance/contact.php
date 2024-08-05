@@ -193,7 +193,7 @@ $this->title = 'Contact us';
                         class=" text-size-16">+962790751376</p>
                      
                     <div class="clearfix"></div>
-                    <a href="mailto:+92790751376" class="text-decoration-none button">Call us Now<i
+                    <a href="tel:+92790751376" class="text-decoration-none button">Call us Now<i
                             class="fa-solid fa-arrow-right"></i></a>
                 </div>
             </div>

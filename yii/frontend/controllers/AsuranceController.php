@@ -43,7 +43,7 @@ class AsuranceController extends \yii\web\Controller
 
         if ($model->from_country === $model->to_country) {
             // dd( $model->to_country );
-            Yii::$app->session->setFlash('error', 'Departure and arrival countries cannot be the same.');
+            Yii::$app->session->setFlash('errorr', 'Departure and arrival countries cannot be the same.');
             return $this->redirect(Yii::$app->getRequest()->getReferrer());
         }
         // dd($model);
@@ -180,7 +180,7 @@ class AsuranceController extends \yii\web\Controller
             ];
         }
         if (empty($options)) {
-            Yii::$app->session->setFlash('error', 'No plans are available for the selected options.');
+            Yii::$app->session->setFlash('errorr', 'No plans are available for the selected options.');
             return $this->redirect(Yii::$app->getRequest()->getReferrer());
         }
         return $this->render('/insurance/index', [

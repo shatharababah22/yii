@@ -41,8 +41,8 @@ class AppAsset extends AssetBundle
       'js/vendors/glight.js',
       'libs/scrollcue/scrollCue.min.js',
       'js/vendors/scrollcue.js',
-      'js/bootstrap-datepicker',
-      'js/datepicker-kv',
+    //   'js/bootstrap-datepicker',
+   
       'js/flatpickr.min.js',
       'https://cdnjs.cloudflare.com/ajax/libs/owl.carousel/2.3.4/owl.carousel.min.js',
 

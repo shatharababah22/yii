@@ -68,7 +68,7 @@ $remainingTime = ($lastResendTimestamp ? max(0, $interval - ($currentTimestamp -
 
 <section class="my-5 wrapper ">
 
-    <div class="container w-75">
+    <div class="container w-100 w-lg-75">
     <?= Alert::widget() ?>
         <div class="col-sm-8 offset-sm-2 col-lg-6 offset-lg-3 col-xl-6 offset-xl-3 text-center">
             <!-- <div class="logo">
@@ -77,9 +77,10 @@ $remainingTime = ($lastResendTimestamp ? max(0, $interval - ($currentTimestamp -
            
             <?php $form = ActiveForm::begin(['options' => ['class' => 'rounded bg-white shadow p-5']]) ?>
 
-            <h3 class="text-dark fw-bolder fs-4 mb-2">Two Step Verification</h3>
-
-            <div class="fw-normal text-muted mb-4">
+            <!-- <h4 class="text-dark fw-bolder  font-size-lg-lg mb-4 mb-lg-0">Two Step Verification</h4> -->
+            <h5 class="text-dark fw-bolder d-md-none  mb-3">Two Step Verification</h5>
+            <h3 class="text-dark fw-bolder d-none d-md-block  ">Two Step Verification</h3>
+            <div class="fw-normal text-muted d-none d-md-block mb-4">
                 Enter the verification code we sent to
             </div>
 
@@ -123,17 +124,17 @@ $remainingTime = ($lastResendTimestamp ? max(0, $interval - ($currentTimestamp -
 
 
             <div class="col-md-12 d-flex justify-content-center">
-                <?= Html::submitButton('Verify', ['class' => 'btn btn-primary submit_btn my-4 w-100 w-lg-25']) ?>
+                <?= Html::submitButton('Verify', ['class' => 'btn btn-primary submit_btn my-2 w-50 w-lg-25  ']) ?>
             </div>
        
 <div class="fw-normal text-muted mb-2">
    
     <?php if ($remainingTime > 0): ?><div id="div1" class="fa text-warning fs-4" ></div>
-        <span class="fw-bold text-decoration-none" style="color:#0F172A">
+        <span class="fw-bold text-decoration-none" style="color:#0F172A;font-size:small;">
         Please wait <?= intval($remainingTime / 60) ?>m <?= $remainingTime % 60 ?>s 
         </span>
     <?php else: ?> Didn’t get the code? 
-        <a href="<?= Url::to(['/asurance/resend', 'mobile' => $mobile]) ?>" class="fw-bold text-decoration-none" style="color:#0F172A">Resend</a>
+        <a href="<?= Url::to(['/asurance/resend', 'mobile' => $mobile]) ?>" class="fw-bold text-decoration-none" style="color:#0F172A; ">Resend</a>
     <?php endif; ?>
 </div>
 

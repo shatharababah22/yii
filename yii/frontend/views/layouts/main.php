@@ -127,7 +127,7 @@ AppAsset::register($this);
 
                             </li>
                             <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Pages</a>
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Comapny</a>
 
                             <ul class="dropdown-menu">
                                 <!-- <li>
@@ -144,7 +144,7 @@ AppAsset::register($this);
 
 
                             <li class="nav-item">
-                            <!-- <a class="nav-link" href="#"  aria-expanded="false">Pages</a> -->
+                            <!-- <a class="nav-link" href="#"  aria-expanded="false">Comapny</a> -->
 
                             <?= Html::a(Yii::t('app', 'Check Policy'),['/asurance/check'] ,['class' => 'nav-link', 'data-cue' => 'fadeUp']) ?>
 
@@ -286,7 +286,7 @@ AppAsset::register($this);
 
                         <div class="col-lg-4 col-12">
                             <div class="mb-3 pb-2 d-flex justify-content-between border-bottom border-bottom-lg-0 position-relative">
-                                <h5>Accounts</h5>
+                                <h5>Comapny</h5>
                                 <a class="d-block d-lg-none  text-inherit" data-bs-toggle="collapse" href="#collapseAccounts" role="button" aria-expanded="false" aria-controls="collapseAccounts">
                                     <i class="bi bi-chevron-down"></i>
                                 </a>
@@ -402,6 +402,25 @@ AppAsset::register($this);
 
 
 </body>
+<script>
+
+  flatpickr('.js-flatpickr', {
+    dateFormat: "d/m/Y",
+     minDate: 'today',  enableTime: false,
+      wrap: false,
+      disableMobile: "true"
+  });
+
+
+</script>
+
+
+
+
+
+<!-- Modal HTML -->
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script> -->
 <!-- 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
