@@ -127,7 +127,7 @@ AppAsset::register($this);
 
                             </li>
                             <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Comapny</a>
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Company</a>
 
                             <ul class="dropdown-menu">
                                 <!-- <li>
@@ -286,7 +286,7 @@ AppAsset::register($this);
 
                         <div class="col-lg-4 col-12">
                             <div class="mb-3 pb-2 d-flex justify-content-between border-bottom border-bottom-lg-0 position-relative">
-                                <h5>Comapny</h5>
+                                <h5>Company</h5>
                                 <a class="d-block d-lg-none  text-inherit" data-bs-toggle="collapse" href="#collapseAccounts" role="button" aria-expanded="false" aria-controls="collapseAccounts">
                                     <i class="bi bi-chevron-down"></i>
                                 </a>
