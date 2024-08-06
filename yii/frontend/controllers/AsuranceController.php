@@ -1355,15 +1355,15 @@ class AsuranceController extends \yii\web\Controller
 
     public function actionRetry($policyId, $id)
     {
-        // Find the policy to retry
+        
         $policy = Policy::findOne($policyId);
     
         if ($policy) {
-            // Optionally, you can update the policy's status or reset fields if needed
-            $policy->status = 0; // Reset status to retry
+           
+            $policy->status = 0; 
     
             if ($policy->save(false)) {
-                // Push the job back to the queue
+          
                 Yii::$app->queue->delay(5)->push(new \common\jobs\PolicyStatusCheckJob([
                     'id' => $id,
                     'policyId' => $policy->id

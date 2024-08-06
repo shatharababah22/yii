@@ -37,7 +37,7 @@ $this->title = 'Plan Details';
                 <div class="text-center text-lg-start mb-7 mb-lg-0" data-cues="slideInDown">
                     <div class="mb-4">
                         <h3 class="text-white-50"></h3>
-                        <h1 class="mb-5 display-5 text-white-stable">
+                        <h1 class="mb-3 mb-md-5 text-white-stable">
                             <span class="text-warning">New</span>
                                <?= $insuranceTitle ?>
          
@@ -227,7 +227,32 @@ $this->title = 'Plan Details';
                             <?php foreach (\common\models\PlansItems::find()->where(['insurance_id' => $model->type])->all() as $planitem) : ?>
                                 <tr class="clickable-row">
                                     <td>
-                                        <?= $planitem->title ?>
+
+
+
+                                    <?php
+$title = $planitem->title;
+$maxLength =28; 
+
+if (strlen($title) > $maxLength) {
+    $splitPoint = strpos($title, ' ', $maxLength);
+    if ($splitPoint === false) {
+        $splitPoint = $maxLength;
+    }
+    $firstLine = substr($title, 0, $splitPoint);
+    $secondLine = substr($title, $splitPoint);
+} else {
+    $firstLine = $title;
+    $secondLine = '';
+}
+?>
+<span class="ms-2">
+    <?= htmlspecialchars($firstLine) ?><br>
+  <span class="ms-5"><?= htmlspecialchars($secondLine) ?></span>  
+</span>
+
+
+                              
                                     </td>
                                     <?php foreach (\common\models\Plans::find()->where(['insurance_id' => $model->type])->joinWith('pricings')->andWhere(['pricing.duration' => $model->duration])->andWhere([
                                         'or',
