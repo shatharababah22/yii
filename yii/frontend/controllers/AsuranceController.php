@@ -121,35 +121,44 @@ class AsuranceController extends \yii\web\Controller
 
 
 
-        $sourceCountries = InsuranceCountries::find()
-            ->select(['id', 'source_country'])
-            ->indexBy('source_country')
-            ->asArray()
-            ->all();
-        // dd($fromCountryName);
-        $id = null;
+      $sourceCountries = InsuranceCountries::find()
+    ->select(['id', 'source_country'])
+    ->asArray()
+    ->all();
+
+$fromCountryName = strtolower($fromCountryName);
+$defaultCountry = 'united emirates'; 
+
+$id = null;
 
 
-        if (isset($sourceCountries[$fromCountryName])) {
-
-            $id = $sourceCountries[$fromCountryName]['id'];
+function findCountryByPartialName($countries, $partialName) {
+    foreach ($countries as $country) {
+        if (stripos($country['source_country'], $partialName) !== false) {
+            return $country['id'];
         }
-        
-        
-        // elseif (isset($sourceCountries[$toCountryName])) {
-        //     $id = $sourceCountries[$toCountryName]['id'];
-        // } 
-        
-        
-        else {
+    }
+    return null;
+}
 
-            $defaultCountry = 'United Emirates';
-            if (isset($sourceCountries[$defaultCountry])) {
-                $id = $sourceCountries[$defaultCountry]['id'];
-            }
+
+
+if (isset($sourceCountries[$fromCountryName])) {
+    $id = $sourceCountries[$fromCountryName]['id'];
+} else {
+
+    $id = findCountryByPartialName($sourceCountries, 'emirate');
+    
+    if ($id === null) {
+   
+        if (isset($sourceCountries[$defaultCountry])) {
+            $id = $sourceCountries[$defaultCountry]['id'];
         }
+    }
+}
 
-// dd($model);
+
+        // dd($model);
 
         // $plans = Plans::find()
         //     ->joinWith('pricings')
@@ -260,7 +269,7 @@ class AsuranceController extends \yii\web\Controller
         return $this->render('/insurance/index', [
             'model' => $model,
             'options' => $options,
-            'plans'=>$plans,
+            'plans' => $plans,
             'insuranceTitle' => $insuranceTitle ?? '',
             'insuranceCountry' => $insuranceCountry,
             'fromCountryName' => $fromCountryName,
