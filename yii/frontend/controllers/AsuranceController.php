@@ -121,42 +121,54 @@ class AsuranceController extends \yii\web\Controller
 
 
 
-      $sourceCountries = InsuranceCountries::find()
-    ->select(['id', 'source_country'])
-    ->asArray()
-    ->all();
-
-$fromCountryName = strtolower($fromCountryName);
-$defaultCountry = 'united emirates'; 
-
-$id = null;
-
-
-function findCountryByPartialName($countries, $partialName) {
-    foreach ($countries as $country) {
-        if (stripos($country['source_country'], $partialName) !== false) {
-            return $country['id'];
-        }
-    }
-    return null;
-}
-
-
-
-if (isset($sourceCountries[$fromCountryName])) {
-    $id = $sourceCountries[$fromCountryName]['id'];
-} else {
-
-    $id = findCountryByPartialName($sourceCountries, 'emirate');
+        $sourceCountries = InsuranceCountries::find()
+        ->select(['id', 'source_country'])
+        ->asArray()
+        ->all();
     
-    if ($id === null) {
    
-        if (isset($sourceCountries[$defaultCountry])) {
-            $id = $sourceCountries[$defaultCountry]['id'];
+    $fromCountryName = ucfirst(strtolower($fromCountryName));
+    
+   
+    $countryLookup = [];
+    foreach ($sourceCountries as $country) {
+        $countryLookup[strtolower($country['source_country'])] = $country;
+    }
+    
+    $defaultCountry = 'united arab emirates'; 
+    
+    $id = null;
+    function findCountryByPartialName($countries, $partialName) {
+        foreach ($countries as $country) {
+            if (stripos($country['source_country'], $partialName) !== false) {
+                return $country['id'];
+            }
+        }
+        return null;
+    }
+    
+
+   
+    if (isset($countryLookup[strtolower($fromCountryName)])) {
+        $id = $countryLookup[strtolower($fromCountryName)]['id'];
+    } else {
+       
+        $id = findCountryByPartialName($sourceCountries, 'emirate');
+    
+        if ($id === null) {
+            if (isset($countryLookup[strtolower($defaultCountry)])) {
+                $id = $countryLookup[strtolower($defaultCountry)]['id'];
+            }
         }
     }
-}
+    
+    // dd($sourceCountries, $fromCountryName, $id);
+    
+    
 
+
+
+// dd(ucfirst($fromCountryName));
 
         // dd($model);
 
