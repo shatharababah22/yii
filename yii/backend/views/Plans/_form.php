@@ -33,7 +33,25 @@ use yii\helpers\Url;
         ) ?>
     </div>
 
-                <?= $form->field($model, 'plan_code')->textInput(['maxlength' => true]) ?>
+
+
+
+    
+
+    <div class="row mb-3">
+        <?= $form->field($model, 'plan_code', ['options' => ['class' => 'col-sm-6']])->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'source_id', ['options' => ['class' => 'col-sm-6']])->dropDownList(
+            \yii\helpers\ArrayHelper::map(
+                \common\models\InsuranceCountries::find()->all(),
+                'id',
+                'source_country'
+            ),
+            ['class' => 'form-select']
+        ) ?>
+    </div>
+
+
+
 
 
 

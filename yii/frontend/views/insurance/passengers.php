@@ -62,14 +62,24 @@ $this->title = 'Trip Details Submission';
 
                                 <p>Upload all passengers passports separated</p>
                                 <?php foreach ($model->attributes() as $input) : ?>
-                                  
-<div class="col-md-12">
-    <?= $form->field($model, $input)->fileInput() ?>
-</div>
 
-<?php endforeach; ?>
+                                    <div class="col-md-12">
+                                        <?= $form->field($model, $input)->fileInput() ?>
+                                    </div>
 
+                                <?php endforeach; ?>
 
+                                <?php if (!empty($savedFiles)) : ?>
+
+                                    <ul id="saved-documents">
+                                        <?php foreach ($savedFiles as $file) : ?>
+                                            <li>
+                                                <?= Html::a(Html::encode(basename($file->document_link)), $file->document_link, ['target' => '_blank']) ?>
+                                                <button type="button" class="btn btn-danger btn-sm delete-file" data-id="<?= $file->id ?>">Delete</button>
+                                            </li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                <?php endif; ?>
 
                                 <div class="col-md-6">
                                     <?= $form->field($policy, 'email')->textInput() ?>
@@ -152,5 +162,24 @@ $this->title = 'Trip Details Submission';
     </div>
     </div>
 </section>
+<script>
+    $(document).on('click', '.delete-file', function() {
+        var fileId = $(this).data('id');
+        var $button = $(this);
 
-<!--Contact us end-->
+        $.ajax({
+            url: '<?= \yii\helpers\Url::to(['delete-file']) ?>',
+            type: 'POST',
+            data: {
+                id: fileId
+            },
+            success: function(response) {
+                if (response.success) {
+                    $button.closest('li').remove();
+                } else {
+                    alert('Failed to delete the file.');
+                }
+            }
+        });
+    });
+</script>

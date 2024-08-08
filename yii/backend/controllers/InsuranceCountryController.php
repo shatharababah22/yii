@@ -71,9 +71,11 @@ class InsuranceCountryController extends Controller
      public function actionCreate()
      {
         $model = new InsuranceCountries();
- 
+   
+
          if (Yii::$app->request->isPost) {
              if ($model->load(Yii::$app->request->post())) {
+                $model->source_country = ucwords( strtolower(trim($model->source_country)));
                  $uploadedFile = UploadedFile::getInstance($model, 'company_logo');
                  if ($uploadedFile) {
                      $file = $uploadedFile;
@@ -110,10 +112,14 @@ class InsuranceCountryController extends Controller
      */
     public function actionUpdate($id){
     $model = $this->findModel($id);
-    $oldPhoto = $model->company_logo; // Store the old photo path
+
+    $oldPhoto = $model->company_logo;
 
     if (Yii::$app->request->isPost) {
         if ($model->load(Yii::$app->request->post())) {
+
+            $model->source_country = ucwords( strtolower(trim($model->source_country)));
+
             $uploadedFile = UploadedFile::getInstance($model, 'company_logo');
 
             if ($uploadedFile) {

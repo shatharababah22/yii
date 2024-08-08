@@ -54,7 +54,7 @@ class AsuranceController extends \yii\web\Controller
                 ->where(['plan_id' => $model->plan])
                 ->andWhere(['duration' => $model->duration])
                 ->one();
-
+            // dd( $pricing);
             $price = $pricing->discount_price  && $pricing->status == 1  ? $pricing->discount_price : $pricing->price;
 
             // dd($price);
@@ -88,7 +88,7 @@ class AsuranceController extends \yii\web\Controller
             $draft->return_date = date('Y-m-d', strtotime($duration, $timestamp));
 
 
-            $draft->departure_date = $departureDate->format('Y-m-d'); // Store in Y-m-d format
+            $draft->departure_date = $departureDate->format('Y-m-d');
             $draft->adult = $model->adult;
             $draft->children = $model->children;
             $draft->infant = $model->infants;
@@ -117,22 +117,97 @@ class AsuranceController extends \yii\web\Controller
         }
 
         // dd( $childrenPassenger );
-        $plans = Plans::find()
-            ->joinWith('pricings')
-            ->where(['plans.insurance_id' => $model->type])
-            ->andWhere(['pricing.duration' => $model->duration])
-            ->andWhere([
-                'or',
-                ['pricing.passenger' => $adultPassenger],
-                ['pricing.passenger' => $childrenPassenger],
-                [
-                    'and',
-                    ['pricing.passenger' => $adultPassenger],
-                    ['pricing.passenger' => $childrenPassenger]
-                ]
-            ])
-            ->all();
 
+
+
+
+        $sourceCountries = InsuranceCountries::find()
+            ->select(['id', 'source_country'])
+            ->indexBy('source_country')
+            ->asArray()
+            ->all();
+        // dd($fromCountryName);
+        $id = null;
+
+
+        if (isset($sourceCountries[$fromCountryName])) {
+
+            $id = $sourceCountries[$fromCountryName]['id'];
+        }
+        
+        
+        // elseif (isset($sourceCountries[$toCountryName])) {
+        //     $id = $sourceCountries[$toCountryName]['id'];
+        // } 
+        
+        
+        else {
+
+            $defaultCountry = 'United Emirates';
+            if (isset($sourceCountries[$defaultCountry])) {
+                $id = $sourceCountries[$defaultCountry]['id'];
+            }
+        }
+
+// dd($model);
+
+        // $plans = Plans::find()
+        //     ->joinWith('pricings')
+        //     ->where(['plans.insurance_id' => $model->type])
+        //     ->andWhere(['plans.countries_id' => $model->duration])
+        //     ->andWhere([
+        //         'or',
+        //         ['pricing.passenger' => $adultPassenger],
+        //         ['pricing.passenger' => $childrenPassenger],
+        //         [
+        //             'and',
+        //             ['pricing.passenger' => $adultPassenger],
+        //             ['pricing.passenger' => $childrenPassenger]
+        //         ]
+        //     ])
+        //     ->all();
+
+
+        // $plans = Plans::find()->where(['plans.insurance_id' => $model->type])->
+        // andwhere(['countries_id' => $id])->andwhere(['pax_type' =>$model->pax_type])->all();
+
+
+
+
+
+        $paxTypeRanges = [
+            '75-86' => ['min_age' => 75, 'max_age' => 86],
+            '19-75' => ['min_age' => 19, 'max_age' => 75],
+            '2-18' => ['min_age' => 2, 'max_age' => 18],
+        ];
+
+
+        $selectedPaxType = $model->pax_type;
+
+
+        if (isset($paxTypeRanges[$selectedPaxType])) {
+
+
+            $range = $paxTypeRanges[$selectedPaxType];
+            $minAge = $range['min_age'];
+            $maxAge = $range['max_age'];
+
+            // dd($range, $minAge ,$maxAge);
+
+
+            $plans = Plans::find()
+                ->where(['insurance_id' => $model->type])
+                ->andWhere(['source_id' => $id])
+                ->andWhere(['=', 'min_age', $minAge])
+                ->andWhere(['=', 'max_age', $maxAge])
+                ->all();
+
+
+            // dd( $plans);
+        } else {
+
+            $plans = [];
+        }
 
 
         // $selectedPlan = null;
@@ -157,8 +232,7 @@ class AsuranceController extends \yii\web\Controller
         $CountryCode = strtoupper($model->from_country);
         // dd($CountryCode);
         $insuranceCountry = InsuranceCountries::find()
-            ->where(['insurance_id' => $model->type])
-            ->andWhere(['UPPER(country_code)' => $CountryCode])
+            ->where(['id' =>  $id])
             ->one();
 
 
@@ -186,6 +260,7 @@ class AsuranceController extends \yii\web\Controller
         return $this->render('/insurance/index', [
             'model' => $model,
             'options' => $options,
+            'plans'=>$plans,
             'insuranceTitle' => $insuranceTitle ?? '',
             'insuranceCountry' => $insuranceCountry,
             'fromCountryName' => $fromCountryName,
@@ -197,7 +272,7 @@ class AsuranceController extends \yii\web\Controller
 
 
 
-  // public function actionTravel()
+    // public function actionTravel()
     // {
 
     //     // $session = Yii::$app->session;
@@ -235,7 +310,7 @@ class AsuranceController extends \yii\web\Controller
     //         $draft = new PolicyDraft();
     //         $draft->insurance_id = $model->type;
     //         $draft->plan_id = $model->plan;
-    //         $draft->DepartCountryCode = $model->from_country;
+    //         $draft->DepartCountryCode = $modelaction->from_country;
     //         $draft->ArrivalCountryCode = $model->to_country;
 
     //         $departureDateFormat = 'd/m/Y';
@@ -354,7 +429,7 @@ class AsuranceController extends \yii\web\Controller
     //             return $this->redirect(Yii::$app->getRequest()->getReferrer());
     //         }
     //     }
-    
+
     //     return $this->render('/insurance/index', [
     //         'model' => $model,
     //         'options' => $options,
@@ -375,6 +450,9 @@ class AsuranceController extends \yii\web\Controller
     }
 
 
+
+
+
     public function actionRetake($id, $policyId)
     {
         $policy = PolicyDraft::findOne($policyId);
@@ -393,15 +471,18 @@ class AsuranceController extends \yii\web\Controller
         return $this->redirect(['passengers', 'draft' => $policy->id, 'passengers' => $passengers]);
     }
 
+
+
+
     public function actionPassengers($draft, $passengers = null)
     {
         $policy = PolicyDraft::findOne($draft);
         $policy->setScenario('update');
-        
+
         $attr = [];
         $labels = [];
-    
-        // Set up attribute names and labels for the dynamic model
+
+
         if ($policy->adult != null) {
             for ($i = 1; $i <= $policy->adult; $i++) {
                 $name = 'Adult' . ($i);
@@ -423,26 +504,27 @@ class AsuranceController extends \yii\web\Controller
                 $labels[$name] = ucwords(Yii::t('app', "Infant Passport (#" . ($i) . ")"));
             }
         }
-    
+
         $model = new \yii\base\DynamicModel($attr);
         $model->setAttributeLabels($labels);
         $model->addRule($attr, 'required');
-    
+        $savedFiles = [];
+
         if ($model->load(Yii::$app->request->post()) && $policy->load(Yii::$app->request->post())) {
             $policy->save();
-    
+
             $allFilesProcessed = true;
             $errorMessages = [];
             $successfulRecords = [];
-    
+
             foreach ($attr as $item) {
                 $files = UploadedFile::getInstances($model, $item);
-    
+
                 foreach ($files as $file) {
                     if ($file !== null) {
                         $fileName = $file->baseName . '.' . time() . $file->extension;
                         $path = Yii::getAlias('@webroot/uploads/') . $fileName;
-    
+
                         if ($file->saveAs($path)) {
                             $post = [
                                 'file_base64' => base64_encode(file_get_contents($path)),
@@ -452,33 +534,34 @@ class AsuranceController extends \yii\web\Controller
                                 'verify_expiry' => true,
                                 'type' => "IPD"
                             ];
-    
+
                             $ch = curl_init();
                             curl_setopt($ch, CURLOPT_URL, 'https://api.idanalyzer.com');
                             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                             curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($post));
                             $response = curl_exec($ch);
                             curl_close($ch);
-    
+
                             $json_request = json_decode($response, true);
-    
+
                             if (isset($json_request['error'])) {
                                 $errorMessages[$item][] = $json_request['error']['message'] . ' (File: ' . $fileName . ')';
                                 $allFilesProcessed = false;
-                                continue; 
+                                continue;
                             } elseif ($json_request['verification']['passed']) {
                                 $dob = $json_request['result']['dob'] ?? "null";
                                 $dobDate = new DateTime($dob);
                                 $now = new DateTime();
                                 $age = $now->diff($dobDate)->y;
-    
+
                                 if ((strpos($item, 'Adult') !== false && $age < 18) ||
-                                    (strpos($item, 'Child') !== false && $age >= 18)) {
+                                    (strpos($item, 'Child') !== false && $age >= 18)
+                                ) {
                                     $errorMessages[$item][] = 'The uploaded document does not match the passenger type. Age: ' . $age . '. The document was uploaded for: ' . $item . '. Please ensure that the document is appropriate for the passenger\'s age group (Adult, Child, or Infant).';
                                     $allFilesProcessed = false;
-                                    continue; 
+                                    continue;
                                 }
-    
+
                                 $existingRecord = PolicyDraftPassengers::find()
                                     ->where(['draft_id' => $policy->id])
                                     ->andWhere([
@@ -487,7 +570,7 @@ class AsuranceController extends \yii\web\Controller
                                         'last_name' => $json_request['result']['lastName'] ?? "null"
                                     ])
                                     ->one();
-    
+
                                 if ($existingRecord === null) {
                                     $PolicyDraftPassengers = new PolicyDraftPassengers();
                                     $PolicyDraftPassengers->draft_id = $policy->id;
@@ -504,8 +587,7 @@ class AsuranceController extends \yii\web\Controller
                                     $PolicyDraftPassengers->warning = isset($json_request['authentication']['warning']) ? implode(',', $json_request['authentication']['warning']) : "null";
                                     $PolicyDraftPassengers->document_link = '/uploads/' . $fileName;
                                     $PolicyDraftPassengers->save();
-                                    $successfulRecords[] = $PolicyDraftPassengers;
-                                   
+                                    $savedFiles[] = $PolicyDraftPassengers;
                                 } else {
                                     $errorMessages[$item][] = 'A document for this person already exists. You cannot upload another document for the same person. Please try with a different person or document.';
                                     $allFilesProcessed = false;
@@ -514,38 +596,68 @@ class AsuranceController extends \yii\web\Controller
                             } else {
                                 $errorMessages[$item][] = join(" and ", $json_request['authentication']['warning']);
                                 $allFilesProcessed = false;
-                                continue; 
+                                continue;
                             }
                         } else {
                             $errorMessages[$item][] = 'Failed to save file: ' . $file->name;
                             $allFilesProcessed = false;
-                            continue; 
+                            continue;
                         }
                     }
                 }
             }
-    
+
             if ($allFilesProcessed || !empty($passengers)) {
-        
+
                 return $this->redirect(['review', 'draft' => $policy->id, 'passengers' => $passengers]);
             }
-    
-     
+
+
             if (!empty($errorMessages)) {
                 $errorMessage = '';
                 foreach ($errorMessages as $item => $messages) {
-                    $errorMessage .= 'Errors for ' . $item . ':<br>' . implode('<br>', $messages) . '<br><br>';
+                    $label = isset($labels[$item]) ? $labels[$item] : $item;
+                    $errorMessage .= 'Errors for ' . $label . ':<br>' . implode('<br>', $messages) . '<br><br>';
                 }
                 Yii::$app->session->setFlash('warning', $errorMessage);
             }
         }
-    
+
+        $savedFiles = PolicyDraftPassengers::find()
+            ->where(['draft_id' => $policy->id])
+            ->all();
+
         return $this->render('/insurance/passengers', [
             'model' => $model,
             'policy' => $policy,
+            'savedFiles' => $savedFiles
         ]);
     }
-    
+
+
+
+
+
+    public function actionDeleteFile()
+    {
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        $id = Yii::$app->request->post('id');
+        $record = PolicyDraftPassengers::findOne($id);
+
+        if ($record) {
+            $filePath = Yii::getAlias('@webroot') . $record->document_link;
+
+            if (file_exists($filePath) && unlink($filePath)) {
+                $record->delete();
+                return ['success' => true];
+            }
+        }
+
+        return ['success' => false];
+    }
+
+
 
     public function actionReview($draft)
     {
@@ -557,7 +669,7 @@ class AsuranceController extends \yii\web\Controller
     }
 
 
- 
+
     public function actionCheck()
     {
         $model = new \yii\base\DynamicModel(['mobile', 'reCaptcha']);
@@ -608,6 +720,12 @@ class AsuranceController extends \yii\web\Controller
 
         return $this->render('/insurance/policy', ['model' => $model]);
     }
+
+
+
+
+
+
 
 
     public function actionResend($mobile)
@@ -822,7 +940,8 @@ class AsuranceController extends \yii\web\Controller
     }
 
 
-    public function actionAbout(){
+    public function actionAbout()
+    {
         return $this->render('/insurance/about');
     }
 
@@ -1100,7 +1219,7 @@ class AsuranceController extends \yii\web\Controller
 
 
 
-        public function actionPayment($id)
+    public function actionPayment($id)
     {
         $policyDraft = PolicyDraft::findOne($id);
         $passenger = PolicyDraftPassengers::find()->where(['draft_id' => $id])->one();
@@ -1245,7 +1364,7 @@ class AsuranceController extends \yii\web\Controller
                         $customer = new Customers();
                         $customer->email = $policyDraft->email;
                         $customer->mobile = $policyDraft->mobile;
-                        $customer->name= $passenger->first_name . ' ' . $passenger->last_name;
+                        $customer->name = $passenger->first_name . ' ' . $passenger->last_name;
                         if (!$customer->save(false)) {
                             Yii::$app->session->setFlash('error', 'Failed to save the customer.');
                             return $this->redirect(['error-page']);
@@ -1279,7 +1398,7 @@ class AsuranceController extends \yii\web\Controller
                             'id' => $id,
                             'policyId' => $policy->id
                         ]));
-                        return $this->redirect(['display-policy', 'policyId' => $policy->id,'policy_Draft',$policyDraft]);
+                        return $this->redirect(['display-policy', 'policyId' => $policy->id, 'policy_Draft', $policyDraft]);
                     } else {
                         var_dump($policy->errors);
                     }
@@ -1355,20 +1474,20 @@ class AsuranceController extends \yii\web\Controller
 
     public function actionRetry($policyId, $id)
     {
-        
+
         $policy = Policy::findOne($policyId);
-    
+
         if ($policy) {
-           
-            $policy->status = 0; 
-    
+
+            $policy->status = 0;
+
             if ($policy->save(false)) {
-          
+
                 Yii::$app->queue->delay(5)->push(new \common\jobs\PolicyStatusCheckJob([
                     'id' => $id,
                     'policyId' => $policy->id
                 ]));
-    
+
                 Yii::$app->session->setFlash('success', 'Retry request has been processed.');
             } else {
                 Yii::$app->session->setFlash('error', 'Failed to retry the policy.');
@@ -1376,10 +1495,10 @@ class AsuranceController extends \yii\web\Controller
         } else {
             Yii::$app->session->setFlash('error', 'Policy not found.');
         }
-    
+
         return $this->redirect(['display-policy', 'policyId' => $policyId, 'id' => $id]);
     }
-    
+
 
     protected function processPayment($data)
     {

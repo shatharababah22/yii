@@ -40,6 +40,8 @@ class Plans extends \yii\db\ActiveRecord
             [['description', 'overview'], 'string'],
             [['name', 'plan_code'], 'string', 'max' => 255],
             [['insurance_id'], 'exist', 'skipOnError' => true, 'targetClass' => Insurances::class, 'targetAttribute' => ['insurance_id' => 'id']],
+            [['source_id'], 'exist', 'skipOnError' => true, 'targetClass' => InsuranceCountries::class, 'targetAttribute' => ['source_id' => 'id']],
+
         ];
     }
 
@@ -51,6 +53,7 @@ class Plans extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'insurance_id' => Yii::t('app', 'Insurance Name'),
+            'source_id' => Yii::t('app', 'Source Name'),
             'name' => Yii::t('app', 'Name'),
             'description' => Yii::t('app', 'Description'),
             'overview' => Yii::t('app', 'Overview'),
@@ -69,6 +72,15 @@ class Plans extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Insurances::class, ['id' => 'insurance_id']);
     }
+
+ 
+    public function getSource()
+    {
+        return $this->hasOne(InsuranceCountries::class, ['id'=>'source_id']);
+    }
+
+
+
 
     /**
      * Gets query for [[Pricings]].

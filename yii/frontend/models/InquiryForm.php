@@ -18,6 +18,7 @@ class InquiryForm extends Model
     public $children;
     public $infants;
     public $plan;
+    public $pax_type;
 
 
     /**
@@ -27,7 +28,7 @@ class InquiryForm extends Model
     {
         return [
             // name, email, subject and body are required
-            [['type', 'from_country', 'to_country', 'date', 'duration', 'adult', 'children', 'infants', 'plan'], 'required'],
+            [['type', 'from_country', 'to_country', 'date', 'duration','pax_type', 'adult', 'children', 'infants', 'plan'], 'required'],
         ];
     }
 
@@ -45,6 +46,7 @@ class InquiryForm extends Model
             'adult' => 'Adult',
             'children' => 'Children',
             'infants' => 'Infants',
+            'pax_type'=>'Pax Type',
         ];
     }
 }

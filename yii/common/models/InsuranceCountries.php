@@ -69,6 +69,16 @@ class InsuranceCountries extends \yii\db\ActiveRecord
         ];
     }
 
+
+    public static function getAllSourceCountries()
+    {
+        return self::find()
+            ->select('source_country')
+            ->distinct() 
+            ->column();
+    }
+
+
     /**
      * Gets query for [[Insurance]].
      *
@@ -78,4 +88,13 @@ class InsuranceCountries extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Insurances::class, ['id' => 'insurance_id']);
     }
+
+
+
+    public function getPlans()
+    {
+        return $this->hasMany(Plans::class, ['countries_id' => 'id']);
+    }
+
+
 }

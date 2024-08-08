@@ -87,7 +87,7 @@ AppAsset::register($this);
                     </div>
                     <div class="offcanvas-body pt-0 align-items-center">
                         <ul class="navbar-nav mx-auto align-items-lg-center">
-                            <li class="nav-item dropdown">
+                            <!-- <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Countries</a>
                                 <ul class="dropdown-menu">
                                     <?php
@@ -113,7 +113,7 @@ AppAsset::register($this);
                                         </li> <?php endforeach; ?>
 
                                 </ul>
-                            </li>
+                            </li> -->
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Assurances</a>
                                 <ul class="dropdown-menu">
@@ -402,17 +402,64 @@ AppAsset::register($this);
 
 
 </body>
-<script>
-
-  flatpickr('.js-flatpickr', {
-    dateFormat: "d/m/Y",
-     minDate: 'today',  enableTime: false,
+<!-- <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    flatpickr('.js-flatpickr', {
+      dateFormat: "d/m/Y",
+      minDate: 'today',
+      enableTime: false,
       wrap: false,
       disableMobile: "true"
+    });
+
+ 
+    const savedDate = localStorage.getItem('savedDate');
+    if (savedDate) {
+      document.querySelector('.js-flatpickr')._flatpickr.setDate(savedDate);
+    }
+
+   
+    document.querySelector('.js-flatpickr')._flatpickr.config.onChange.push(function(selectedDates, dateStr) {
+      localStorage.setItem('savedDate', dateStr);
+    });
+
+    document.getElementById('next-button').addEventListener('click', function() {
+      localStorage.removeItem('savedDate'); 
+    });
   });
+</script> -->
 
 
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    flatpickr('.js-flatpickr', {
+      dateFormat: "d/m/Y",
+      minDate: 'today',
+      enableTime: false,
+      wrap: false,
+      disableMobile: "true"
+    });
+
+    const savedDate = localStorage.getItem('savedDate');
+    if (savedDate) {
+      document.querySelector('.js-flatpickr')._flatpickr.setDate(savedDate);
+    }
+
+    document.querySelector('.js-flatpickr')._flatpickr.config.onChange.push(function(selectedDates, dateStr) {
+      localStorage.setItem('savedDate', dateStr);
+    });
+
+    const form = document.getElementById('nextt');
+    form.addEventListener('submit', function(event) {
+      // Clear the saved date from localStorage
+      localStorage.removeItem('savedDate');
+      
+      // Optionally, you can prevent the default form submission and submit it manually
+      // if needed, but usually, just clearing localStorage is sufficient
+    });
+  });
 </script>
+
 
 
 
